@@ -1,32 +1,49 @@
 {
-    "name": "Smile",
-    "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
+  "name": "Smile",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
 
-    "features": {
-        "ghcr.io/devcontainers/features/common-utils": {
-            "installOhMyZsh": true,
-            "installZsh": true,
-            "configureZshAsDefaultShell": true,
-            "upgradePackages": true,
-        },
-    },
-
-    "workspaceMount": "source=${localWorkspaceFolder},target=/smile,type=bind,consistency=cached",
-    "workspaceFolder": "/smile",
-
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "Vue.volar",
-                "dbaeumer.vscode-eslint",
-                "esbenp.prettier-vscode",
-                "JosefBiehler.cypress-fixture-intellisense",
-                "aaron-bond.better-comments",
-                "GitHub.vscode-pull-request-github",
-                "github.vscode-github-actions",
-                "GitHub.remotehub",
-                "mikestead.dotenv"
-            ]
-        }
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils": {
+      "installOhMyZsh": true,
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "upgradePackages": true
     }
+  },
+
+  "postStartCommand": "npm run dev",
+  "postCreateCommand": "./scripts/setup_project.sh && ./scripts/setup_git_hooks.sh",
+
+  "workspaceMount": "source=${localWorkspaceFolder},target=/smile,type=bind,consistency=cached",
+  "workspaceFolder": "/smile",
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "files.useIgnoreFiles": true,
+        "editor.wordBasedSuggestions": "matchingDocuments",
+        "editor.formatOnType": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "diffEditor.ignoreTrimWhitespace": false,
+        "[yaml]": {
+          "editor.defaultFormatter": "redhat.vscode-yaml"
+        },
+        "[dockerfile]": {
+          "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+        }
+      },
+      "extensions": [
+        "Vue.volar",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "JosefBiehler.cypress-fixture-intellisense",
+        "aaron-bond.better-comments",
+        "GitHub.vscode-pull-request-github",
+        "github.vscode-github-actions",
+        "mikestead.dotenv",
+        "ms-azuretools.vscode-docker",
+        "redhat.vscode-yaml"
+      ]
+    }
+  }
 }
