@@ -22,10 +22,12 @@ var db
 
 if (appconfig.mode === 'testing') {
   db = getFirestore()
+  db._setSettings({ignoreUndefinedProperties: true})
   connectFirestoreEmulator(db, '127.0.0.1', 8080)
   console.warn('WARNING: using local firestore emulator')
 } else {
   db = getFirestore(firebaseApp)
+  db._setSettings({ignoreUndefinedProperties: true})
 }
 
 let mode = 'real'
