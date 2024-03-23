@@ -15,7 +15,8 @@ import {
 function initLastRoute(mode) {
   if (mode === 'development') {
     return 'recruit'
-  } else if (mode === 'presentation') {
+  }
+  if (mode === 'presentation') {
     return 'presentation_home'
   }
   return 'landing'
@@ -207,6 +208,8 @@ export default defineStore('smilestore', {
       this.data.conditions[name] = cond
     },
     async setKnown() {
+      // TODD: this need to have an exception handler wrapping around it
+      // because things go wrong
       this.local.knownUser = true
       this.local.partNum = await updateExperimentCounter('participants')
       this.local.docRef = await createDoc(this.data, this.local.seedID, this.local.partNum)
@@ -218,6 +221,8 @@ export default defineStore('smilestore', {
         this.setDBConnected()
         // force a data save so conditions get added to the data right away
         this.saveData(true)
+      } else {
+        console.error('SMILESTORE: could not create document in firebase')
       }
       return this.data.conditions
     },
@@ -261,6 +266,8 @@ export default defineStore('smilestore', {
         this.local.totalWrites += 1
         this.local.lastWrite = Date.now()
         console.log('Request to firebase successful')
+      } else {
+        console.error("SMILESTORE: can't save data, not connected to firebase")
       }
     },
     resetLocal() {

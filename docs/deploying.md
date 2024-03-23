@@ -128,7 +128,7 @@ Sometimes a deployment can fail due to an error in your code or your setup.  Whe
 
 First, check the `#smile-deploy` slack channel and see if there are any relevant messages.
 
-Second, make sure you have a set of `.env.*.local` files in the `env/` folder (created using `git secret reveal`) and have run the `npm run config:upload` command (refer back to the [initial setup instructions](starting)).  This latter command uploads some specific configuration options to GitHub which are needed for your deployment to run.  You can verify these have been set by going to your repository on the GitHub website, clicking Settings, then "Secrets".  There should be several repository secrets including `SECRET_APP_CONFIG` and `EXP_DEPLOY_PATH`, etc...
+Second, make sure you have a set of `.env.*.local` files in the `env/` folder (created using `git secret reveal`) and have run the `npm run upload_config` command (refer back to the [initial setup instructions](starting)).  This latter command uploads some specific configuration options to GitHub which are needed for your deployment to run.  You can verify these have been set by going to your repository on the GitHub website, clicking Settings, then "Secrets".  There should be several repository secrets including `SECRET_APP_CONFIG` and `EXP_DEPLOY_PATH`, etc...
 
 Third, run the `npm run build` and `npm run preview` commands and verify that these steps are completed without error on your local machine.  If there are errors they may be preventing GitHub from building your site.  Fix the errors locally and push the changes.
 
@@ -153,7 +153,7 @@ GitHub Actions are a feature of GitHub that allows customizable scripts to run o
 The first step of the GitHub action runs a sequence of shell commands on a Linux cloud instance hosted by GitHub (`runs-on: ubuntu-latest`).
 Next, the current version of the code (after the commit) is checked out using git. 
 
-Next, several scripts run to optimize the environment for the app and configure it.  Then relevant software is installed such as Node.js.  The node dependencies are then run using `npm install`.  Then the website is built `npm run` build`.  The completed website is located at `dist/`.
+Next, several scripts run to optimize the environment for the app and configure it.  Then relevant software is installed such as Node.js.  The node dependencies are then run using `npm install`.  Then the website is built `npm run build`.  The completed website is located at `dist/`.
 
 You can run most of the steps up to this point locally by just typing `npm run build`.
 
@@ -165,7 +165,7 @@ The remote host, folder, and other options are set using GitHub Secrets which ar
 ### Notifying the Slack bot
 In the <GureckisLabText/>, the final step is to send a notification about the deployment to a Slack [Workflow Builder](https://slack.com/help/articles/360035692513-Guide-to-Workflow-Builder) bot.  This lets you verify the code was deployed and provides you with an up-to-date URL to share with participants.
 
-If the deployment script fails, GitHub will attempt to notify the slack bot about the error.  However, it requires that the GitHub secrets have been properly uploaded with `npm run config:upload` so the absence of an error notification isn't proof things did work.
+If the deployment script fails, GitHub will attempt to notify the slack bot about the error.  However, it requires that the GitHub secrets have been properly uploaded with `npm run upload_config` so the absence of an error notification isn't proof things did work.
 
 ## Blocking web crawlers
 

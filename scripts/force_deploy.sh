@@ -5,7 +5,7 @@
 BRANCH=$(git rev-parse --abbrev-ref HEAD | tr '[:upper:]' '[:lower:]')
 
 echo "Forcing a deploy of branch: $BRANCH." 
-echo "Warning this will only work if you have run 'npm run config_upload' at least once"
+echo "Warning: this will only work if you have run 'npm run upload_config' at least once"
 
 gh workflow run deploy-hash.yml -f github_sha=$BRANCH
 

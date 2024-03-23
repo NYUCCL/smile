@@ -41,7 +41,7 @@ this should create several `.env.*.local` files in your `env/` directory (the `*
 After all the necessary files are in the `env` folder run:
 
 ```
-npm run config:upload
+npm run upload_config
 ```
 
 to configure your deployment process.
@@ -251,10 +251,10 @@ EXP_DEPLOY_KEY         = "-----BEGIN RSA PRIVATE KEY-----\n-----END RSA PRIVATE 
 ## Configuring your deployment settings on GitHub
 
 
-Several of the configuration options are designed to configure ["secrets"](https://docs.github.com/en/actions/security-guides/encrypted-secrets) on your GitHub repo.   These are variables that you define in the settings section of the repository which can then be accessed by a script at run time using Github Actions.  They are omitted from version control and from logs making it a good way to share sensitive information without exposing them in a public repo.  When you run `npm run config:upload` you should see output like this (with NYUCCL/smile replaced with your username and repo):
+Several of the configuration options are designed to configure ["secrets"](https://docs.github.com/en/actions/security-guides/encrypted-secrets) on your GitHub repo.   These are variables that you define in the settings section of the repository which can then be accessed by a script at run time using Github Actions.  They are omitted from version control and from logs making it a good way to share sensitive information without exposing them in a public repo.  When you run `npm run upload_config` you should see output like this (with NYUCCL/smile replaced with your username and repo):
 
 ```
-> smile@0.0.0 config:upload
+> smile@0.0.0 upload_config
 > sh scripts/update_config.sh
 
 ✓ Set Actions secret SECRET_APP_CONFIG for NYUCCL/smile
@@ -319,4 +319,6 @@ It is important to keep in mind that variables passed to `src/config.js` will no
 
 ## Adding New Configuration Options
 
-Adding new configuration options should mostly happen in `.env.local`.  You simple make up a new `VITE_SOMETHING` variable.  Then add it to the object in `src/config.js` to expose it to your web application!  The configuration is available as `smileconfig` anywhere in your Vue app.  It's pretty easy.
+Adding new configuration options should mostly happen in `.env.local`.  You simply make up a new `VITE_SOMETHING` variable.  Then add it to the object in `src/config.js` to expose it to your web application!  The configuration is available as `smileconfig` anywhere in your Vue app.  It's pretty easy.
+
+Note: if you add new configuration options, you need to also update them on GitHub for those to sync to deployments. Run `npm run upload_config` as explained above under [Configuring your deployment settings on GitHub](#configuring-your-deployment-settings-on-github). 

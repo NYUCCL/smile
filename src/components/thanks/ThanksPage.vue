@@ -2,6 +2,7 @@
 import Clipboard from 'clipboard';
 import sha256 from 'crypto-js/sha256'
 import Base64url from 'crypto-js/enc-base64'
+import stringify from 'json-stable-stringify'
 import { useRouter, useRoute } from 'vue-router'
 import useTimelineStepper from '@/composables/timelinestepper'
 import useSmileStore from '@/stores/smiledata' // get access to the global store
@@ -22,7 +23,7 @@ smilestore.saveData(true) // force a data save
 // compute completion code
 function computeCompletionCode() {
     // stringify the data
-    const data = JSON.stringify(smilestore.data)
+    const data = stringify(smilestore.data)
     const hashDigest = Base64url.stringify(sha256(data))
     return hashDigest.slice(0,20) // only use first 20 characters, may need to update to shortest possible code
 }

@@ -6,9 +6,9 @@ This page shows how to generate random numbers in <SmileText />, and how to use 
 
 ## Seeded random number generation
 
-<SmileText /> uses <b>seeded</b> random number generation. Setting a seed makes random number generation reproducible. That is, two random number generators set with the same seed will produce the same sequence of random numbers. 
+<SmileText /> uses <b>seeded</b> random number generation. Setting a seed makes random number generation reproducible. That is, two random number generators set with the same seed will produce the same sequence of random numbers.
 
-In the context of an experiment, if we know the seed used to assign a particular participant to conditions, stimuli, trial orders, etc., we can completely recreate those conditions, stimuli, trial orders, etc. after the fact. As a result, we can see our experiment *exactly* as any given participant saw it. This makes it easier to find bugs, understand each participant's repsonses, etc.
+In the context of an experiment, if we know the seed used to assign a particular participant to conditions, stimuli, trial orders, etc., we can completely recreate those conditions, stimuli, trial orders, etc. after the fact. As a result, we can see our experiment _exactly_ as any given participant saw it. This makes it easier to find bugs, understand each participant's responses, etc.
 
 Seeding is also useful for testing: we can easily reconstruct the exact same trials/stimuli/conditions over and over again.
 
@@ -18,15 +18,15 @@ So for example, for a participant with seed ID `a5c40328-0625-4353-bab1-05612539
 
 **Note**: Be careful about using external libraries that depend on `Math.random()`, such as lodash. To get lodash to respect the seed you've set, you must import it within the component where you want to use it, then define a new lodash function. Then you must use that function rather than the default `_`:
 
-``` js
+```js
 import _ from 'lodash'
-const lodash = _.runInContext();
+const lodash = _.runInContext()
 
 // this will use the seeded Math.random()
 lodash.shuffle([1, 2, 3])
 ```
 
-Why is the random number generator re-seeded upon entry to each route? Why can't we just seed it once? If the participant accidentally refreshes a page, we want the *same* random number to be generated on each refresh. For example, if a random number generator controls which of two images is presented to that participant, we don't want the participant to see image 1, accidentally refresh, then be re-randomized to see image 2. If the random number generator was seeded at the beginning of the study, this is exactly what could happen when the page is refreshed (because the code for the beginning of the study won't be re-run). However, if the random number generator is seeded within the route where randomization occurs, the seed will be reset each time the page reloads. As a result, we will always generate the same random numbers for that participant within that route.
+Why is the random number generator re-seeded upon entry to each route? Why can't we just seed it once? If the participant accidentally refreshes a page, we want the _same_ random number to be generated on each refresh. For example, if a random number generator controls which of two images is presented to that participant, we don't want the participant to see image 1, accidentally refresh, then be re-randomized to see image 2. If the random number generator was seeded at the beginning of the study, this is exactly what could happen when the page is refreshed (because the code for the beginning of the study won't be re-run). However, if the random number generator is seeded within the route where randomization occurs, the seed will be reset each time the page reloads. As a result, we will always generate the same random numbers for that participant within that route.
 
 **Warning:** Be careful with routes that step through multiple trials. Generally, if a single route steps through multiple views, each of which require a random number (e.g., multiple trials), you should generate all random numbers for that route at the beginning of the route (rather than within each specific trial). Here's why: If the participant refreshes the page, you want them to go back to the trial where they left off (see `pageTracker` in `stores/smiledata.js` for more on this). If you set all random numbers at the beginning, the participant can easily pick up from trial 10 with the same randomization (all random numbers are regenerated upon refresh, and the `pageTracker` will correctly point to the 10th random number for the 10th trial). However, if you set random numbers within each trial, the partcipant will get a different random number on trial 10 before page refresh (the 10th random number after seeding) and after page refresh (the 1st random number after seeding).
 
@@ -52,7 +52,7 @@ Randomly shuffles an array. For example, this can be used to present some fixed 
 ```js
 import * as random from '@/randomization'
 
-const stimuli = ["image1.png", "image2.png", "image3.png", "image4.png", "image5.png"]
+const stimuli = ['image1.png', 'image2.png', 'image3.png', 'image4.png', 'image5.png']
 
 // shuffle the stimulus array
 const stimuli_shuffled = random.shuffle(stimuli)
@@ -65,7 +65,7 @@ Samples **without** replacement from an array. For example, this can be used to 
 ```js
 import * as random from '@/randomization'
 
-const stimuli = ["image1.png", "image2.png", "image3.png", "image4.png", "image5.png"]
+const stimuli = ['image1.png', 'image2.png', 'image3.png', 'image4.png', 'image5.png']
 
 // sample (without replacement) from array
 const stimuli_selected = random.sampleWithoutReplacement(stimuli, 3)
@@ -78,7 +78,7 @@ Samples **with** replacement from an array. For example, this can be used to ran
 ```js
 import * as random from '@/randomization'
 
-const stimuli = ["image1.png", "image2.png", "image3.png", "image4.png", "image5.png"]
+const stimuli = ['image1.png', 'image2.png', 'image3.png', 'image4.png', 'image5.png']
 
 // sample (with replacement) from array
 const stimuli_selected = random.sampleWithReplacement(stimuli, 3)
@@ -91,9 +91,9 @@ Computes the cartesian product of any number of arrays. For example, this can be
 ```js
 import * as random from '@/randomization'
 
-const stimuli = ["image1.png", "image2.png", "image3.png", "image4.png", "image5.png"]
-const prompts = ["click the red button", "click the blue button"]
-const backgroundColors = ["purple", "orange", "yellow"]
+const stimuli = ['image1.png', 'image2.png', 'image3.png', 'image4.png', 'image5.png']
+const prompts = ['click the red button', 'click the blue button']
+const backgroundColors = ['purple', 'orange', 'yellow']
 
 // get cartesian product of all arrays -- this will return an array of 5 x 2 x 3 = 30 arrays (each of length 3), each of which contains a stimulus, prompt, and background color
 const all_trial_types = random.expandProduct(stimuli, prompts, backgroundColors)
@@ -107,14 +107,13 @@ It is possible to randomize the order of routes in the timeline. See [Timeline](
 
 In rare cases, it may be desirable to generate "true" or "unseeded" random numbers (by default `Math.random()` actually does set a seed, but it's set automatically using other random stuff). To do so, you can make a local instance of a random number generator using the `seedrandom` library:
 
-``` js
+```js
 import seedrandom from 'seedrandom'
 
-const rng = seedrandom();
+const rng = seedrandom()
 
 // number will not be reproducible
 rng()
-
 ```
 
 ## Balanced condition assignment
@@ -183,22 +182,20 @@ import useSmileStore from '@/stores/smiledata'
 const smilestore = useSmileStore()
 
 const instText = computed(() => {
-    if(smilestore.getConditions.instructions === 'version1') {
-      return "instructions version 1"
-    } 
-    if(smilestore.getConditions.instructions === 'version2') {
-      return "instructions version 2"
-    } 
-    if(smilestore.getConditions.instructions === 'version3') {
-      return "instructions version 3"
-    }
-    return "no condition set"
+  if (smilestore.getConditions.instructions === 'version1') {
+    return 'instructions version 1'
+  }
+  if (smilestore.getConditions.instructions === 'version2') {
+    return 'instructions version 2'
+  }
+  if (smilestore.getConditions.instructions === 'version3') {
+    return 'instructions version 3'
+  }
+  return 'no condition set'
 })
-
 ```
 
 If you then refer to `instText` in your `<template>` section, the component will display the correct instructions based on the assigned condition (or "no condition set" if no condition has been assigned yet).
-
 
 ## Override randomization for debugging
 

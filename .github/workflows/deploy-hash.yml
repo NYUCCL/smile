@@ -175,6 +175,10 @@ jobs:
           remote_user: ${{ secrets.EXP_DEPLOY_USER }}
           remote_key: ${{ secrets.EXP_DEPLOY_KEY  }}
 
+      # make .htaccess file and add wasm mime type
+      - name: create the .htaccess file and add the wasm mime type
+        run: echo "AddType application/wasm wasm" > dist/.htaccess
+
       # send a notification at the end
       - name: Send notification to lab slack
         env:

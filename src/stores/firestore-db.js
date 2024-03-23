@@ -11,14 +11,14 @@ import {
   runTransaction,
   connectFirestoreEmulator,
 } from 'firebase/firestore'
-import appconfig from '@/config'
 import { split } from 'lodash'
+import appconfig from '@/config'
 
 // initialize firebase connection
 // since this is a module these will run once at the start
 
 const firebaseApp = initializeApp(appconfig.firebaseConfig)
-var db
+let db
 
 if (appconfig.mode === 'testing') {
   db = getFirestore()
@@ -64,6 +64,7 @@ export const loadDoc = async (docid) => {
 }
 
 export const createDoc = async (data, seedid, partnum) => {
+  console.log('trying to create document')
   try {
     const expRef = doc(db, mode, appconfig.project_ref)
     await setDoc(
