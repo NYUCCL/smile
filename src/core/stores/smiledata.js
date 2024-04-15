@@ -66,6 +66,9 @@ export default defineStore('smilestore', {
           '#/welcome/citizensci/?CITIZEN_ID=XXXXX&CITIZEN_STUDY_ID=123RVWYBAZW00EXAMPLE&CITIZEN_SESSION_ID=AZ3456EXAMPLE',
         web: '#/welcome',
       },
+      stream_data_current_batch: {
+
+      }
     },
     dev:
       appconfig.mode === 'development'
