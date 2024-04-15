@@ -31,6 +31,8 @@ export default {
   allow_repeats: import.meta.env.VITE_ALLOW_REPEATS,
   auto_save: import.meta.env.VITE_AUTO_SAVE_DATA,
   max_writes: import.meta.env.VITE_MAX_WRITES,
+  max_doc_size_mb: import.meta.env.VITE_MAX_DOC_SIZE_MB,
+  buffer_interval: import.meta.env.VITE_BUFFER_INTERVAL,
   min_write_interval: import.meta.env.VITE_MIN_WRITE_INTERVAL,
   show_progress_bar: import.meta.env.VITE_SHOW_PROGRESS_BAR,
   bug_reports: import.meta.env.VITE_BUG_REPORTS,
