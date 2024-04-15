@@ -50,6 +50,19 @@ export const updateSubjectDataRecord = async (data, docid) => {
   }
 }
 
+export const createSubDoc = async (docid, subcollection, data) => {
+  // create a doc in subcollection
+  // add time stamp to data
+  const log = useLog()
+  data.timestamp = fsnow()
+  try {
+    const docRef = await addDoc(collection(db, `${mode}/${appconfig.project_ref}/data/${docid}/${subcollection}`), data)
+    log.log('Subdocument written with ID: ', docRef.id)
+  } catch (e) {
+    log.error('Error adding subdocument: ', e)
+  }
+}
+
 export const loadDoc = async (docid) => {
   const docRef = doc(db, `${mode}/${appconfig.project_ref}/data/`, docid)
   const docSnap = await getDoc(docRef)
