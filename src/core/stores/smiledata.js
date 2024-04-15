@@ -10,6 +10,7 @@ import {
   balancedAssignConditions,
   loadDoc,
   fsnow,
+  createSubDoc,
 } from './firestore-db'
 import sizeof from 'firestore-size'
 
@@ -66,9 +67,10 @@ export default defineStore('smilestore', {
           '#/welcome/citizensci/?CITIZEN_ID=XXXXX&CITIZEN_STUDY_ID=123RVWYBAZW00EXAMPLE&CITIZEN_SESSION_ID=AZ3456EXAMPLE',
         web: '#/welcome',
       },
-      stream_data_current_batch: {
-
-      }
+      stream_data: {
+        buffer: [],
+        buffering: false,
+      },
     },
     dev:
       appconfig.mode === 'development'
@@ -109,7 +111,7 @@ export default defineStore('smilestore', {
       route_order: [],
       conditions: {},
       smile_config: appconfig, //  adding config info to firebase document
-      study_data: [],
+      stream_data_batch: {},
     },
     config: appconfig,
   }),
@@ -271,7 +273,7 @@ export default defineStore('smilestore', {
       }
     },
     saveTrialData(data) {
-      this.data.study_data.push(data)
+      this.setStreamingData(data, 'study_data')
     },
     saveDemographicForm(data) {
       this.data.demographic_form = data
@@ -322,8 +324,12 @@ export default defineStore('smilestore', {
     recordRoute(route) {
       this.data.route_order.push(route)
     },
-    async saveData(force = false) {
+    async saveData(force = false, subcollection = undefined) {
       const log = useLog()
+      if (this.global.stream_data.buffer.length > 0 && subcollection !== undefined) {
+        this.moveToBuffer(subcollection)
+        return
+      }
       if (this.isDBConnected) {
         if (!force && this.local.totalWrites >= appconfig.max_writes) {
           log.error(
@@ -338,10 +344,19 @@ export default defineStore('smilestore', {
             Data NOT saved. Call saveData() less frequently to avoid problems/cost issues. See env/.env \
             file to alter this setting.`
           )
-          // console.error(Date.now() - this.local.lastWrite)
+          if (subcollection !== undefined) {
+            this.moveToBuffer(subcollection)
+          }
           return
         }
-        await updateSubjectDataRecord(this.data, this.local.docRef)
+        if (subcollection !== undefined) {
+          createSubDoc(this.local.docRef, subcollection, this.global.stream_data[subcollection])
+          this.global.stream_data[subcollection].data = []
+          this.data.stream_data_batch[subcollection] += 1
+          this.global.stream_data[subcollection].batch = this.data.stream_data_batch[subcollection]
+        } else {
+          await updateSubjectDataRecord(this.data, this.local.docRef)
+        }
         //console.log('data size = ', sizeof(data))
         this.local.approx_data_size = sizeof(this.data)
         this.local.totalWrites += 1
@@ -359,6 +374,78 @@ export default defineStore('smilestore', {
       // this.local.allowJumps = false
       // this.global.db_connected = false
       this.$reset()
+    },
+    setStreamingData(data, subcollection) {
+      const log = useLog()
+      if (subcollection === undefined) {
+        log.error('Error setting streaming data: subcollection is undefined')
+        return
+      }
+      if (!this.global.stream_data.hasOwnProperty(subcollection)) {
+        // initialize subcollection if it doesn't exist
+        this.initStreamData(subcollection)
+      }
+
+      try {
+        // Add the data to the subcollection in global store
+        this.global.stream_data[subcollection].data.push(data)
+
+        // Calculate the size of the data in MB
+        const dataSize = sizeof(this.global.stream_data[subcollection])
+
+        if (dataSize / 1e6 > appconfig.max_doc_size_mb) {
+          // Save the data to firestore if the size exceeds the limit
+          this.saveData((subcollection = subcollection))
+        }
+      } catch (error) {
+        log.error('Error setting streaming data:', error)
+      }
+    },
+    initStreamData(subcollection) {
+      const log = useLog()
+      this.global.stream_data[subcollection] = {}
+      let batch = 0
+      if (this.data.stream_data_batch.hasOwnProperty(subcollection)) {
+        batch = this.data.stream_data_batch[subcollection]
+      } else {
+        this.data.stream_data_batch[subcollection] = 0
+      }
+      this.gloabl.stream_data[subcollection].batch = batch
+      this.gloabl.stream_data[subcollection].data = []
+      log.log(`Initialized subcollection ${subcollection} in streaming data storage`)
+    },
+    moveToBuffer(subcollection) {
+      const log = useLog()
+      log.log('Buffering data... ')
+      log.log('Documents to write: ', this.global.stream_data.buffer.length)
+      this.global.stream_data.buffer.push([subcollection, this.global.stream_data[subcollection]])
+      this.global.stream_data[subcollection].data = [] // clear the data
+      if (!this.global.stream_data.buffering) {
+        this.global.stream_data.buffering = true
+        this.initBuffer()
+      }
+    },
+    initBuffer() {
+      const log = useLog()
+      const saveBufferedData = async () => {
+        if (this.global.stream_data.buffer.length > 0) {
+          const [subcollection, streamDataDoc] = this.global.stream_data.buffer.shift()
+          try {
+            createSubDoc(streamDataDoc, this.local.docRef, subcollection)
+            this.local.totalWrites += 1
+            this.local.lastWrite = Date.now()
+            this.data.stream_data_batch[subcollection] += 1
+            this.global.stream_data[subcollection].batch = this.data.stream_data_batch[subcollection]
+            log.log('Successfully saved buffered data to firestore')
+          } catch (error) {
+            log.error('Error saving data from buffer:', error)
+          }
+        } else {
+          clearInterval(intervalId)
+          this.global.stream_data.buffering = false
+        }
+      }
+      const intervalId = setInterval(saveBufferedData, appconfig.buffer_interval) // maybe this should be defined outside of the function...?
     },
   },
 })
