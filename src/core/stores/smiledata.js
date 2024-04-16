@@ -393,9 +393,9 @@ export default defineStore('smilestore', {
         // Calculate the size of the data in MB
         const dataSize = sizeof(this.global.stream_data[subcollection])
 
-        if (dataSize / 1e6 > appconfig.max_doc_size_mb) {
-          // Save the data to firestore if the size exceeds the limit
-          this.saveData((subcollection = subcollection))
+        if (dataSize / 1e6 > parseFloat(appconfig.max_doc_size_mb)) {
+          // Save the data to firestore when document size reaches specified limit
+          this.saveData(false, subcollection)
         }
       } catch (error) {
         log.error('Error setting streaming data:', error)
@@ -410,8 +410,8 @@ export default defineStore('smilestore', {
       } else {
         this.data.stream_data_batch[subcollection] = 0
       }
-      this.gloabl.stream_data[subcollection].batch = batch
-      this.gloabl.stream_data[subcollection].data = []
+      this.global.stream_data[subcollection].batch = batch
+      this.global.stream_data[subcollection].data = []
       log.log(`Initialized subcollection ${subcollection} in streaming data storage`)
     },
     moveToBuffer(subcollection) {
@@ -445,7 +445,7 @@ export default defineStore('smilestore', {
           this.global.stream_data.buffering = false
         }
       }
-      const intervalId = setInterval(saveBufferedData, appconfig.buffer_interval) // maybe this should be defined outside of the function...?
+      const intervalId = setInterval(saveBufferedData, parseFloat(appconfig.buffer_interval)) // maybe this should be defined outside of the function...?
     },
   },
 })
