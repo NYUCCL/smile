@@ -66,9 +66,10 @@ export default function useSmileAPI() {
     },
     isBrowserTooSmall: () => {
       let val = false
-      if(smilestore.config.windowsizer_aggressive && smilestore.verifiedVisibility) {
-        val = window.innerWidth < smilestore.config.windowsizer_request.width+40 || window.innerHeight < smilestore.config.windowsizer_request.height+40
-        
+      if (smilestore.config.windowsizer_aggressive && smilestore.verifiedVisibility) {
+        val =
+          window.innerWidth < smilestore.config.windowsizer_request.width + 40 ||
+          window.innerHeight < smilestore.config.windowsizer_request.height + 40
       }
       return val
     },
@@ -120,7 +121,6 @@ export default function useSmileAPI() {
     },
     saveTrialData: (data) => {
       smilestore.saveTrialData(data)
-      console.log('data ', smilestore.data.study_data)
     },
   }
 
