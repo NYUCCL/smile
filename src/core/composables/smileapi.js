@@ -115,6 +115,9 @@ export default function useSmileAPI() {
     saveData: (force) => {
       smilestore.saveData(force)
     },
+    setStreamingData: (data, subcollection) => {
+      smilestore.setStreamingData(data, subcollection)
+    },
     saveTrialData: (data) => {
       smilestore.saveTrialData(data)
       console.log('data ', smilestore.data.study_data)
