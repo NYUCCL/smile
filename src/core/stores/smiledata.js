@@ -69,7 +69,7 @@ export default defineStore('smilestore', {
       },
       stream_data: {
         buffer: [],
-        buffering: false,
+        intervalId: undefined,
       },
     },
     dev:
@@ -341,7 +341,7 @@ export default defineStore('smilestore', {
         if (!force && this.local.lastWrite && Date.now() - this.local.lastWrite < appconfig.min_write_interval) {
           log.error(
             `SMILESTORE: write interval too short for firebase (${appconfig.min_write_interval}).  \
-            Data NOT saved. Call saveData() less frequently to avoid problems/cost issues. See env/.env \
+            Moving data to buffer. You might want to look into your data generation process to avoid problems. See env/.env \
             file to alter this setting.`
           )
           if (subcollection !== undefined) {
@@ -393,7 +393,7 @@ export default defineStore('smilestore', {
         // Calculate the size of the data in MB
         const dataSize = sizeof(this.global.stream_data[subcollection])
 
-        if (dataSize / 1e6 > parseFloat(appconfig.max_doc_size_mb)) {
+        if (dataSize / 1e6 > appconfig.max_doc_size_mb) {
           // Save the data to firestore when document size reaches specified limit
           this.saveData(false, subcollection)
         }
@@ -416,36 +416,37 @@ export default defineStore('smilestore', {
     },
     moveToBuffer(subcollection) {
       const log = useLog()
-      log.log('Buffering data... ')
-      log.log('Documents to write: ', this.global.stream_data.buffer.length)
       this.global.stream_data.buffer.push([subcollection, this.global.stream_data[subcollection]])
       this.global.stream_data[subcollection].data = [] // clear the data
-      if (!this.global.stream_data.buffering) {
-        this.global.stream_data.buffering = true
+      if (this.global.stream_data.intervalId === undefined) {
         this.initBuffer()
       }
     },
     initBuffer() {
       const log = useLog()
+      log.log('Initializing buffer...')
       const saveBufferedData = async () => {
         if (this.global.stream_data.buffer.length > 0) {
           const [subcollection, streamDataDoc] = this.global.stream_data.buffer.shift()
           try {
-            createSubDoc(streamDataDoc, this.local.docRef, subcollection)
+            createSubDoc(this.local.docRef, subcollection, streamDataDoc)
             this.local.totalWrites += 1
             this.local.lastWrite = Date.now()
             this.data.stream_data_batch[subcollection] += 1
             this.global.stream_data[subcollection].batch = this.data.stream_data_batch[subcollection]
-            log.log('Successfully saved buffered data to firestore')
+            log.log(
+              `Successfully saved buffered data to Firestore. Documents remaining: ${this.global.stream_data.buffer.length}`
+            )
           } catch (error) {
-            log.error('Error saving data from buffer:', error)
+            log.error('Error saving data from buffer to Firestore:', error)
           }
-        } else {
-          clearInterval(intervalId)
-          this.global.stream_data.buffering = false
         }
+        // else {
+        //   clearInterval(intervalId)
+        //   this.global.stream_data.buffering = false
+        // }
       }
-      const intervalId = setInterval(saveBufferedData, parseFloat(appconfig.buffer_interval)) // maybe this should be defined outside of the function...?
+      this.global.stream_data.intervalId = setInterval(saveBufferedData, appconfig.buffer_interval)
     },
   },
 })
