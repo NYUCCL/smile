@@ -1,10 +1,8 @@
-# :ladder: Stepping Views
-
-Many experiments are organized into a series of repeated events called "trials".
-Trials are different than [Views](/views) because they often repeat the same
-basic structure many times. Smile provides several features for organizing and
-managing trials or other sequenced elements _within_ a View (the
-[Timeline](/timeline) is used to sequence across Views).
+# :ladder: Stepping Through Trials
+For some conditions in your experiment, you may want to repeat several trials
+of the same event. Smile provides a trial stepper for organizing and managing
+sequenced events _within_ a View. This way, you can avoid repeating a 
+[View](/views) multiple times in your [timeline](/timeline). 
 
 <img src="/images/steps.png" width="600" alt="steps example" style="margin: auto;">
 
@@ -32,9 +30,10 @@ about how to [persist stepper state](#persisting-stepper-state)
 
 ## Create a stepped View
 
-To create a stepped view, you need to import the SmileAPI, define a list of
-trials and then use the `useTrialStepper` method to advance through the trials.
-Here we walk through the steps.
+To create a stepped view, you need to import the SmileAPI, define your trials, 
+(which can be adapted later), then use the `useTrialStepper` method to advance 
+through the trials. Here, we will walk through the steps of setting up your 
+trial stepper. 
 
 ### Import the SmileAPI
 
@@ -51,36 +50,63 @@ const api = useAPI() // [!code highlight]
 
 ### Define the trials
 
-Next, still in `<script setup>`, define a list of trials. Each trial is an
-object with keys that define aspects of what you wish to display on a given
-trial.
+
+Next, still in `<script setup>`, you can define your trials. Each trial 
+is an object with keys which defines the information displayed for that
+trial. In the simplest case, the trials will all exist on one level, and
+the stepper will advance through linearly.
 
 ```js
 var trials = [
-  { word: 'SHIP', color: 'red', condition: 'unrelated' },
+  { word: ['SHIP'], color: ['red'] },
+  { word: ['WORLD'], color: ['green'] },
   ... // more trials
 ]
 ```
 
-### Randomize the trials
-
-You can then shuffle the trials randomly using
+You can also define nested trials. Say you have 2 different conditions within
+a View. For each condition, you would like to specify a few subconditions and 
+repeat that scenario 3 times. You can always name your fields anything you
+would like, but make sure to use the field `repeat_for` if you would like to
+indicate that you want to loop over a specified condition for some number of
+times. Below is an example trial configuration:
 
 ```js
-trials = api.shuffle(trials)
+var trials = [
+  {level1: ['condition_1'], 
+   level2: ['subcondition_a', 'subcondition_b'], 
+   repeat_for: 3},
+  {level1: ['condition_2'], 
+   level2: ['subcondition_a', 'subcondition_b', 'subcondition_c'], 
+   repeat_for: 3},
+  ... // more trials
+]
 ```
+The resulting trial structure is represented by the following tree diagram. Note
+that the order of fields in each dictionary dictates the nesting order of the trial 
+conditions. The next section will detail how the trial stepper navigates this tree 
+diagram. 
+
+<img src="/images/nested_steps.png" width="250" alt="nested_steps" style="margin: auto;">
+
 
 ### Use the `useStepper` method
 
-Next, use the `useStepper` method to advance through the trials. This method
+The `useStepper` method to advance through the trials. This method
 uses a Vue composable to provide methods to advance and go back through the
 trials.
 
 ```js
-const step = api.useStepper(trials)
+const step = api.useTrialStepper(trials)
 ```
+By default, the trial stepper will always move through the leaf nodes of the trial
+tree. Referring to the above image, that means the trial stepper will iterate over 
+the numbered trials, while still populating the page with the information given
+by the fields in the parent levels. This structure allows you to flexibly set up
+multiple conditions, trials, and repeated events for each experiment page with 
+minimal code repetition.
 
-The returned object provides:
+The returned stepper object provides:
 
 - `step.next()`: Advance to the next step
 - `step.prev()`: Go back to the previous step
