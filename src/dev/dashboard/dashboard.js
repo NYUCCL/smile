@@ -1,31 +1,47 @@
 import { createApp } from 'vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // import with an @ symbol are resolved by vite to ./src directory
+import { createRouter, createWebHashHistory } from 'vue-router'
 
-import Dashboard from '@/dev/dashboard/Dashboard.vue' // import the main app component
-//import { router } from '@/core/router' // import the router
-//import { pinia } from '@/core/stores/createPinia'
+import DashboardApp from '@/dev/dashboard/DashboardApp.vue' // import the main app component
+import { pinia } from '@/core/stores/createPinia'
+
+import Overview from '@/dev/dashboard/Overview.vue'
+import DocumentViewer from '@/dev/dashboard/DocumentViewer.vue'
+
+import '@/core/main.css'
+
+import { useColorMode } from '@vueuse/core'
+useColorMode()
 
 // drag components
-// import VueDraggableResizable from 'vue-draggable-resizable'
-import { createNotivue } from 'notivue'
 
 // Create the app and the data store
-const app = createApp(Dashboard) // create the app
-const notivue = createNotivue({
-  position: 'top-left',
-  limit: 4,
-  enqueue: true,
-  avoidDuplicates: true,
-  notifications: {
-    global: {
-      duration: 2000,
-    },
+const app = createApp(DashboardApp) // create the app
+
+const routes = [
+  {
+    path: '/',
+    component: Overview,
+  },
+  {
+    path: '/document/:collection/:documentId',
+    name: 'document-viewer',
+    component: DocumentViewer,
+    props: true
+  },
+]
+
+const router = createRouter({
+  history: createWebHashHistory(), // We are using the hash history for now/simplicity
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 }
   },
 })
+
 // register plugins
-// app.use(pinia) // tell the app to use the data store
-// app.use(router) // tell the app to use the router
+app.use(pinia) // tell the app to use the data store
+app.use(router) // tell the app to use the router
 
 // add the ability to drag and resize elements
 //app.component('vue-draggable-resizable', VueDraggableResizable)

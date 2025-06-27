@@ -12,21 +12,41 @@ service cloud.firestore {
       return isAuthenticated() && 
              request.auth.uid == doc.data.firebaseAnonAuthID;
     }
+    
+    // Helper function to check if user has admin access
+    function isAdmin() {
+      return isAuthenticated() && (
+        // Add your admin user IDs here (replace with actual UIDs from the dashboard)
+        request.auth.uid == "62hhFmQoJwOMjnbkeNG9y7uhY8i2" ||
+        request.auth.uid == "ANOTHER_ADMIN_UID_HERE" ||
+        // Option for custom claims (if you implement that later)
+        request.auth.token.admin == true ||
+        request.auth.token.role == "admin"
+      );
+    }
 
     // Rules for testing collection
     match /testing/{studyID} {
       allow create: if isAuthenticated() && !exists(/databases/$(database)/documents/testing/$(studyID));
-      allow read: if isAuthenticated();  // Add this line
+      allow read: if isAuthenticated();
+      allow list: if isAdmin(); // Admins can list all studies
+      
       match /data/{partID} {
         allow create: if isAuthenticated() && 
                         request.resource.data.firebaseAnonAuthID == request.auth.uid;
-        allow read, update: if isOwner(resource);
+        allow read, update: if isOwner(resource) || isAdmin(); // Admins can read/update any data
+        allow list: if isAdmin(); // Admins can list all data documents
         allow delete: if false;
 
         match /private/private_data {
           allow create: if isAuthenticated() && 
                           request.resource.data.firebaseAnonAuthID  == request.auth.uid;
-          allow read, update: if isOwner(resource);
+          allow read, update: if isOwner(resource) || isAdmin(); // Admins can access private data
+          allow delete: if false;
+        }
+        
+        match /notes/annotations {
+          allow create, read, update: if isAdmin(); // Only admins can manage notes
           allow delete: if false;
         }
       }
@@ -35,17 +55,25 @@ service cloud.firestore {
     // Rules for real collection (identical to testing)
     match /real/{studyID} {
       allow create: if isAuthenticated() && !exists(/databases/$(database)/documents/real/$(studyID));
-      allow read: if isAuthenticated();  // Add this line
+      allow read: if isAuthenticated();
+      allow list: if isAdmin(); // Admins can list all studies
+      
       match /data/{partID} {
         allow create: if isAuthenticated() && 
                         request.resource.data.firebaseAnonAuthID  == request.auth.uid;
-        allow read, update: if isOwner(resource);
+        allow read, update: if isOwner(resource) || isAdmin(); // Admins can read/update any data  
+        allow list: if isAdmin(); // Admins can list all data documents
         allow delete: if false;
         
         match /private/private_data {
           allow create: if isAuthenticated() && 
                           request.resource.data.firebaseAnonAuthID  == request.auth.uid;
-          allow read, update: if isOwner(resource);
+          allow read, update: if isOwner(resource) || isAdmin(); // Admins can access private data
+          allow delete: if false;
+        }
+        
+        match /notes/annotations {
+          allow create, read, update: if isAdmin(); // Only admins can manage notes
           allow delete: if false;
         }
       }
