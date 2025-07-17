@@ -1,9 +1,9 @@
 <script setup>
-import { reactiveOmit } from "@vueuse/core";
-import { ToggleGroupItem, useForwardProps } from "reka-ui";
-import { inject } from "vue";
-import { cn } from '@/uikit/lib/utils';
-import { toggleVariants } from '@/uikit/components/ui/toggle';
+import { reactiveOmit } from '@vueuse/core'
+import { ToggleGroupItem, useForwardProps } from 'reka-ui'
+import { inject } from 'vue'
+import { cn } from '@/uikit/lib/utils'
+import { toggleVariants } from '@/uikit/components/ui/toggle'
 
 const props = defineProps({
   value: { type: null, required: true },
@@ -13,12 +13,12 @@ const props = defineProps({
   class: { type: null, required: false },
   variant: { type: null, required: false },
   size: { type: null, required: false },
-});
+})
 
-const context = inject("toggleGroup");
+const context = inject('toggleGroup')
 
-const delegatedProps = reactiveOmit(props, "class", "size", "variant");
-const forwardedProps = useForwardProps(delegatedProps);
+const delegatedProps = reactiveOmit(props, 'class', 'size', 'variant')
+const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
@@ -35,7 +35,7 @@ const forwardedProps = useForwardProps(delegatedProps);
           size: context?.size || size,
         }),
         'min-w-0 flex-1 shrink-0 rounded-none shadow-none first:rounded-l-md last:rounded-r-md focus:z-10 focus-visible:z-10 data-[variant=outline]:border-l-0 data-[variant=outline]:first:border-l',
-        props.class,
+        props.class
       )
     "
   >

@@ -1,10 +1,10 @@
 <script setup>
-import { cn } from '@/uikit/lib/utils';
-import { Separator } from '@/uikit/components/ui/separator';
+import { cn } from '@/uikit/lib/utils'
+import { Separator } from '@/uikit/components/ui/separator'
 
 const props = defineProps({
   class: { type: null, required: false },
-});
+})
 </script>
 
 <template>

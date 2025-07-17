@@ -24,5 +24,5 @@ jobs:
           payload: |
             { 
               "github_username": "${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}",
-              "message": "I'm sorry to report there was an error building and deploying your site.  Please see https://smile.gureckislab.org/deploying.html#debugging-deployment-issues"
+              "message": "I'm sorry to report there was an error building and deploying your site. Check the GitHub Actions tab for your repo here: https://github.com/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }} , see also the docs here: https://smile.gureckislab.org/deploying.html#debugging-deployment-issues"
             }

@@ -7,7 +7,7 @@ export const getResponsiveWidthClasses = (leftWidth, responsiveUI = true) => {
     // Return the fixed width class without responsive behavior
     return leftWidth || 'w-1/3'
   }
-  
+
   const widthMap = {
     'w-1/12': 'w-full @xl:w-1/12',
     'w-1/6': 'w-full @xl:w-1/6',

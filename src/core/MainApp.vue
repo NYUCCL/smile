@@ -1,13 +1,50 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import WindowSizerView from '@/builtins/window_sizer/WindowSizerView.vue'
 import StatusBar from '@/builtins/navbars/StatusBar.vue'
 
 import useAPI from '@/core/composables/useAPI'
 const api = useAPI()
 
-import { useColorMode } from '@vueuse/core'
-useColorMode()
+import { useSmileColorMode } from '@/core/composables/useColorMode'
+
+// Use global scope for production and presentation modes (applies to html/body), experiment scope for development
+const colorModeScope = api.config.mode === 'production' || api.config.mode === 'presentation' ? 'global' : 'experiment'
+const { state: systemColorMode, mode: colorModeControl } = useSmileColorMode(colorModeScope)
+
+// In presentation mode, prioritize the color mode control over API config
+// In other modes, sync API config to color mode control
+if (api.config.mode !== 'presentation') {
+  // Watch for changes to API config and sync with color mode control (development/production modes)
+  watch(
+    () => api.config.colorMode,
+    (newMode) => {
+      if (newMode !== 'system' && newMode !== 'auto') {
+        // Explicitly set mode when not using system
+        colorModeControl.value = newMode
+      } else {
+        // Use auto for system preference
+        colorModeControl.value = 'auto'
+      }
+    },
+    { immediate: true }
+  )
+}
+
+// The effective color mode logic depends on the mode
+const effectiveColorMode = computed(() => {
+  if (api.config.mode === 'presentation') {
+    // In presentation mode, use the color mode control state (set by DarkModeButton)
+    return systemColorMode.value
+  } else {
+    // In other modes, respect the API config setting
+    if (api.config.colorMode === 'system' || api.config.colorMode === 'auto') {
+      return systemColorMode.value
+    } else {
+      return api.config.colorMode
+    }
+  }
+})
 
 // Define props
 const props = defineProps({
@@ -152,7 +189,12 @@ const deviceTooSmall = computed(() => {
 </script>
 
 <template>
-  <div class="@container" ref="containerDiv">
+  <div
+    id="main-app"
+    class="@container bg-background text-foreground"
+    :data-experiment-scope="api.config.mode !== 'presentation' ? '' : null"
+    ref="containerDiv"
+  >
     <StatusBar v-if="showStatusBar" />
     <WindowSizerView triggered="true" v-if="deviceTooSmall"></WindowSizerView>
     <router-view v-else />

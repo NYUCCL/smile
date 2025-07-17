@@ -1,10 +1,10 @@
 <script setup>
-import { ChevronRight } from "lucide-vue-next";
-import { cn } from '@/uikit/lib/utils';
+import { ChevronRight } from 'lucide-vue-next'
+import { cn } from '@/uikit/lib/utils'
 
 const props = defineProps({
   class: { type: null, required: false },
-});
+})
 </script>
 
 <template>

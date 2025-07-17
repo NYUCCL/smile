@@ -1,11 +1,11 @@
 <script setup>
-import { CalendarGridHead } from "reka-ui";
+import { CalendarGridHead } from 'reka-ui'
 
 const props = defineProps({
   asChild: { type: Boolean, required: false },
   as: { type: null, required: false },
   class: { type: null, required: false },
-});
+})
 </script>
 
 <template>

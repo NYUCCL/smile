@@ -1,9 +1,9 @@
 <script setup>
-import { reactiveOmit } from "@vueuse/core";
-import { Check } from "lucide-vue-next";
-import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from "reka-ui";
-import { cn } from '@/uikit/lib/utils';
-import { checkboxVariants } from './index.js';
+import { reactiveOmit } from '@vueuse/core'
+import { Check } from 'lucide-vue-next'
+import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from 'reka-ui'
+import { cn } from '@/uikit/lib/utils'
+import { checkboxVariants } from './index.js'
 
 const props = defineProps({
   defaultValue: { type: [Boolean, String], required: false },
@@ -16,12 +16,16 @@ const props = defineProps({
   name: { type: String, required: false },
   required: { type: Boolean, required: false },
   class: { type: null, required: false },
-  variant: { type: String, default: 'default', validator: (value) => ['default', 'primary', 'info', 'success', 'warning', 'danger'].includes(value) },
+  variant: {
+    type: String,
+    default: 'default',
+    validator: (value) => ['default', 'primary', 'info', 'success', 'warning', 'danger'].includes(value),
+  },
   size: { type: String, default: 'default', validator: (value) => ['xs', 'sm', 'default', 'lg', 'xl'].includes(value) },
-});
-const emits = defineEmits(["update:modelValue"]);
+})
+const emits = defineEmits(['update:modelValue'])
 
-const delegatedProps = reactiveOmit(props, "class", "variant", "size");
+const delegatedProps = reactiveOmit(props, 'class', 'variant', 'size')
 
 const iconSizeClasses = {
   xs: 'size-2',
@@ -29,22 +33,13 @@ const iconSizeClasses = {
   default: 'size-3.5',
   lg: 'size-4',
   xl: 'size-5',
-};
+}
 
-const forwarded = useForwardPropsEmits(delegatedProps, emits);
+const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 
 <template>
-  <CheckboxRoot
-    data-slot="checkbox"
-    v-bind="forwarded"
-    :class="
-      cn(
-        checkboxVariants({ variant, size }),
-        props.class,
-      )
-    "
-  >
+  <CheckboxRoot data-slot="checkbox" v-bind="forwarded" :class="cn(checkboxVariants({ variant, size }), props.class)">
     <CheckboxIndicator
       data-slot="checkbox-indicator"
       class="flex items-center justify-center text-current transition-none"

@@ -1,7 +1,7 @@
 <script setup>
-import { reactiveOmit } from "@vueuse/core";
-import { DropdownMenuItem, useForwardProps } from "reka-ui";
-import { cn } from '@/uikit/lib/utils';
+import { reactiveOmit } from '@vueuse/core'
+import { DropdownMenuItem, useForwardProps } from 'reka-ui'
+import { cn } from '@/uikit/lib/utils'
 
 const props = defineProps({
   disabled: { type: Boolean, required: false },
@@ -10,12 +10,12 @@ const props = defineProps({
   as: { type: null, required: false },
   class: { type: null, required: false },
   inset: { type: Boolean, required: false },
-  variant: { type: String, required: false, default: "default" },
-});
+  variant: { type: String, required: false, default: 'default' },
+})
 
-const delegatedProps = reactiveOmit(props, "inset", "variant", "class");
+const delegatedProps = reactiveOmit(props, 'inset', 'variant', 'class')
 
-const forwardedProps = useForwardProps(delegatedProps);
+const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
@@ -27,7 +27,7 @@ const forwardedProps = useForwardProps(delegatedProps);
     :class="
       cn(
         `focus:bg-accent focus:text-accent-foreground data-[variant=destructive]:text-destructive-foreground data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/40 data-[variant=destructive]:focus:text-destructive-foreground data-[variant=destructive]:*:[svg]:!text-destructive-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4`,
-        props.class,
+        props.class
       )
     "
   >

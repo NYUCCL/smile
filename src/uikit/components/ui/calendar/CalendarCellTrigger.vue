@@ -1,20 +1,20 @@
 <script setup>
-import { reactiveOmit } from "@vueuse/core";
-import { CalendarCellTrigger, useForwardProps } from "reka-ui";
-import { cn } from '@/uikit/lib/utils';
-import { buttonVariants } from '@/uikit/components/ui/button';
+import { reactiveOmit } from '@vueuse/core'
+import { CalendarCellTrigger, useForwardProps } from 'reka-ui'
+import { cn } from '@/uikit/lib/utils'
+import { buttonVariants } from '@/uikit/components/ui/button'
 
 const props = defineProps({
   day: { type: null, required: true },
   month: { type: null, required: true },
   asChild: { type: Boolean, required: false },
-  as: { type: null, required: false, default: "button" },
+  as: { type: null, required: false, default: 'button' },
   class: { type: null, required: false },
-});
+})
 
-const delegatedProps = reactiveOmit(props, "class");
+const delegatedProps = reactiveOmit(props, 'class')
 
-const forwardedProps = useForwardProps(delegatedProps);
+const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
@@ -33,7 +33,7 @@ const forwardedProps = useForwardProps(delegatedProps);
         'data-[unavailable]:text-destructive-foreground data-[unavailable]:line-through',
         // Outside months
         'data-[outside-view]:text-muted-foreground',
-        props.class,
+        props.class
       )
     "
     v-bind="forwardedProps"

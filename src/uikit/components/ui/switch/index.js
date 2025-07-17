@@ -1,18 +1,16 @@
 import { cva } from 'class-variance-authority'
 
-export { default as Switch } from "./Switch.vue"
+export { default as Switch } from './Switch.vue'
 
 export const switchVariants = cva(
-  "peer inline-flex shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
+  'peer inline-flex shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
       variant: {
-        default:
-          'data-[state=checked]:bg-ring data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80',
+        default: 'data-[state=checked]:bg-ring data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80',
         primary:
           'data-[state=checked]:bg-primary-button data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80',
-        info:
-          'data-[state=checked]:bg-info-button data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80',
+        info: 'data-[state=checked]:bg-info-button data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80',
         success:
           'data-[state=checked]:bg-success-button data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80',
         warning:

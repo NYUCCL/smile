@@ -15,7 +15,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/uikit/components/ui/popover'
 import ConfigDevPanel from '@/dev/developer_mode/ConfigDevPanel.vue'
 import { Sun, Moon } from 'lucide-vue-next'
-import { useColorMode } from '@vueuse/core'
+import { useSmileColorMode } from '@/core/composables/useColorMode'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/uikit/components/ui/tooltip'
 
 const props = defineProps({
@@ -28,16 +28,18 @@ const props = defineProps({
 import useAPI from '@/core/composables/useAPI'
 const api = useAPI()
 
-// Add color mode functionality
-
-// Add color mode functionality
-const mode = useColorMode()
+// Global color mode for the entire application (html element)
+const { state: globalColorMode, setLight, setDark } = useSmileColorMode('global')
 
 // Computed property to bind to the switch
 const isDarkMode = computed({
-  get: () => mode.value === 'dark',
+  get: () => globalColorMode.value === 'dark',
   set: (value) => {
-    mode.value = value ? 'dark' : 'light'
+    if (value) {
+      setDark()
+    } else {
+      setLight()
+    }
   },
 })
 </script>
@@ -141,7 +143,7 @@ const isDarkMode = computed({
             </SidebarMenuButton>
           </TooltipTrigger>
           <TooltipContent side="right">
-            <p>{{ isDarkMode ? 'Switch to Light Mode in Dev Tools' : 'Switch to Dark Mode in Dev Tools' }}</p>
+            <p>{{ isDarkMode ? 'Switch to Light Mode (Global)' : 'Switch to Dark Mode (Global)' }}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

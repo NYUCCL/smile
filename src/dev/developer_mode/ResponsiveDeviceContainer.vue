@@ -6,12 +6,20 @@ import ResponsiveDeviceSelect from './ResponsiveDeviceSelect.vue'
 import { Separator } from '@/uikit/components/ui/separator'
 import { Button } from '@/uikit/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/uikit/components/ui/tooltip'
+import { useSmileColorMode } from '@/core/composables/useColorMode'
 
 const api = useAPI()
 
 import { useElementSize } from '@vueuse/core'
 const fullScreenDiv = ref(null)
 const { width: fullScreenWidth, height: fullScreenHeight } = useElementSize(fullScreenDiv)
+
+const {
+  state: experimentColorMode,
+  mode: experimentColorModeRaw,
+  toggle: toggleColorMode,
+  system,
+} = useSmileColorMode('experiment')
 
 // Initialize device dimensions based on the selected device from store
 const devicePresets = {
@@ -128,9 +136,7 @@ const toggleFullscreen = () => {
   api.store.dev.isFullscreen = !api.store.dev.isFullscreen
 }
 
-const toggleColorMode = () => {
-  api.config.colorMode = api.config.colorMode === 'light' ? 'dark' : 'light'
-}
+// toggleColorMode is now imported from useSmileColorMode above
 
 /**
  * Computed property that determines whether to wrap content in ResponsiveDeviceContainer
@@ -143,6 +149,10 @@ const shouldUseResponsiveContainer = computed(() => {
   const routeName = api.currentRouteName()
   return routeName !== undefined && routeName !== 'recruit' && api.config.mode == 'development'
 })
+
+const colorMode = computed(() => {
+  return experimentColorMode.value
+})
 </script>
 
 <template>
@@ -150,8 +160,8 @@ const shouldUseResponsiveContainer = computed(() => {
   <div
     v-if="api.store.dev.isFullscreen || !shouldUseResponsiveContainer || api.config.mode == 'presentation'"
     ref="fullScreenDiv"
-    class="fullscreen-container bg-background text-foreground"
-    :class="api.currentRouteName() !== 'recruit' ? (api.config.colorMode === 'dark' ? 'dark' : 'light') : ''"
+    class="fullscreen-container bg-background text-foreground dev-color-mode"
+    :class="api.currentRouteName() !== 'recruit' ? colorMode : ''"
   >
     <MainApp :deviceWidth="fullScreenWidth" :deviceHeight="fullScreenHeight" />
   </div>
@@ -181,13 +191,15 @@ const shouldUseResponsiveContainer = computed(() => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="ghost" size="xs" @click="toggleColorMode">
-                  <i-lucide-moon v-if="api.config.colorMode === 'light'" />
+                  <i-lucide-moon v-if="experimentColorModeRaw === 'light'" />
+                  <i-lucide-sun-moon v-else-if="experimentColorModeRaw === 'dark'" />
                   <i-lucide-sun v-else />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p v-if="api.config.colorMode === 'light'">Dark Mode</p>
-                <p v-else>Light Mode</p>
+                <p v-if="experimentColorModeRaw === 'light'">Switch to Dark Mode</p>
+                <p v-else-if="experimentColorModeRaw === 'dark'">Switch to System ({{ system }})</p>
+                <p v-else>Switch to Light Mode</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -206,10 +218,7 @@ const shouldUseResponsiveContainer = computed(() => {
           </TooltipProvider>
         </div>
       </div>
-      <div
-        class="device-wrapper"
-        :class="api.currentRouteName() !== 'recruit' ? (api.config.colorMode === 'dark' ? 'dark' : 'light') : ''"
-      >
+      <div class="device-wrapper dev-color-mode" :class="api.currentRouteName() !== 'recruit' ? colorMode : ''">
         <div class="device-container bg-background text-foreground" ref="containerDiv">
           <MainApp :deviceWidth="api.store.dev.deviceWidth" :deviceHeight="api.store.dev.deviceHeight" />
         </div>

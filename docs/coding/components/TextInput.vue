@@ -5,7 +5,7 @@ const text = ref('')
 
 <template>
   <div class="border-1 border-gray-800 rounded-md p-2 w-[200px]">
-  <input v-model="text" placeholder="Type here" />
+    <input v-model="text" placeholder="Type here" />
   </div>
   <p><b>You typed: </b>{{ text }}</p>
 </template>

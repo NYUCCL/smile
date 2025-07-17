@@ -44,7 +44,7 @@ defineExpose({
   collapse,
   expand,
   getSize,
-  isCollapsed
+  isCollapsed,
 })
 </script>
 

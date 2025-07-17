@@ -93,9 +93,13 @@ onMounted(() => {
 })
 
 // Watch for prop changes and highlighter availability
-watch([() => props.rawCode, () => props.filePath, highlighter], () => {
-  loadCode()
-}, { immediate: true })
+watch(
+  [() => props.rawCode, () => props.filePath, highlighter],
+  () => {
+    loadCode()
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -159,7 +163,12 @@ watch([() => props.rawCode, () => props.filePath, highlighter], () => {
       value="preview"
       class="relative after:absolute after:inset-0 after:right-3 after:z-0 after:rounded-lg after:bg-muted h-[--height] px-0"
     >
-      <ResizablePanelGroup v-if="responsive" id="block-resizable" direction="horizontal" class="relative z-10 bg-background">
+      <ResizablePanelGroup
+        v-if="responsive"
+        id="block-resizable"
+        direction="horizontal"
+        class="relative z-10 bg-background"
+      >
         <ResizablePanel id="block-resizable-panel-1" ref="resizableRef" :default-size="100" :min-size="30" as-child>
           <div :class="['w-full border-1 border-gray-200 rounded-lg', previewClasses]" :style="{ height: height }">
             <slot />

@@ -12,7 +12,9 @@ const api = useAPI()
 <template>
   <div class="w-full h-full flex border-t border-border overflow-hidden">
     <!-- Left sidebar - 36px wide -->
-    <div class="w-9 h-full bg-muted border-dev-lines border-r flex flex-col items-center justify-between pt-1 pb-1 flex-shrink-0">
+    <div
+      class="w-9 h-full bg-muted border-dev-lines border-r flex flex-col items-center justify-between pt-1 pb-1 flex-shrink-0"
+    >
       <!-- Top section with tab buttons -->
       <div class="flex flex-col items-center">
         <!-- Magnifying glass button - Browse tab -->
@@ -23,9 +25,9 @@ const api = useAPI()
                 variant="ghost"
                 size="icon"
                 class="w-8 h-8 mb-2 mt-1"
-                :class="{ 
+                :class="{
                   'bg-chart-4 hover:!bg-chart-4/80': api.store.dev.consoleBarTab === 'browse',
-                  'hover:!bg-sidebar-border': api.store.dev.consoleBarTab !== 'browse'
+                  'hover:!bg-sidebar-border': api.store.dev.consoleBarTab !== 'browse',
                 }"
                 @click="api.store.dev.consoleBarTab = 'browse'"
               >
@@ -46,9 +48,9 @@ const api = useAPI()
                 variant="ghost"
                 size="icon"
                 class="w-8 h-8 mb-2"
-                :class="{ 
+                :class="{
                   'bg-chart-4 hover:!bg-chart-4/80': api.store.dev.consoleBarTab === 'log',
-                  'hover:!bg-sidebar-border': api.store.dev.consoleBarTab !== 'log'
+                  'hover:!bg-sidebar-border': api.store.dev.consoleBarTab !== 'log',
                 }"
                 @click="api.store.dev.consoleBarTab = 'log'"
               >
@@ -69,9 +71,9 @@ const api = useAPI()
                 variant="ghost"
                 size="icon"
                 class="w-8 h-8 mb-1"
-                :class="{ 
+                :class="{
                   'bg-chart-4 hover:!bg-chart-4/80': api.store.dev.consoleBarTab === 'config',
-                  'hover:!bg-sidebar-border': api.store.dev.consoleBarTab !== 'config'
+                  'hover:!bg-sidebar-border': api.store.dev.consoleBarTab !== 'config',
                 }"
                 @click="api.store.dev.consoleBarTab = 'config'"
               >

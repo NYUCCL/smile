@@ -1,18 +1,36 @@
 <script setup>
-import { computed } from 'vue'
 import { Switch } from '@/uikit/components/ui/switch'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/uikit/components/ui/select'
 import { Input } from '@/uikit/components/ui/input'
 import useAPI from '@/core/composables/useAPI'
-import { Button } from '@/uikit/components/ui/button'
 import { Checkbox } from '@/uikit/components/ui/checkbox'
 const api = useAPI()
+import { useSmileColorMode } from '@/core/composables/useColorMode'
+import { computed } from 'vue'
+const { system, mode: experimentColorMode } = useSmileColorMode('experiment')
 
-const darkMode = computed({
-  get: () => api.config.colorMode === 'dark',
+// Create a computed property that syncs the dropdown with the actual color mode
+const colorModeSelect = computed({
+  get: () => experimentColorMode.value,
   set: (value) => {
-    api.config.colorMode = value ? 'dark' : 'light'
+    experimentColorMode.value = value
+    // Also update the API config to keep it in sync
+    api.config.colorMode = value
   },
+})
+
+// Create a computed property for the display text in the SelectTrigger
+const colorModeDisplayText = computed(() => {
+  switch (colorModeSelect.value) {
+    case 'light':
+      return 'Light'
+    case 'dark':
+      return 'Dark'
+    case 'auto':
+      return `System (${system.value})`
+    default:
+      return colorModeSelect.value
+  }
 })
 </script>
 
@@ -103,12 +121,27 @@ const darkMode = computed({
                   <Checkbox v-model="api.config.responsiveUI" class="mt-1" />
                 </div>
               </div>
-              <div class="flex flex-col items-center">
-                <span>Dark</span>
-                <div class="field">
-                  <Checkbox v-model="darkMode" class="mt-1" />
-                </div>
+
+              <div class="flex flex-col items-left">
+                <span>Color Mode</span>
+                <Select v-model="colorModeSelect" class="mt-1 h-8">
+                  <SelectTrigger size="sm" class="h-6 text-[1.1em] font-mono">
+                    <SelectValue>{{ colorModeDisplayText }}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="light" key="light">Light</SelectItem>
+                    <SelectItem value="dark" key="dark">Dark</SelectItem>
+                    <SelectItem value="auto" key="auto">System ({{ system }})</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
+            </div>
+          </td>
+        </tr>
+
+        <tr class="table-row-base table-row-base-bottom">
+          <td class="table-cell-base table-cell-left table-cell-small font-mono" colspan="4">
+            <div class="flex flex-wrap gap-4 items-center">
               <div class="flex flex-col items-left">
                 Service<br />
 

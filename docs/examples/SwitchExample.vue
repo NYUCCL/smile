@@ -8,11 +8,11 @@
       <Switch size="sm" />
       <Switch size="lg" />
       <Switch size="xl" />
-      <Switch variant="primary" :modelValue="true"/>
-      <Switch variant="info" :modelValue="true"/>
-      <Switch variant="success" :modelValue="true"/>
-      <Switch variant="warning" :modelValue="true"/>
-      <Switch variant="danger" :modelValue="true"/>
+      <Switch variant="primary" :modelValue="true" />
+      <Switch variant="info" :modelValue="true" />
+      <Switch variant="success" :modelValue="true" />
+      <Switch variant="warning" :modelValue="true" />
+      <Switch variant="danger" :modelValue="true" />
     </div>
   </div>
 </template>

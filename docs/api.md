@@ -64,8 +64,9 @@ The following functions are available when using `useViewAPI`:
   data without including parent block data.
 - `queryStepData`, `queryStepDataLeaf`: See
   [Data Query Methods](#data-query-methods).
-- `dataAlongPath`: Getter for the raw data array of all steps in the current path.
-  This is useful when you need to access the raw data structure of the path.
+- `dataAlongPath`: Getter for the raw data array of all steps in the current
+  path. This is useful when you need to access the raw data structure of the
+  path.
 - `stepIndex`: Returns the current step index among leaf nodes.
 - `blockIndex`: Returns the current block index.
 - `pathString`: Returns the current path as a string.
@@ -244,10 +245,14 @@ api.goToStep('trial/block1/step2', false)
   in use until the next route.
 - `randomAssignCondition(conditionObject)`: Randomly assigns a condition based
   on the provided condition object. Supports weighted randomization.
-- `randomInt(min, max)`: Generate a random integer between min and max (inclusive).
-- `shuffle(array)`: Randomly reorder elements in an array using Fisher-Yates algorithm.
-- `sampleWithReplacement(array, n, weights)`: Sample elements from an array with replacement.
-- `sampleWithoutReplacement(array, n)`: Sample elements from an array without replacement.
+- `randomInt(min, max)`: Generate a random integer between min and max
+  (inclusive).
+- `shuffle(array)`: Randomly reorder elements in an array using Fisher-Yates
+  algorithm.
+- `sampleWithReplacement(array, n, weights)`: Sample elements from an array with
+  replacement.
+- `sampleWithoutReplacement(array, n)`: Sample elements from an array without
+  replacement.
 - `faker`: Collection of faker distributions for generating random data.
 
 ## Logging and Debugging
@@ -300,11 +305,9 @@ references) must be converted to Firestore-safe formats before saving.
 These methods provide functionality for querying data across multiple steps in
 the experiment.
 
-#### `queryStepData(pathFilter = null)`
-
-Gets data for all leaf nodes in the stepper, optionally filtered by path
-pattern. Returns only the data directly associated with each leaf node, without
-merging parent block data.
+- `queryStepData(pathFilter = null)`: Gets data for all leaf nodes in the
+  stepper, optionally filtered by path pattern. Returns only the data directly
+  associated with each leaf node, without merging parent block data.
 
 ```javascript
 // Get data for all leaf nodes
@@ -314,12 +317,10 @@ const allLeafData = api.queryStepData()
 const trialData = api.queryStepData('trial/block*')
 ```
 
-#### `queryStepDataLeaf(pathFilter = null)`
-
-Gets data for all leaf nodes in the stepper, optionally filtered by path
-pattern. Returns only the data directly associated with each leaf node, without
-merging parent block data. This is an alias for `queryStepData` for consistency
-with the `stepDataLeaf` getter.
+- `queryStepDataLeaf(pathFilter = null)`: Gets data for all leaf nodes in the
+  stepper, optionally filtered by path pattern. Returns only the data directly
+  associated with each leaf node, without merging parent block data. This is an
+  alias for `queryStepData` for consistency with the `stepDataLeaf` getter.
 
 ```javascript
 // Get data for all leaf nodes
@@ -331,26 +332,25 @@ const trialData = api.queryStepDataLeaf('trial/block*')
 
 The difference between these methods:
 
-- `queryStepData()` returns the merged data for each leaf node (including parent block data)
-- `queryStepDataLeaf()` returns only the data directly from each leaf node (without parent block data)
+- `queryStepData()` returns the merged data for each leaf node (including parent
+  block data)
+- `queryStepDataLeaf()` returns only the data directly from each leaf node
+  (without parent block data)
 
 Example:
 
-```javascript
-// Given a structure:
-// block (blockType: 'practice')
-//   trial1 (response: 'A')
-//   trial2 (response: 'B')
+Given a structure:
 
-// queryStepData() returns (merged data):
-[
-  { blockType: 'practice', response: 'A' },
-  { blockType: 'practice', response: 'B' }
-]
+- block (blockType: 'practice')
+  - trial1 (response: 'A')
+  - trial2 (response: 'B')
 
-// queryStepDataLeaf() returns (leaf data only):
-[
-  { response: 'A' },
-  { response: 'B' }
-]
+`queryStepData()` returns (merged data):
+`[ { blockType: 'practice', response: 'A' }, { blockType: 'practice', response: 'B' }, ]`
+
+`queryStepDataLeaf()` returns (leaf data only):
+`[({ response: 'A' }, { response: 'B' })]`
+
+```
+
 ```

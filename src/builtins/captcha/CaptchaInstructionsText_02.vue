@@ -13,8 +13,8 @@ const ready = ref(0)
     </p>
     <p class="is-size-5 has-text-left">
       Only begin when you are ready to focus because if you fail to respond to too many questions, your answers are
-      incorrect, your response times appear irregular, you may be flagged as likely an AI bot (<i-fa6-solid-robot
-      />) and your compensation may be denied.
+      incorrect, your response times appear irregular, you may be flagged as likely an AI bot (<i-fa6-solid-robot />)
+      and your compensation may be denied.
     </p>
     <hr />
     <button class="button is-warning" id="finish" @click="ready++">

@@ -1,10 +1,10 @@
 <script setup>
-import { cn } from '@/uikit/lib/utils';
-import { Input } from '@/uikit/components/ui/input';
+import { cn } from '@/uikit/lib/utils'
+import { Input } from '@/uikit/components/ui/input'
 
 const props = defineProps({
   class: { type: null, required: false },
-});
+})
 </script>
 
 <template>

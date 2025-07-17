@@ -1,40 +1,35 @@
 <script setup>
-import { reactiveOmit } from "@vueuse/core";
-import { X } from "lucide-vue-next";
-import {
-  DialogClose,
-  DialogContent,
-  DialogPortal,
-  useForwardPropsEmits,
-} from "reka-ui";
-import { cn } from '@/uikit/lib/utils';
-import SheetOverlay from "./SheetOverlay.vue";
+import { reactiveOmit } from '@vueuse/core'
+import { X } from 'lucide-vue-next'
+import { DialogClose, DialogContent, DialogPortal, useForwardPropsEmits } from 'reka-ui'
+import { cn } from '@/uikit/lib/utils'
+import SheetOverlay from './SheetOverlay.vue'
 
 defineOptions({
   inheritAttrs: false,
-});
+})
 
 const props = defineProps({
   class: { type: null, required: false },
-  side: { type: String, required: false, default: "right" },
+  side: { type: String, required: false, default: 'right' },
   forceMount: { type: Boolean, required: false },
   trapFocus: { type: Boolean, required: false },
   disableOutsidePointerEvents: { type: Boolean, required: false },
   asChild: { type: Boolean, required: false },
   as: { type: null, required: false },
-});
+})
 const emits = defineEmits([
-  "escapeKeyDown",
-  "pointerDownOutside",
-  "focusOutside",
-  "interactOutside",
-  "openAutoFocus",
-  "closeAutoFocus",
-]);
+  'escapeKeyDown',
+  'pointerDownOutside',
+  'focusOutside',
+  'interactOutside',
+  'openAutoFocus',
+  'closeAutoFocus',
+])
 
-const delegatedProps = reactiveOmit(props, "class", "side");
+const delegatedProps = reactiveOmit(props, 'class', 'side')
 
-const forwarded = useForwardPropsEmits(delegatedProps, emits);
+const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 
 <template>
@@ -53,7 +48,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
             'data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 h-auto border-b',
           side === 'bottom' &&
             'data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t',
-          props.class,
+          props.class
         )
       "
       v-bind="{ ...forwarded, ...$attrs }"

@@ -28,9 +28,7 @@
         </a>
         <hr class="dropdown-divider" />
         <a href="https://bulma.io" class="dropdown-item" target="_new"> <FAIcon icon="fa-solid fa-globe" /> Bulma </a>
-        <a href="https://fontawesome.com" class="dropdown-item" target="_new">
-          <i-fa6-solid-globe /> FontAwesome
-        </a>
+        <a href="https://fontawesome.com" class="dropdown-item" target="_new"> <i-fa6-solid-globe /> FontAwesome </a>
         <hr class="dropdown-divider" />
         <a href="https://www.internetingishard.com" class="dropdown-item" target="_new">
           <i-fa6-solid-globe /> Interneting is hard

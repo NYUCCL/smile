@@ -16,7 +16,11 @@ const props = defineProps({
   required: { type: Boolean, required: false },
   class: { type: null, required: false },
   size: { type: String, default: 'default', validator: (value) => ['default', 'sm', 'lg', 'xl'].includes(value) },
-  variant: { type: String, default: 'default', validator: (value) => ['default', 'primary', 'info', 'success', 'warning', 'danger'].includes(value) },
+  variant: {
+    type: String,
+    default: 'default',
+    validator: (value) => ['default', 'primary', 'info', 'success', 'warning', 'danger'].includes(value),
+  },
 })
 
 const emits = defineEmits(['update:modelValue'])
@@ -53,13 +57,7 @@ const sizeClasses = {
   <SwitchRoot
     data-slot="switch"
     v-bind="forwarded"
-    :class="
-      cn(
-        switchVariants({ variant, size }),
-        sizeClasses[size].root,
-        props.class
-      )
-    "
+    :class="cn(switchVariants({ variant, size }), sizeClasses[size].root, props.class)"
   >
     <SwitchThumb
       data-slot="switch-thumb"

@@ -50,7 +50,7 @@ jobs:
       - name: Setup node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.11.1 # this is what i'm using locally
+          node-version-file: '.node_version'
 
       # install node packages
       - name: Install node dependencies
@@ -58,7 +58,9 @@ jobs:
 
       # accesses some git variables and processes them to be lower case/short/escaped
       - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v3.x
+        uses: rlespinasse/github-slug-action@v5
+        with:
+          short-length: 7
 
       # Configure git-specific .env file
       - name: Expose git-specific information to the Vite environment

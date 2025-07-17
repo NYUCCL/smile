@@ -40,7 +40,8 @@ mobile and arranges them horizontally on larger screens.
   'w-1/3'). The `leftWidth` prop accepts classes like `w-1/4` (25%), `w-1/3`
   (33%, default), `w-2/5` (40%), `w-1/2` (50%), `w-3/5` (60%), `w-2/3` (67%), or
   `w-3/4` (75%)
-- `responsiveUI` - Boolean: Whether to use responsive layout behavior (default: true)
+- `responsiveUI` - Boolean: Whether to use responsive layout behavior (default:
+  true)
 - `class` - String: Additional CSS classes to apply to the container
 
 ### Example

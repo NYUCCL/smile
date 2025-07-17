@@ -58,3 +58,12 @@ The developer mode tools have a separate dark mode configuration. You can toggle
 dark mode for the developer tools irrespective of what you choose for the
 experiment itself. This allows you to use dark mode for development while
 keeping your experiment in light mode, or vice versa.
+
+The dark mode button on the sidebar (lower left corner) will toggle the dark
+mode for the developer tools. The sidebar on the right has a dropdown for
+configuring the dark mode for the experiment. In addition, the developer tools
+have a dark mode button in the top toolbar (upper right corner).
+
+In presentation mode, the dark mode button in the top toolbar (upper right
+corner) will toggle the dark mode for the presentation mode. These buttons
+toggle between light, dark, and system preferences.

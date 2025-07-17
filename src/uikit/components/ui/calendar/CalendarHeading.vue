@@ -1,19 +1,19 @@
 <script setup>
-import { reactiveOmit } from "@vueuse/core";
-import { CalendarHeading, useForwardProps } from "reka-ui";
-import { cn } from '@/uikit/lib/utils';
+import { reactiveOmit } from '@vueuse/core'
+import { CalendarHeading, useForwardProps } from 'reka-ui'
+import { cn } from '@/uikit/lib/utils'
 
 const props = defineProps({
   asChild: { type: Boolean, required: false },
   as: { type: null, required: false },
   class: { type: null, required: false },
-});
+})
 
-defineSlots();
+defineSlots()
 
-const delegatedProps = reactiveOmit(props, "class");
+const delegatedProps = reactiveOmit(props, 'class')
 
-const forwardedProps = useForwardProps(delegatedProps);
+const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>

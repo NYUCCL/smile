@@ -7,19 +7,10 @@ import { Button } from '@/uikit/components/ui/button'
 import { Separator } from '@/uikit/components/ui/separator'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/uikit/components/ui/select'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/uikit/components/ui/tooltip'
-import { useColorMode } from '@vueuse/core'
+
 import { computed } from 'vue'
 
 const api = useAPI()
-const mode = useColorMode()
-
-// Computed property to bind to the switch
-const isDarkMode = computed({
-  get: () => mode.value === 'dark',
-  set: (value) => {
-    mode.value = value ? 'dark' : 'light'
-  },
-})
 
 // Device presets for rotation logic
 const devicePresets = {

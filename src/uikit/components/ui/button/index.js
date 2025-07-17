@@ -26,8 +26,7 @@ export const buttonVariants = cva(
           'text-link-button underline-offset-4 hover:underline disabled:text-gray-400 disabled:no-underline',
         'button-link-light':
           'bg-link-button-light text-link-button-light-foreground shadow-xs hover:bg-link-button-light/80 disabled:bg-gray-100 disabled:text-gray-400',
-        info:
-          'bg-info-button text-info-button-foreground shadow-xs hover:bg-info-button/90 disabled:bg-gray-300 disabled:text-gray-500',
+        info: 'bg-info-button text-info-button-foreground shadow-xs hover:bg-info-button/90 disabled:bg-gray-300 disabled:text-gray-500',
         'info-light':
           'bg-info-button-light text-info-button-light-foreground shadow-xs hover:bg-info-button-light/80 disabled:bg-gray-100 disabled:text-gray-400',
         success:

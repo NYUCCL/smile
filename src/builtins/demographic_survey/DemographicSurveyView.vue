@@ -172,7 +172,7 @@ function finish() {
                   {{ dateValue ? df.format(dateValue.toDate(getLocalTimeZone())) : 'Pick a date' }}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent class="w-auto p-0" :theme="api.config.colorMode === 'dark' ? 'dark' : 'light'">
+              <PopoverContent class="w-auto p-0">
                 <Calendar v-model="dateValue" initial-focus />
               </PopoverContent>
             </Popover>
@@ -185,7 +185,7 @@ function finish() {
               <SelectTrigger class="w-full bg-background dark:bg-background text-base">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
-              <SelectContent :theme="api.config.colorMode === 'dark' ? 'dark' : 'light'">
+              <SelectContent>
                 <SelectItem value="Male">Male</SelectItem>
                 <SelectItem value="Female">Female</SelectItem>
                 <SelectItem value="Other">Other</SelectItem>
@@ -201,7 +201,7 @@ function finish() {
               <SelectTrigger class="w-full bg-background dark:bg-background text-base">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
-              <SelectContent :theme="api.config.colorMode === 'dark' ? 'dark' : 'light'">
+              <SelectContent>
                 <SelectItem value="Asian">Asian</SelectItem>
                 <SelectItem value="Black/African American">Black/African American</SelectItem>
                 <SelectItem value="Caucasian/White">Caucasian/White</SelectItem>
@@ -221,7 +221,7 @@ function finish() {
               <SelectTrigger class="w-full bg-background dark:bg-background text-base">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
-              <SelectContent :theme="api.config.colorMode === 'dark' ? 'dark' : 'light'">
+              <SelectContent>
                 <SelectItem value="No">No</SelectItem>
                 <SelectItem value="Yes">Yes</SelectItem>
                 <SelectItem value="I prefer not to say">I prefer not to say</SelectItem>
@@ -236,7 +236,7 @@ function finish() {
               <SelectTrigger class="w-full bg-background dark:bg-background text-base">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
-              <SelectContent :theme="api.config.colorMode === 'dark' ? 'dark' : 'light'">
+              <SelectContent>
                 <SelectItem value="Yes">Yes</SelectItem>
                 <SelectItem value="No">No</SelectItem>
                 <SelectItem value="I prefer not to say">I prefer not to say</SelectItem>
@@ -269,7 +269,7 @@ function finish() {
               <SelectTrigger class="w-full bg-background dark:bg-background text-base">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
-              <SelectContent :theme="api.config.colorMode === 'dark' ? 'dark' : 'light'">
+              <SelectContent>
                 <SelectItem value="Yes">Yes</SelectItem>
                 <SelectItem value="No">No</SelectItem>
                 <SelectItem value="Unsure">Unsure</SelectItem>
@@ -285,7 +285,7 @@ function finish() {
               <SelectTrigger class="w-full bg-background dark:bg-background text-base">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
-              <SelectContent :theme="api.config.colorMode === 'dark' ? 'dark' : 'light'">
+              <SelectContent>
                 <SelectItem value="Yes">Yes</SelectItem>
                 <SelectItem value="No">No</SelectItem>
                 <SelectItem value="Unsure">Unsure</SelectItem>
@@ -303,7 +303,7 @@ function finish() {
               <SelectTrigger class="w-full bg-background dark:bg-background text-base">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
-              <SelectContent :theme="api.config.colorMode === 'dark' ? 'dark' : 'light'">
+              <SelectContent>
                 <SelectItem value="Yes">Yes</SelectItem>
                 <SelectItem value="No">No</SelectItem>
                 <SelectItem value="Unsure">Unsure</SelectItem>
@@ -321,7 +321,7 @@ function finish() {
               <SelectTrigger class="w-full bg-background dark:bg-background text-base">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
-              <SelectContent :theme="api.config.colorMode === 'dark' ? 'dark' : 'light'">
+              <SelectContent>
                 <SelectItem value="Yes">Yes</SelectItem>
                 <SelectItem value="No">No</SelectItem>
                 <SelectItem value="Unsure">Unsure</SelectItem>
@@ -341,7 +341,7 @@ function finish() {
               <SelectTrigger class="w-full bg-background dark:bg-background text-base">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
-              <SelectContent :theme="api.config.colorMode === 'dark' ? 'dark' : 'light'">
+              <SelectContent>
                 <SelectItem value="Yes">Yes</SelectItem>
                 <SelectItem value="No">No</SelectItem>
                 <SelectItem value="Unsure">Unsure</SelectItem>
@@ -377,7 +377,7 @@ function finish() {
               <SelectTrigger class="w-full bg-background dark:bg-background text-base">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
-              <SelectContent :theme="api.config.colorMode === 'dark' ? 'dark' : 'light'">
+              <SelectContent>
                 <SelectItem value="Afghanistan">Afghanistan</SelectItem>
                 <SelectItem value="Albania">Albania</SelectItem>
                 <SelectItem value="Algeria">Algeria</SelectItem>
@@ -598,7 +598,7 @@ function finish() {
               <SelectTrigger class="w-full bg-background dark:bg-background text-base">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
-              <SelectContent :theme="api.config.colorMode === 'dark' ? 'dark' : 'light'">
+              <SelectContent>
                 <SelectItem value="No Formal Qualifications">No Formal Qualifications</SelectItem>
                 <SelectItem value="Secondary Education (ie. GED/GCSE)">Secondary Education (ie. GED/GCSE)</SelectItem>
                 <SelectItem value="High School Diploma (A-levels)">High School Diploma (A-levels)</SelectItem>
@@ -623,7 +623,7 @@ function finish() {
               <SelectTrigger class="w-full bg-background dark:bg-background text-base">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
-              <SelectContent :theme="api.config.colorMode === 'dark' ? 'dark' : 'light'">
+              <SelectContent>
                 <SelectItem value="Less than $20,000">Less than $20,000</SelectItem>
                 <SelectItem value="$20,000–$39,999">$20,000–$39,999</SelectItem>
                 <SelectItem value="$40,000–$59,999">$40,000–$59,999</SelectItem>
