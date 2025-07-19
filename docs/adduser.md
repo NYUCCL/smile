@@ -19,7 +19,7 @@ your lab like a fileserver, slack channel or even distributed over email.
 
 ::: info Great news!
 
-You only need to do this the first time you try out <SmileText/>! Then you will
+You only need to do this the first time you try out <SmileText />! Then you will
 forever be part of the family. For each new project you want to use with this
 lab copy the relevant .env files over.
 

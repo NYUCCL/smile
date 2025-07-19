@@ -1,12 +1,12 @@
 <script setup>
-import { Primitive } from "reka-ui";
-import { cn } from '@/uikit/lib/utils';
+import { Primitive } from 'reka-ui'
+import { cn } from '@/uikit/lib/utils'
 
 const props = defineProps({
   asChild: { type: Boolean, required: false },
-  as: { type: null, required: false, default: "a" },
+  as: { type: null, required: false, default: 'a' },
   class: { type: null, required: false },
-});
+})
 </script>
 
 <template>

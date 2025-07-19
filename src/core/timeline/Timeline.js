@@ -5,7 +5,7 @@
 
 import _ from 'lodash'
 import RecruitmentChooser from '@/dev/developer_mode/RecruitmentChooserView.vue'
-import PresentationMode from '@/dev/presentation_mode/PresentationModeView.vue'
+import PresentationMode from '@/user/PresentationModeView.vue'
 
 /**
  * Timeline class for managing the sequence of routes in the application
@@ -27,6 +27,12 @@ class Timeline {
     this._IS_ROOT_NODE = '_IS_ROOT_NODE'
     // add the recruitment chooser if in development mode
     if (api.config.mode === 'development') {
+      this.registerView({
+        path: '/presentation',
+        name: 'presentation_home',
+        component: PresentationMode,
+        meta: { allowAlways: true, requiresConsent: false },
+      })
       this.registerView({
         path: '/',
         name: 'recruit',
@@ -115,6 +121,7 @@ class Timeline {
    */
   pushSeqView(routeConfig) {
     const newroute = this.cloneRouteAndFillDefaults(routeConfig)
+
     if (!newroute.meta) {
       newroute.meta = { next: undefined, prev: undefined } // need to configure it
     } else {

@@ -1,13 +1,13 @@
 <template>
-  <div class="informedconsent">
-    <h1 class="is-size-4 has-text-weight-bold">Informed Consent Statement</h1>
-    <hr />
+  <div class="p-3 pt-2 text-left">
+    <h1 class="text-3xl font-bold"><i-mdi-approve class="inline-block mr-2" />Informed Consent</h1>
+    <hr class="mt-2 mb-3 h-px" />
     <p>
       If you agree to be in this study, you will be asked to look at pictures of objects or pictures presented on a
       computer display, watch videos, listen to sounds, or observe lights controlled by the computer and to make
       judgments about them using a keyboard, mouse, or other input device attached to a computer.
     </p>
-    <ul>
+    <ul class="pl-8 pt-3 pb-3 list-square">
       <li>
         Participation in this study will take about 30 minutes to complete, and you will receive $4.50 for your
         participation. As an additional incentive to try your best at the task, you may earn a cash bonus of up to
@@ -45,25 +45,13 @@
 </template>
 
 <style scoped>
-.informedconsent {
-  padding: 10px;
-  padding-top: 5px;
-  text-align: left;
-  font-size: 0.95em;
-  color: #717171;
-}
-
-.informedconsent hr {
-  background-color: rgb(210, 210, 210);
-  margin-top: 7px;
-  margin-bottom: 10px;
-  height: 1px;
-}
-
-.informedconsent ul {
-  padding-left: 30px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+/* Ensure list bullets are visible */
+ul {
   list-style-type: square;
+  padding-left: 2rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
 }
 </style>

@@ -33,7 +33,8 @@ developing and launching experiments relatively painless.
   [Google Firestore](https://firebase.google.com/docs/firestore) database.
   Firestore is a robust schema-less database solution ideally suited for the
   web. The cost is low for even fairly large experiments and datasets (although
-  there are some technical limits, see [here](/datastorage) for more info).
+  there are some technical limits, see [here](/coding/datastorage) for more
+  info).
 
 - **Slack** (weakly required).  
   In order to notify you and your other lab members when certain tasks are
@@ -68,10 +69,10 @@ The general overview of how these services interact is shown below:
 ![Overview of services](/images/service-overview.png)
 
 You push code to Github. Each time this happens, your code is
-[deployed](/deploying) to your web (i.e., http) server. In addition, a message
-is posted to Slack to let you know that deployment was successful (or to let you
-know that there were errors preventing deployment). Participants access your
-task via their web browser, which is able to write to the Google Firebase
+[deployed](/recruit/deploying) to your web (i.e., http) server. In addition, a
+message is posted to Slack to let you know that deployment was successful (or to
+let you know that there were errors preventing deployment). Participants access
+your task via their web browser, which is able to write to the Google Firebase
 database.
 
 The following sections walk you through configuring each of these services. This
@@ -114,10 +115,12 @@ changes from the child and parent repositories when you want. This new forked
 repo will be your lab's "base" repo. All your individual projects will then fork
 from your lab's "base" repo. This allows you to share the
 lab/organization-specific configuration files with all the repos that fork from
-your base repo. It is recommended you fork from your lab's base repo because you
-can then make common changes that should apply to all your experiments (e.g.,
-logos, branding, consent forms). Of course you can also fork from the main Smile
-repo as well.
+your base repo. For example, you might have a custom university logo or informed
+consent form and if you make a base repo for your lab every sub-project can
+automatically grab these changes from the base Smile repo. It is recommended you
+fork from your lab's base repo because you can then make common changes that
+should apply to all your experiments (e.g., logos, branding, consent forms). Of
+course you can also fork from the main Smile repo as well.
 
 ![Inheriting between Github repos](/images/labconfig-github-inherit.png)
 
@@ -203,7 +206,7 @@ Firebase rules in the
 [Firebase rules documentation](https://firebase.google.com/docs/rules).
 
 Here is an example of the rules file that works well with Smile experiments (in
-`/firebase.rules` of the main Smile repo):
+`firebase/firebase.rules` of the main Smile repo):
 
 <<< @/../firebase/firebase.rules{js}
 
@@ -212,8 +215,9 @@ Here is an example of the rules file that works well with Smile experiments (in
 When you're developing an experiment and push changed to Github, your experiment
 code goes through a pre-processing step, which optimizes the speed at which the
 code is delievered to participants. Also, when your code builds successfully it
-is deployed to a unique URL (see [deploy](/deploying) docs for full details). If
-things go wrong in this process, it is helpful to get a notification.
+is deployed to a unique URL (see [deploy](/recruit/deploying) docs for full
+details). If things go wrong in this process, it is helpful to get a
+notification.
 
 **If you don't want to use Slack, skip these instructions and go to the next
 section.**
@@ -395,6 +399,18 @@ npm run upload_config
 ```
 
 Then be sure to redistribute the changed files to members of your lab.
+
+## Other things to configure in your base repo
+
+A few files you might want to modify in your base repo are:
+
+- `user/assets/universitylogo.png` (currently this is a NYU logo but you can
+  change it to your favored version)
+- `user/components/InformedConsentText.vue` (the basic informed consent form for
+  your experiment, currently it is boilerplate but if you share the same form
+  for all your downstream lab projects it might make sense to modify this in
+  your base repo, users can of course edit/overide it on a project-by-project
+  basis)
 
 ## All done!
 

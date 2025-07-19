@@ -1,14 +1,14 @@
 <script setup>
-import { Primitive } from "reka-ui";
-import { cn } from '@/uikit/lib/utils';
+import { Primitive } from 'reka-ui'
+import { cn } from '@/uikit/lib/utils'
 
 const props = defineProps({
   asChild: { type: Boolean, required: false },
-  as: { type: null, required: false, default: "a" },
-  size: { type: String, required: false, default: "md" },
+  as: { type: null, required: false, default: 'a' },
+  size: { type: String, required: false, default: 'md' },
   isActive: { type: Boolean, required: false },
   class: { type: null, required: false },
-});
+})
 </script>
 
 <template>
@@ -26,7 +26,7 @@ const props = defineProps({
         size === 'sm' && 'text-xs',
         size === 'md' && 'text-sm',
         'group-data-[collapsible=icon]:hidden',
-        props.class,
+        props.class
       )
     "
   >

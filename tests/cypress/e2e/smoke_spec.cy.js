@@ -60,8 +60,6 @@ describe('user flow', () => {
     cy.get('[name=income]').select('Less than $20,000')
     cy.contains('That was easy!').click()
 
-    cy.url().should('include', '/captcha') // should go to captcha next
-    cy.contains('next').click() // click the continue button
     cy.url().should('include', '/exp') // should go to the "exp" next
     cy.contains('next').click() // click to continue
     cy.url().should('include', '/debrief') // should end up on the "debrief" page

@@ -1,7 +1,7 @@
 <script setup>
-import { reactiveOmit } from "@vueuse/core";
-import { TagsInputRoot, useForwardPropsEmits } from "reka-ui";
-import { cn } from '@/uikit/lib/utils';
+import { reactiveOmit } from '@vueuse/core'
+import { TagsInputRoot, useForwardPropsEmits } from 'reka-ui'
+import { cn } from '@/uikit/lib/utils'
 
 const props = defineProps({
   modelValue: { type: [Array, null], required: false },
@@ -22,17 +22,12 @@ const props = defineProps({
   name: { type: String, required: false },
   required: { type: Boolean, required: false },
   class: { type: null, required: false },
-});
-const emits = defineEmits([
-  "update:modelValue",
-  "invalid",
-  "addTag",
-  "removeTag",
-]);
+})
+const emits = defineEmits(['update:modelValue', 'invalid', 'addTag', 'removeTag'])
 
-const delegatedProps = reactiveOmit(props, "class");
+const delegatedProps = reactiveOmit(props, 'class')
 
-const forwarded = useForwardPropsEmits(delegatedProps, emits);
+const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 
 <template>
@@ -41,7 +36,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
     :class="
       cn(
         'flex flex-wrap gap-2 items-center rounded-md border border-input bg-background px-3 py-1.5 text-sm',
-        props.class,
+        props.class
       )
     "
   >

@@ -9,7 +9,7 @@
  */
 import { defineStore } from 'pinia'
 import appconfig from '@/core/config'
-import { push } from 'notivue'
+import { toast } from 'vue-sonner'
 import useSmileStore from '@/core/stores/smilestore'
 
 /**
@@ -150,7 +150,7 @@ export default defineStore('log', {
           smilestore.dev.notificationFilter == 'Warnings only') &&
         appconfig.mode === 'development'
       ) {
-        push.warning(message)
+        toast.warning(message)
       }
       console.warn(message)
       this.addToHistory(msg)
@@ -175,7 +175,7 @@ export default defineStore('log', {
           smilestore.dev.notificationFilter == 'Errors only') &&
         appconfig.mode === 'development'
       ) {
-        push.error(message)
+        toast.error(message)
       }
       console.error(message)
       this.addToHistory(msg)
@@ -199,7 +199,7 @@ export default defineStore('log', {
         (smilestore.dev.notificationFilter == 'All' || smilestore.dev.notificationFilter == 'Success only') &&
         appconfig.mode === 'development'
       ) {
-        push.success(message)
+        toast.success(message)
       }
       console.log(message)
       this.addToHistory(msg)

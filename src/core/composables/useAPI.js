@@ -106,27 +106,51 @@ export class SmileAPI {
   // Router related methods
   /**
    * Navigate to the next view in the timeline sequence
+   * @param {boolean} [resetScroll=true] - Whether to reset scroll position to top after navigation
    * @returns {void}
+   * @memberof SmileAPI
+   * @instance
    */
-  goNextView = () => this.timeline.goNextView()
+  goNextView = (resetScroll = true) => {
+    this.timeline.goNextView(() => {
+      if (resetScroll) {
+        this.scrollToTop()
+      }
+    })
+  }
   /**
    * Navigate to the previous view in the timeline sequence
+   * @param {boolean} [resetScroll=true] - Whether to reset scroll position to top after navigation
    * @returns {void}
+   * @memberof SmileAPI
+   * @instance
    */
-  goPrevView = () => this.timeline.goPrevView()
+  goPrevView = (resetScroll = true) => {
+    this.timeline.goPrevView(() => {
+      if (resetScroll) {
+        this.scrollToTop()
+      }
+    })
+  }
   /**
    * Navigate to a specific view in the application
    * @param {string} view - The name of the view to navigate to
    * @param {boolean} [force=true] - Whether to force navigation by temporarily disabling navigation guards
+   * @param {boolean} [resetScroll=true] - Whether to reset scroll position to top after navigation
    * @returns {Promise<void>}
+   * @memberof SmileAPI
+   * @instance
    */
-  goToView = async (view, force = true) => {
+  goToView = async (view, force = true, resetScroll = true) => {
     if (force) {
       this.store.browserEphemeral.forceNavigate = true
       await this.router.push({ name: view })
       this.store.browserEphemeral.forceNavigate = false
     } else {
       await this.router.push({ name: view })
+    }
+    if (resetScroll) {
+      this.scrollToTop()
     }
   }
 
@@ -154,6 +178,16 @@ export class SmileAPI {
    */
   prevView = () => this.timeline.prevView()
 
+  /**
+   * Scrolls the main content container to the top
+   * @returns {void}
+   */
+  scrollToTop() {
+    const mainContent = document.querySelector('.device-container')
+    if (mainContent) {
+      mainContent.scrollTop = 0
+    }
+  }
   // Randomization utilities
   /**
    * Collection of faker distributions for generating random data
@@ -370,7 +404,7 @@ export class SmileAPI {
    * @returns {void}
    */
   verifyVisibility(value) {
-    this.store.data.verifiedVisibility = value
+    this.store.verifyVisibility(value)
   }
 
   /**
@@ -403,15 +437,21 @@ export class SmileAPI {
 
   // Browser checks
   /**
-   * Checks if the browser window is smaller than the required dimensions
+   * Checks if the browser window dimensions are smaller than the required dimensions
+   * @param {number} width - The current width to check against minimum requirements
+   * @param {number} height - The current height to check against minimum requirements
    * @returns {boolean} True if browser window is too small, false otherwise
    */
-  isBrowserTooSmall() {
+  isBrowserTooSmall(width, height) {
     let val = false
-    if (this.store.config.windowsizerAggressive === true && this.store.data.verifiedVisibility === true) {
+    if (
+      this.store.config.windowsizerAggressive === true &&
+      this.store.data.verifiedVisibility === true &&
+      !this.store.browserPersisted.withdrawn
+    ) {
       val =
-        window.innerWidth < this.store.config.windowsizerRequest.width + 40 ||
-        window.innerHeight < this.store.config.windowsizerRequest.height + 40
+        width < this.store.config.windowsizerRequest.width + 10 ||
+        height < this.store.config.windowsizerRequest.height + 85 // margin for status bar
     }
     return val
   }
@@ -424,7 +464,8 @@ export class SmileAPI {
    */
   setAutofill(autofill) {
     this.logStore.debug('SMILEAPI: registering autofill function')
-    if (this.store.config.mode === 'development') this.store.setAutofill(autofill)
+    if (this.store.config.mode === 'development' || this.store.config.mode === 'presentation')
+      this.store.setAutofill(autofill)
   }
 
   /**
@@ -433,7 +474,8 @@ export class SmileAPI {
    */
   removeAutofill() {
     this.logStore.debug('SMILEAPI: removing autofill')
-    if (this.store.config.mode === 'development') this.store.removeAutofill()
+    if (this.store.config.mode === 'development' || this.store.config.mode === 'presentation')
+      this.store.removeAutofill()
   }
 
   // Completion and recruitment
@@ -478,6 +520,15 @@ export class SmileAPI {
    */
   currentRouteName() {
     return this.route.name
+  }
+
+  // routes
+  /**
+   * Gets the info of the current route
+   * @returns {Object} The current route info
+   */
+  currentRouteInfo() {
+    return this.route
   }
 
   /**

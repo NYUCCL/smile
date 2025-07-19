@@ -1,0 +1,95 @@
+---
+alwaysApply: true
+---
+
+You are an expert in JavaScript, Node.js, Vue 3, Shadcn Vue, Radix Vue, VueUse, and Tailwind.
+
+Code Style and Structure
+
+- Write concise, technical JavaScript code with accurate examples.
+- Use composition API and declarative programming patterns; avoid options API.
+- Prefer iteration and modularization over code duplication.
+- Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
+
+Naming Conventions
+
+- Use lowercase with dashes for directories (e.g., components/auth-wizard).
+- Use PascalCase for component names (e.g., AuthWizard.vue).
+- Use camelCase for composables (e.g., useAuthState.ts).
+
+TypeScript Usage
+
+- Use TypeScript for all code; prefer types over interfaces.
+- Avoid enums; use const objects instead.
+- Use Vue 3 with TypeScript, leveraging defineComponent and PropType.
+
+Syntax and Formatting
+
+- Use arrow functions for methods and computed properties.
+- Avoid unnecessary curly braces in conditionals; use concise syntax for simple statements.
+- Use template syntax for declarative rendering.
+
+UI and Styling
+
+- Use Shadcn Vue, Radix Vue, and Tailwind for components and styling.
+- Shadcn libraries are in the @/uikit/components/ui/ folder
+- Implement responsive design with Tailwind CSS; use a web-first approach.
+
+Key Conventions
+
+- Use VueUse for common composables and utility functions.
+- Use Pinia for state management.
+- Optimize Web Vitals (LCP, CLS, FID).
+- Utilize Nuxt's auto-imports feature for components and composables.
+
+Vue 3 and Composition API Best Practices
+
+- Use <script setup> syntax for concise component definitions.
+- Leverage ref, reactive, and computed for reactive state management.
+- Use provide/inject for dependency injection when appropriate.
+- Implement custom composables for reusable logic.
+- Order the sections of Single-File Components: 1. script, 2. template, then 3. style.
+
+Smile
+
+- Smile provide a custom API. It is imported using:
+
+```js
+import useViewAPI from '@/core/composables/useViewAPI'
+const api = useViewAPI()
+```
+
+If the component is not a "View" then it can be imported as
+
+```js
+import useAPI from '@/core/composables/useAPI'
+const api = useAPI()
+```
+
+The API provides these navigation functions:
+
+- `api.goNextStep(resetScroll = true)` - Advance to the next trial. Returns the
+  index of the next state (0, 1, 2, etc.) or `null` if at the end. The
+  `resetScroll` parameter controls whether to automatically scroll to the top of
+  the page after navigation.
+- `api.goPrevStep(resetScroll = true)` - Go back to the previous trial. Returns
+  the index of the previous state or `null` if at the beginning. The
+  `resetScroll` parameter controls whether to automatically scroll to the top of
+  the page after navigation.
+- `api.stepData` - An array of data objects along the current path (e.g.,
+  `[{ shape: 'circle', color: 'red' }]`)
+- `api.stepIndex` - The index of the current step in the stepper (i.e., the
+  current index of leaf node)
+- `api.blockIndex` - The index of the current block in the stepper (i.e., the
+  current index of the block node)
+- `api.pathString` - The path to the current step as a string (e.g., "0" for
+  first trial, "0-0" for nested trials)
+- `api.path` - The path to the current step as an array (e.g., ["0", "0"] for
+  nested trials)
+- `api.length` - The number of steps in the stepper
+- `api.blockLength` - The number of steps in the current block
+- `api.stepLength/api.nSteps` - The number of steps in the current step
+- `api.isLastStep()` - Whether the current step is the last step in the stepper
+- `api.isLastBlockStep()` - Whether the current step is the last step in the
+  current block
+- `api.recordStep()` - Record the current step data

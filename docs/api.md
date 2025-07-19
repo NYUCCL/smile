@@ -1,8 +1,9 @@
 # Smile API
 
-Smile provides a common API which is accessed in user [Views](./views.md) and
-[Components](./components.md). This API provides a set of methods and properties
-which enable things like navigation, state management, data access, and more.
+Smile provides a common API which is accessed in user [Views](/coding/views) and
+[Components](/coding/components). This API provides a set of methods and
+properties which enable things like navigation, state management, data access,
+and more.
 
 ## Usage
 
@@ -30,16 +31,35 @@ additional methods for:
 - Timing utilities
 - State visualization
 
+::: danger When to use `useViewAPI` versus `useAPI`?
+
+There are two ways to invoke the Smile API (`useViewAPI` or `useAPI`). You
+should only use `useViewAPI` with [Views](/coding/views) which are top level
+components you register in `design.js` timeline. This is because `useViewAPI` is
+specifically designed to provide View-level API features like the
+[steps](/coding/steps) functionality. In other components if you need access to
+API features like configuration settings, or the global store use `useAPI`.
+
+:::
+
 ## Stepper Functions
 
 The following functions are available when using `useViewAPI`:
 
 ### Navigation
 
-- `goNextStep()`: Advances to the next step in the stepper.
-- `goPrevStep()`: Returns to the previous step in the stepper.
-- `goToStep(path)`: Navigates to a specific step by path.
-- `goFirstStep()`: Resets the stepper to its first step.
+- `goNextStep(resetScroll = true)`: Advances to the next step in the stepper.
+  The `resetScroll` parameter controls whether to automatically scroll to the
+  top of the page after navigation.
+- `goPrevStep(resetScroll = true)`: Returns to the previous step in the stepper.
+  The `resetScroll` parameter controls whether to automatically scroll to the
+  top of the page after navigation.
+- `goToStep(path, resetScroll = true)`: Navigates to a specific step by path.
+  The `resetScroll` parameter controls whether to automatically scroll to the
+  top of the page after navigation.
+- `goFirstStep(resetScroll = true)`: Resets the stepper to its first step. The
+  `resetScroll` parameter controls whether to automatically scroll to the top of
+  the page after navigation.
 - `hasNextStep()`: Checks if there's a next step available.
 - `hasPrevStep()`: Checks if there's a previous step available.
 - `hasSteps()`: Checks if the stepper has any steps.
@@ -55,9 +75,9 @@ The following functions are available when using `useViewAPI`:
   data without including parent block data.
 - `queryStepData`, `queryStepDataLeaf`: See
   [Data Query Methods](#data-query-methods).
-- `pathData`: Getter for the raw data array of all steps in the current path.
-  This is useful when you need to access the raw data structure of the path.
-- `pathData`: Returns the current data path with component resolution.
+- `dataAlongPath`: Getter for the raw data array of all steps in the current
+  path. This is useful when you need to access the raw data structure of the
+  path.
 - `stepIndex`: Returns the current step index among leaf nodes.
 - `blockIndex`: Returns the current block index.
 - `pathString`: Returns the current path as a string.
@@ -90,10 +110,8 @@ The following functions are available when using `useViewAPI`:
 
 - `clear()`: Clears the stepper state and component registry.
 - `clearCurrentStepData()`: Clears the data for the current step in the stepper.
-  filtered by path pattern.
 - `updateStepper()`: Updates the internal stepper state.
-- `_visualizeStateMachine()`: Returns a visualization of the current state
-  machine.
+- `recordStep()`: Records the current step data to the experiment data store.
 
 ### Event Handling
 
@@ -113,12 +131,50 @@ The following functions are available in both `useAPI` and `useViewAPI`:
 
 ## Navigation
 
-- `goNextView()`: Advances to the next View in the timeline.
-- `goPrevView()`: Returns to the previous View in the timeline.
-- `goToView(view, force = true)`: Navigates to a specific View (by name). The
-  force parameter temporarily disables navigation guards.
+- `goNextView(resetScroll = true)`: Advances to the next View in the timeline.
+  The `resetScroll` parameter controls whether to automatically scroll to the
+  top of the page after navigation.
+- `goPrevView(resetScroll = true)`: Returns to the previous View in the
+  timeline. The `resetScroll` parameter controls whether to automatically scroll
+  to the top of the page after navigation.
+- `goToView(view, force = true, resetScroll = true)`: Navigates to a specific
+  View (by name). The `force` parameter temporarily disables navigation guards.
+  The `resetScroll` parameter controls whether to automatically scroll to the
+  top of the page after navigation.
 - `hasNextView()`: Checks if there's a next View available.
 - `hasPrevView()`: Checks if there's a previous View available.
+- `nextView()`: Returns the next view object in the navigation sequence.
+- `prevView()`: Returns the previous view object in the navigation sequence.
+
+### Scroll Behavior
+
+All navigation methods in both the base API and view API include an optional
+`resetScroll` parameter that controls automatic scrolling behavior:
+
+- **`resetScroll = true` (default)**: Automatically scrolls the main content
+  container to the top after navigation. This ensures users start at the top of
+  new views/steps.
+- **`resetScroll = false`**: Preserves the current scroll position after
+  navigation. Useful when you want to maintain the user's scroll position.
+
+The scroll behavior targets the `.device-container` element, which is the main
+content wrapper in SMILE applications.
+
+**Example usage:**
+
+```javascript
+// Navigate to next view and scroll to top (default behavior)
+api.goNextView()
+
+// Navigate to next view but preserve scroll position
+api.goNextView(false)
+
+// Navigate to specific step and scroll to top
+api.goToStep('trial/block1/step2')
+
+// Navigate to specific step but preserve scroll position
+api.goToStep('trial/block1/step2', false)
+```
 
 ## State Management
 
@@ -140,6 +196,9 @@ The following functions are available in both `useAPI` and `useViewAPI`:
   `code`.
 - `connectDB()`: Ensures the user is known and has consented, setting these
   states if needed.
+- `completeConsent()`: Completes the consent process by setting consented status
+  and known user if needed.
+- `reloadBrowser()`: Reloads the current browser window/page.
 
 ## Component and Configuration Management
 
@@ -152,17 +211,22 @@ The following functions are available in both `useAPI` and `useViewAPI`:
 
 ## Data and Configuration Access
 
-- `config`: Accesses the configuration.
-- `data`: Accesses the data store.
-- `private`: Accesses private data store.
-- `all_data`: Accesses combined private and data stores.
-- `all_config`: Accesses combined local, dev, github and main configs.
-- `browserPersisted`: Accesses browser persisted state.
-- `browserEphemeral`: Accesses browser ephemeral state.
-- `dev`: Accesses development-only settings.
-- `route`: Accesses the current route.
-- `router`: Accesses the router object.
-- `urls`: Accesses URL configurations.
+- `store`: Accesses the Smile store instance containing:
+  - `store.browserPersisted`: Browser persisted state
+  - `store.browserEphemeral`: Browser ephemeral state
+  - `store.data`: Main data store
+  - `store.private`: Private data store
+  - `store.config`: Configuration settings
+- `data`: Direct access to the data store (alias for `store.data`)
+- `private`: Direct access to private data store (alias for `store.private`)
+- `config`: Direct access to configuration (alias for `store.config`)
+- `all_data`: Accesses combined private and data stores
+- `all_config`: Accesses combined local, dev, github and main configs
+- `urls`: Accesses URL configurations
+- `logStore`: Accesses the logging store
+- `route`: Accesses the current route
+- `router`: Accesses the router object
+- `timeline`: Accesses the timeline instance
 
 ## Utility Functions
 
@@ -184,6 +248,8 @@ The following functions are available in both `useAPI` and `useViewAPI`:
   `src/user/assets/`.
 - `getCoreStaticUrl(path)`: Returns the public URL for a static asset provided
   by the smile library in `src/assets`.
+- `scrollToTop()`: Scrolls the main content container to the top.
+- `currentRouteInfo()`: Returns the current route info object.
 
 ## Randomization Functions
 
@@ -191,37 +257,15 @@ The following functions are available in both `useAPI` and `useViewAPI`:
   in use until the next route.
 - `randomAssignCondition(conditionObject)`: Randomly assigns a condition based
   on the provided condition object. Supports weighted randomization.
-- `shuffle(options)`: Shuffles the current states using the Fisher-Yates
-  algorithm. If a seed is provided, ensures deterministic shuffling.
-
-**Parameters:**
-
-- `options` (Object|string): Either a string seed or an options object
-  - `seed` (string, optional): Seed for deterministic shuffling
-  - `always` (boolean, optional): If true, allows shuffling even if already
-    shuffled. Defaults to false.
-
-**Returns:**
-
-- Returns the Stepper instance for method chaining
-
-**Example:**
-
-```javascript
-// Shuffle with a seed (only shuffles if not already shuffled)
-stepper.shuffle('seed123')
-
-// Shuffle with options
-stepper.shuffle({ seed: 'seed123', always: false }) // Only shuffles if not already shuffled
-stepper.shuffle({ seed: 'seed123', always: true }) // Always shuffles
-stepper.shuffle({ always: true }) // Always shuffles without a seed
-```
-
-**Notes:**
-
-- The shuffle operation is tracked internally. Once shuffled, subsequent calls
-  to shuffle will be ignored unless `always` is set to true.
-- If there is only one or zero states, the shuffle operation is skipped.
+- `randomInt(min, max)`: Generate a random integer between min and max
+  (inclusive).
+- `shuffle(array)`: Randomly reorder elements in an array using Fisher-Yates
+  algorithm.
+- `sampleWithReplacement(array, n, weights)`: Sample elements from an array with
+  replacement.
+- `sampleWithoutReplacement(array, n)`: Sample elements from an array without
+  replacement.
+- `faker`: Collection of faker distributions for generating random data.
 
 ## Logging and Debugging
 
@@ -250,8 +294,8 @@ Complex JavaScript objects (like functions, classes, or objects with circular
 references) must be converted to Firestore-safe formats before saving.
 
 - `recordForm(name, myFirestoreSafeObject)`: Saves form data for any arbitrarily
-  named form (see [DemographicSurvey](views#demographic-survey) for an example).
-  The object must be Firestore-safe.
+  named form (see [DemographicSurvey](/coding/views#demographic-survey) for an
+  example). The object must be Firestore-safe.
 - `recordProperty(name, FirestoreSafeObject)`: Saves a Firestore-safe object at
   the top level of the data object. This does not save the data to the database,
   but it does record it in the local state. The next call to `saveData()` will
@@ -273,11 +317,9 @@ references) must be converted to Firestore-safe formats before saving.
 These methods provide functionality for querying data across multiple steps in
 the experiment.
 
-#### `queryStepData(pathFilter = null)`
-
-Gets data for all leaf nodes in the stepper, optionally filtered by path
-pattern. Returns only the data directly associated with each leaf node, without
-merging parent block data.
+- `queryStepData(pathFilter = null)`: Gets data for all leaf nodes in the
+  stepper, optionally filtered by path pattern. Returns only the data directly
+  associated with each leaf node, without merging parent block data.
 
 ```javascript
 // Get data for all leaf nodes
@@ -287,12 +329,10 @@ const allLeafData = api.queryStepData()
 const trialData = api.queryStepData('trial/block*')
 ```
 
-#### `queryStepDataLeaf(pathFilter = null)`
-
-Gets data for all leaf nodes in the stepper, optionally filtered by path
-pattern. Returns only the data directly associated with each leaf node, without
-merging parent block data. This is an alias for `queryStepData` for consistency
-with the `stepDataLeaf` getter.
+- `queryStepDataLeaf(pathFilter = null)`: Gets data for all leaf nodes in the
+  stepper, optionally filtered by path pattern. Returns only the data directly
+  associated with each leaf node, without merging parent block data. This is an
+  alias for `queryStepData` for consistency with the `stepDataLeaf` getter.
 
 ```javascript
 // Get data for all leaf nodes
@@ -302,32 +342,23 @@ const allLeafData = api.queryStepDataLeaf()
 const trialData = api.queryStepDataLeaf('trial/block*')
 ```
 
-#### `queryStepDataMerge(pathFilter = null)`
+The difference between these methods:
 
-Gets merged data for all leaf nodes in the stepper, optionally filtered by path
-pattern. Similar to `queryStepData` but returns the merged data for each leaf
-node (including parent block data).
+- `queryStepData()` returns the merged data for each leaf node (including parent
+  block data)
+- `queryStepDataLeaf()` returns only the data directly from each leaf node
+  (without parent block data)
 
-```javascript
-// Get merged data for all leaf nodes
-const allMergedData = api.queryStepDataMerge()
+Example:
 
-// Get merged data for nodes matching a pattern
-const trialData = api.queryStepDataMerge('trial/block*')
-```
+Given a structure:
 
-The difference between these methods can be illustrated with an example:
+- block (blockType: 'practice')
+  - trial1 (response: 'A')
+  - trial2 (response: 'B')
 
-```javascript
-// Given a structure:
-// block (blockType: 'practice')
-//   trial1 (response: 'A')
-//   trial2 (response: 'B')
+`queryStepData()` returns (merged data):
+`[ { blockType: 'practice', response: 'A' }, { blockType: 'practice', response: 'B' }, ]`
 
-// queryStepData() returns:
-;[{ response: 'A' }, { response: 'B' }][
-  // queryStepDataMerge() returns:
-  ({ blockType: 'practice', response: 'A' },
-  { blockType: 'practice', response: 'B' })
-]
-```
+`queryStepDataLeaf()` returns (leaf data only):
+`[({ response: 'A' }, { response: 'B' })]`

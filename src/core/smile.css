@@ -3,20 +3,6 @@
  * It is imported into the main.css file.
  */
 
-/* globally provided to prevent selection on some pages */
-.prevent-select {
-  /* needed because selecting the outlines can give away the answer */
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
-}
-
-.page {
-  height: 100%;
-  width: 80%;
-  margin: 0 auto;
-}
-
 :root {
   --purple: #8a4d76;
   --pink: #e88f9e;
@@ -42,14 +28,6 @@
   --page-text-color: '#000';
   --status-bar-bg-color: '#fff';
   --status-bar-text-color: '#000';
-
-  /* above from the out .scss file */
-  --bulma-input-arrow: var(--purple);
-  --bulma-primary: var(--purple);
-  --bulma-link: var(--darker-grey);
-  --bulma-link-text: var(--light-grey);
-  --bulma-link-text-hover: var(--pink);
-  --bulma-link-text-active: var(--darker-grey);
 }
 
 .table-cell-small {

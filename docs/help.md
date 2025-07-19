@@ -5,24 +5,13 @@ guarantee of support. Effective use of this project assumes you know modern
 [Javascript](https://javascript.info/) syntax, have some familiarity with typing
 commands in a terminal program, git, [GitHub](https://github.com), and
 understand basic concepts about web servers and web design. Smile is designed to
-make life easier **for programmers/developers**.
-
-::: warning Wait, I thought you said this makes life fun and easy?
-
-Yes. <SmileText/> makes common development tasks easier and more fun for people
-who are already programmers. It lower the amount of code you need to write to
-make a complex web experiment, test it, and deploy it online. Smile glues
-together many services that you would otherwise have to configure yourself.
-However, there are better packages and services for people looking for no-code
-solutions that avoid the need to program altogether including
-[Qualtrics](https://www.qualtrics.com/),
+make life easier **for programmers/developers**. There are better packages and
+services for people looking for no-code solutions that avoid the need to program
+altogether including [Qualtrics](https://www.qualtrics.com/),
 [SurveyMonkey](https://www.surveymonkey.com/), and
 [Google Forms](https://www.google.com/forms/about/).
 
-:::
-
-That all said, if you need help or are stuck we have collected some useful
-resources.
+If you need help or are stuck we have collected some useful resources.
 
 ## Documentation
 
@@ -78,8 +67,8 @@ Javascript applications. Here are some resources for learning more about Vite:
 
 ### CSS/Styling
 
-- [Bulma](https://bulma.io) - the CSS framework used in the project. The docs
-  are quite intuitive.
+- [Tailwind CSS](https://tailwindcss.com) - the CSS framework used in the
+  project. The docs are quite intuitive.
 
 ### Github
 

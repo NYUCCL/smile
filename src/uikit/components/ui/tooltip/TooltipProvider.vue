@@ -1,5 +1,5 @@
 <script setup>
-import { TooltipProvider } from "reka-ui";
+import { TooltipProvider } from 'reka-ui'
 
 const props = defineProps({
   delayDuration: { type: Number, required: false, default: 0 },
@@ -8,7 +8,7 @@ const props = defineProps({
   disableClosingTrigger: { type: Boolean, required: false },
   disabled: { type: Boolean, required: false },
   ignoreNonKeyboardFocus: { type: Boolean, required: false },
-});
+})
 </script>
 
 <template>

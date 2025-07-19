@@ -1,9 +1,9 @@
 <script setup>
-import { cn } from '@/uikit/lib/utils';
+import { cn } from '@/uikit/lib/utils'
 
 const props = defineProps({
   class: { type: null, required: false },
-});
+})
 </script>
 
 <template>
@@ -18,7 +18,7 @@ const props = defineProps({
         'peer-data-[size=default]/menu-button:top-1.5',
         'peer-data-[size=lg]/menu-button:top-2.5',
         'group-data-[collapsible=icon]:hidden',
-        props.class,
+        props.class
       )
     "
   >

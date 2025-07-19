@@ -17,6 +17,13 @@ vi.mock('@/core/composables/useViewAPI', () => ({
     goNextView: mockGoNextView,
     preloadAllImages: mockPreloadAllImages,
     preloadAllVideos: mockPreloadAllVideos,
+    config: {
+      windowsizerRequest: {
+        width: 1000,
+        height: 1000,
+      },
+      responsiveUI: true,
+    },
   }),
 }))
 

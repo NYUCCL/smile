@@ -60,9 +60,10 @@ const config = reactive({
 
 # Starting a new project
 
-When you start a new project, there are a few one-time steps you must take.
-These include copying the current version of the <SmileText/> project, adjusting
-the configuration settings for your project, and running a setup script.
+After [setting up your lab](/labconfig), when you want to start a new project,
+there are a few steps you must take. These include copying the current version
+of the <SmileText/> project, adjusting the configuration settings for your
+project, and running a setup script.
 
 **Don't worry it is easy and most of it you only do once!**
 
@@ -242,12 +243,12 @@ lab. A robot :robot: there will let you know that your project was deployed and
 provide you with a web link to live site.
 
 If that didn't happen/work then continue reading to learn more about
-[deployments](/deploying) including
-[debugging tips](/deploying#debugging-deployment-issues).
+[deployments](/recruit/deploying) including
+[debugging tips](/recruit/deploying#debugging-deployment-issues).
 
 From here on out any time you make a change to any file (except in the `docs/`
 folder or a
-[few specifically named branches](/deploying#what-commits-trigger-a-deployment)),
+[few specifically named branches](/recruit/deploying#what-commits-trigger-a-deployment)),
 commit it, and push that change to your project repository the Slack bot will
 confirm your code has been uploaded to the live webserver and is theoretically
 ready for participants.
@@ -263,4 +264,4 @@ npm run dev
 ```
 
 to run the development server and see the current, default setup of the site.
-More information about developing is available [here](/developing).
+More information about developing is available [here](/coding/developing).

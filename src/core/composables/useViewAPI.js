@@ -122,12 +122,16 @@ class ViewAPI extends SmileAPI {
   /**
    * Advances to the next step in the stepper.
    * Updates the stepper state if a next step exists.
+   * @param {boolean} [resetScroll=true] - Whether to reset scroll position to top after navigation
    * @returns {Object|null} The next state object if one exists, null otherwise
    * @memberof ViewAPI
    * @instance
    */
-  goNextStep() {
+  goNextStep(resetScroll = true) {
     let next = this._stepper.value.next()
+    if (resetScroll) {
+      this.scrollToTop()
+    }
     if (next !== null) {
       this._updateStepperState(next)
     }
@@ -137,12 +141,16 @@ class ViewAPI extends SmileAPI {
   /**
    * Returns to the previous step in the stepper.
    * Updates the stepper state if a previous step exists.
+   * @param {boolean} [resetScroll=true] - Whether to reset scroll position to top after navigation
    * @returns {Object|null} The previous state object if one exists, null otherwise
    * @memberof ViewAPI
    * @instance
    */
-  goPrevStep() {
+  goPrevStep(resetScroll = true) {
     let prev = this._stepper.value.prev()
+    if (resetScroll) {
+      this.scrollToTop()
+    }
     if (prev !== null) {
       this._updateStepperState(prev)
     }
@@ -152,25 +160,33 @@ class ViewAPI extends SmileAPI {
   /**
    * Resets the stepper to its first step.
    * Updates the stepper state after resetting to the initial position.
+   * @param {boolean} [resetScroll=true] - Whether to reset scroll position to top after navigation
    * @returns {void}
    * @memberof ViewAPI
    * @instance
    */
-  goFirstStep() {
+  goFirstStep(resetScroll = true) {
     this._stepper.value.reset()
+    if (resetScroll) {
+      this.scrollToTop()
+    }
     this._updateStepperState(this._stepper.value)
   }
 
   /**
    * Navigates to a specific step by path.
    * Updates the stepper state after navigating to the specified path.
-   * @param {string} path - The path of the step to navigate to
+   * @param {string} path - The path of the step to navigate to (e.g. "trial/block1/step2")
+   * @param {boolean} [resetScroll=true] - Whether to reset scroll position to top after navigation
    * @returns {void}
    * @memberof ViewAPI
    * @instance
    */
-  goToStep(path) {
+  goToStep(path, resetScroll = true) {
     this._stepper.value.goTo(path)
+    if (resetScroll) {
+      this.scrollToTop()
+    }
     this._updateStepperState(this._stepper.value)
   }
 
@@ -519,7 +535,7 @@ class ViewAPI extends SmileAPI {
       }, {})
     })
 
-    const createRecursiveProxy = (obj) => {
+    const createRecursiveProxy = (obj, path = []) => {
       if (obj === null || typeof obj !== 'object') {
         return obj
       }
@@ -529,14 +545,21 @@ class ViewAPI extends SmileAPI {
           get: (target, prop) => {
             const value = target[prop]
             if (typeof prop === 'string' && !isNaN(prop)) {
-              return createRecursiveProxy(value)
+              return createRecursiveProxy(value, [...path, prop])
             }
             return value
           },
           set: (target, prop, value) => {
-            target[prop] = value
             if (this._stepper.value.currentData) {
-              this._stepper.value.currentData[prop] = value
+              // Navigate to the correct nested location in currentData
+              let current = this._stepper.value.currentData
+              for (let i = 0; i < path.length; i++) {
+                if (current[path[i]] === undefined) {
+                  current[path[i]] = {}
+                }
+                current = current[path[i]]
+              }
+              current[prop] = value
               this._saveStepperState()
             }
             return true
@@ -547,12 +570,19 @@ class ViewAPI extends SmileAPI {
       return new Proxy(obj, {
         get: (target, prop) => {
           const value = target[prop]
-          return createRecursiveProxy(value)
+          return createRecursiveProxy(value, [...path, prop])
         },
         set: (target, prop, value) => {
-          target[prop] = value
           if (this._stepper.value.currentData) {
-            this._stepper.value.currentData[prop] = value
+            // Navigate to the correct nested location in currentData
+            let current = this._stepper.value.currentData
+            for (let i = 0; i < path.length; i++) {
+              if (current[path[i]] === undefined) {
+                current[path[i]] = {}
+              }
+              current = current[path[i]]
+            }
+            current[prop] = value
             this._saveStepperState()
           }
           return true
@@ -649,8 +679,8 @@ class ViewAPI extends SmileAPI {
   /**
    * Gets data for all leaf nodes in the stepper, optionally filtered by path pattern.
    * Returns only the data directly associated with each leaf node, without merging parent block data.
-   * @param {string|null} pathFilter - Optional path pattern to filter nodes (e.g. 'trial/block*')
-   * @returns {Array} Array of data objects for each matching leaf node
+   * @param {string|null} [pathFilter=null] - Optional path pattern to filter nodes (e.g. 'trial/block*')
+   * @returns {Array<Object>} Array of data objects for each matching leaf node
    * @memberof ViewAPI
    * @instance
    * @example
@@ -684,18 +714,18 @@ class ViewAPI extends SmileAPI {
   }
 
   /**
-   * Gets merged data for all leaf nodes in the stepper, optionally filtered by path pattern.
-   * Similar to queryStepData but returns the merged data for each leaf node (including parent block data).
+   * Gets data for all leaf nodes in the stepper, optionally filtered by path pattern.
+   * Returns only the data directly associated with each leaf node, excluding global variables.
    * @param {string|null} pathFilter - Optional path pattern to filter nodes (e.g. 'trial/block*')
-   * @returns {Array} Array of merged data objects for each matching leaf node
+   * @returns {Array} Array of data objects for each matching leaf node, with gvars removed
    * @memberof ViewAPI
    * @instance
    * @example
-   * // Get merged data for all leaf nodes
-   * const allMergedData = api.queryStepDataMerge()
+   * // Get data for all leaf nodes
+   * const allData = api.queryStepData()
    *
-   * // Get merged data for nodes matching a pattern
-   * const trialData = api.queryStepDataMerge('trial/block*')
+   * // Get data for nodes matching a pattern
+   * const trialData = api.queryStepData('trial/block*')
    */
   queryStepData(pathFilter = null) {
     const matchesFilter = (path, filter) => {

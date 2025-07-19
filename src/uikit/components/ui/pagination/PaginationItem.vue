@@ -1,19 +1,19 @@
 <script setup>
-import { reactiveOmit } from "@vueuse/core";
-import { PaginationListItem } from "reka-ui";
-import { cn } from '@/uikit/lib/utils';
-import { buttonVariants } from '@/uikit/components/ui/button';
+import { reactiveOmit } from '@vueuse/core'
+import { PaginationListItem } from 'reka-ui'
+import { cn } from '@/uikit/lib/utils'
+import { buttonVariants } from '@/uikit/components/ui/button'
 
 const props = defineProps({
   value: { type: Number, required: true },
   asChild: { type: Boolean, required: false },
   as: { type: null, required: false },
-  size: { type: null, required: false, default: "icon" },
+  size: { type: null, required: false, default: 'icon' },
   class: { type: null, required: false },
   isActive: { type: Boolean, required: false },
-});
+})
 
-const delegatedProps = reactiveOmit(props, "class", "size", "isActive");
+const delegatedProps = reactiveOmit(props, 'class', 'size', 'isActive')
 </script>
 
 <template>
@@ -26,7 +26,7 @@ const delegatedProps = reactiveOmit(props, "class", "size", "isActive");
           variant: isActive ? 'outline' : 'ghost',
           size,
         }),
-        props.class,
+        props.class
       )
     "
   >

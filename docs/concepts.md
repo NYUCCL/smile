@@ -5,19 +5,19 @@ modularity and reusability. Smile leverages the capabilities of existing open
 source libraries including Vite and Vue, while providing an **entirely new
 interface** for specifying and debugging interactive experiments.
 
-The first concept to introduce is the notion of a [View](./views.md). A View is
-a self-contained bit of code that represents a single "phase" or part of an
-experiment. For example, the part of your experiment that collects informed
+The first concept to introduce is the notion of a [View](/coding/views.md). A
+View is a self-contained bit of code that represents a single "phase" or part of
+an experiment. For example, the part of your experiment that collects informed
 consent might be one View. Another View might be the debriefing form. Below we
 will describe how you define the sequence of Views in your experiment.
 
-<img src="/images/viewstimeline.png" width="800" alt="timeline example" style="margin: auto;">
+<img src="/images/viewstimeline.png" width="600" alt="timeline example" style="margin: auto;">
 
 Each View is minimally a Vue component (a special type of web development file)
 which can be written in whatever way you please. However, Smile provides a
 custom API for building Views. The key idea behind this API is the concept of
-'steps'. A [step](./steps.md) is a sequenced event that occurs _within_ a view.
-For example, a View might have a step that presents a question to the
+'steps'. A [step](/coding/steps.md) is a sequenced event that occurs _within_ a
+view. For example, a View might have a step that presents a question to the
 participant, a step that collects a response, and a step that displays the
 results.
 
@@ -101,10 +101,9 @@ api.steps.append([
 <style scoped></style>
 ```
 
-This defines four steps in the experiment. Each step has a `word` property that
-is displayed to the user. This is incomplete though because it doesn't actually
-show the word to the user. We'd like to step through these steps each time the
-user presses the spacebar.
+This defines four steps in the experiment. Each step has a `word` property. This
+is incomplete though because it doesn't actually show the word to the user. We'd
+like to advance through these steps each time the user presses the spacebar.
 
 ```vue{13-15}
 <script setup>
@@ -174,8 +173,8 @@ This uses the `api.stepData` object to access the data for the current step. The
 
 When we advance to the next step using the `api.goNextStep()` method, it
 automatically changes the `api.stepData` to refer to the next step and
-[reactively](components.html#declarative-rendering-and-reactivity) updates the
-template to display the new word.
+[reactively](/coding/components.html#declarative-rendering-and-reactivity)
+updates the template to display the new word.
 
 This is already a working View! On first load it will show the word "THIS" since
 that is the first step. Then if the user presses the spacebar, it will advance
@@ -266,7 +265,7 @@ It gets much more fancy and powerful from there. For example
 [here](https://github.com/NYUCCL/smile/blob/main/src/user/components/stroop_exp/StroopView.vue)
 is a more complex example of a Stroop experiment which uses hierarchically
 nested steps, randomization, and more. We provide complete documentation of
-[steps](/steps) and the [API](/api).
+[steps](/coding/steps) and the [API](/api).
 
 ### Transitioning to the next View
 
@@ -406,10 +405,10 @@ to add it to the timeline. The `name` property is used to identify the View. The
 
 You'll notice that there are many other Views in the default timeline including
 `WindowSizer`, `Instructions`, and `Consent`. These are all
-[built in Views](views.html#built-in-views-1) that are provided by Smile which
-are commonly used in experiments. You can of course remove any of these, or edit
-them to your liking. Some are quite sophisticated and can save you a lot of time
-such as the `InstructionsQuiz` View which can be used to quickly build
+[built in Views](/coding/views.html#built-in-views-1) that are provided by Smile
+which are commonly used in experiments. You can of course remove any of these,
+or edit them to your liking. Some are quite sophisticated and can save you a lot
+of time such as the `InstructionsQuiz` View which can be used to quickly build
 comprehension check quizzes.
 
 With this change there is a new sequence to the experiment
@@ -433,8 +432,8 @@ A final key concept of Smile is the advanced tools which help you develop and
 debug your experiment. We think of it as enabling "brain surgery" on your
 experiment. You can use these tools to bounce around, inspect various elements
 of your interface, and check the format of your data. You can read more about
-[development](/developing) in the remainder of the documentation. However,
-assuming you've done everything to
+[development](/coding/developing) in the remainder of the documentation.
+However, assuming you've done everything to
 [install the required software](/requirements), [setup](/labconfig) and
 [configured your repo](/starting), you can type
 
@@ -465,5 +464,3 @@ Then you simply open the URL labeled "Local" in your browser.
 Critically, when running in development mode, Smile provides a GUI "overlay"
 which allows you to see and explore the current state and flow of the
 experiment. The dev mode tools are best explained in this video:
-
-## Next steps

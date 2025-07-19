@@ -46,31 +46,30 @@ mode website.
 ## How to customize Presentation Mode
 
 To customize this presentation mode page edit the
-`src/components/presentation_mode/PresentationModeHomePage.vue` component. You
-can add links to papers, hot link to different parts of your experiment, or add
-custom routes that help to visualize your data, etc...
+`src/userPresentationModeView.vue` component. You can add links to papers, hot
+link to different parts of your experiment, or add custom routes that help to
+visualize your data, etc...
 
 ## How to deploy in Presentation Mode
 
-To deploy your project in presentation mode there are two options. The first is
-to create a new branch titled 'presentation' and push this to GitHub. This will
+To deploy your project in presentation mode there are two options:
+
+### Option 1: Branch-based deployment
+
+Create a new branch titled 'presentation' and push this to GitHub. This will
 generate a special "presentation mode" deployment and you'll receive a slack
 notification about when the website is ready. An example from the default
 <SmileText/> repo is
 [here](https://exps.gureckislab.org/nyuccl/smile/presentation/#/)
 
-The second option is to edit `src/config/config.js` and change the line that
-reads
+### Option 2: Environment variable deployment
 
-```
-mode: import.meta.env.MODE,
-```
+Set the `EXP_DEPLOY_MODE` environment variable in your local `.env.deploy.local`
+file to `'presentation'`. This can be done by:
 
-to
+1. Create or edit the file `.env.deploy.local` in your project root
+2. Add the line: `EXP_DEPLOY_MODE = presentation`
+3. Run the update script: `npm run update_config`
 
-```
-mode: 'presentation',
-```
-
-When you next commit this change to your repo, the new site will be built in
-presentation mode. This can be done on any branch.
+When you next commit and push to any branch, the site will be built in
+presentation mode.

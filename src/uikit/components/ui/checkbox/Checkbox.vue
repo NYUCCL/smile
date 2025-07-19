@@ -1,8 +1,9 @@
 <script setup>
-import { reactiveOmit } from "@vueuse/core";
-import { Check } from "lucide-vue-next";
-import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from "reka-ui";
-import { cn } from '@/uikit/lib/utils';
+import { reactiveOmit } from '@vueuse/core'
+import { Check } from 'lucide-vue-next'
+import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from 'reka-ui'
+import { cn } from '@/uikit/lib/utils'
+import { checkboxVariants } from './index.js'
 
 const props = defineProps({
   defaultValue: { type: [Boolean, String], required: false },
@@ -15,31 +16,36 @@ const props = defineProps({
   name: { type: String, required: false },
   required: { type: Boolean, required: false },
   class: { type: null, required: false },
-});
-const emits = defineEmits(["update:modelValue"]);
+  variant: {
+    type: String,
+    default: 'default',
+    validator: (value) => ['default', 'primary', 'info', 'success', 'warning', 'danger'].includes(value),
+  },
+  size: { type: String, default: 'default', validator: (value) => ['xs', 'sm', 'default', 'lg', 'xl'].includes(value) },
+})
+const emits = defineEmits(['update:modelValue'])
 
-const delegatedProps = reactiveOmit(props, "class");
+const delegatedProps = reactiveOmit(props, 'class', 'variant', 'size')
 
-const forwarded = useForwardPropsEmits(delegatedProps, emits);
+const iconSizeClasses = {
+  xs: 'size-2',
+  sm: 'size-2.5',
+  default: 'size-3.5',
+  lg: 'size-4',
+  xl: 'size-5',
+}
+
+const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 
 <template>
-  <CheckboxRoot
-    data-slot="checkbox"
-    v-bind="forwarded"
-    :class="
-      cn(
-        'peer border-input data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
-        props.class,
-      )
-    "
-  >
+  <CheckboxRoot data-slot="checkbox" v-bind="forwarded" :class="cn(checkboxVariants({ variant, size }), props.class)">
     <CheckboxIndicator
       data-slot="checkbox-indicator"
       class="flex items-center justify-center text-current transition-none"
     >
       <slot>
-        <Check class="size-3.5" />
+        <Check :class="iconSizeClasses[size]" />
       </slot>
     </CheckboxIndicator>
   </CheckboxRoot>

@@ -118,7 +118,7 @@ const initDev = {
   mainView: 'devmode',
   consoleBarHeight: 300, // height of the data bar (transient)
   consoleBarTab: 'browse', // which tab to show in the data bar (transient)
-  sidebarTab: 'steps', // which tab is visible in the dev sidebar (transient)
+  sideBarTab: 'steps', // which tab is visible in the dev sidebar (transient)
   searchParams: '', // search parameters (transient)
   logFilter: 'All', // what level of log messages to show (transient)
   notificationFilter: 'Errors only', // what level of notifications to show (transient)
@@ -126,10 +126,15 @@ const initDev = {
   dataPath: null, // path to the data (transient)
   configPath: null, // path to the config (transient)
   selectedDevice: 'desktop2', // selected device for responsive design mode
+  deviceWidth: 1024, // device width for responsive design mode
+  deviceHeight: 768, // device height for responsive design mode
   isRotated: false, // device rotation state for responsive design mode
   isFullscreen: false, // fullscreen state for responsive design mode
   // panel locations (transient)
   routePanelVisible: false,
+  // color mode settings (persisted)
+  globalColorMode: 'auto', // global color mode for the dev tools
+  experimentColorMode: 'auto', // experiment color mode for the main app
 }
 
 const initBrowserPersisted = {
@@ -142,6 +147,7 @@ const initBrowserPersisted = {
   currentViewDone: false,
   consented: false,
   withdrawn: false,
+  verifiedVisibility: false,
   done: false,
   reset: false,
   totalWrites: 0,
@@ -161,6 +167,7 @@ const initBrowserPersisted = {
 const initBrowserEphemeral = {
   // ephemeral state, resets on browser refresh
   forceNavigate: false,
+  tooSmall: false,
   steppers: {}, // Store for HStepper instances
   dbConnected: false,
   dbChanges: true,
@@ -329,6 +336,11 @@ export default defineStore('smilestore', {
       this.data.withdrawn = true
       this.private.withdrawData = forminfo
       this.data.endtime = fsnow()
+    },
+
+    verifyVisibility(value) {
+      this.browserPersisted.verifiedVisibility = value
+      this.data.verifiedVisibility = value
     },
 
     /**

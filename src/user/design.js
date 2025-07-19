@@ -16,24 +16,24 @@ import { markRaw } from 'vue'
 import { processQuery } from '@/core/utils/utils'
 
 // 1. Import main built-in View components
-import Advertisement from '@/builtins/advertisement/AdvertisementView.vue'
-import MTurk from '@/builtins/mturk/MTurkRecruitView.vue'
-import Consent from '@/builtins/simple_consent/InformedConsentView.vue'
-import DemographicSurvey from '@/builtins/demographic_survey/DemographicSurveyView.vue'
-import DeviceSurvey from '@/builtins/device_survey/DeviceSurveyView.vue'
-import Instructions from '@/builtins/instructions/InstructionsView.vue'
-import InstructionsQuiz from '@/builtins/instructions_quiz/InstructionsQuiz.vue'
-import Debrief from '@/builtins/debrief/DebriefView.vue'
-import TaskFeedbackSurvey from '@/builtins/task_survey/TaskFeedbackSurveyView.vue'
-import Thanks from '@/builtins/thanks/ThanksView.vue'
-import Withdraw from '@/builtins/withdraw/WithdrawView.vue'
-import WindowSizer from '@/builtins/window_sizer/WindowSizerView.vue'
+import AdvertisementView from '@/builtins/advertisement/AdvertisementView.vue'
+import MTurkRecruitView from '@/builtins/mturk/MTurkRecruitView.vue'
+import InformedConsentView from '@/builtins/informedConsent/InformedConsentView.vue'
+import DemographicSurveyView from '@/builtins/demographicSurvey/DemographicSurveyView.vue'
+import DeviceSurveyView from '@/builtins/deviceSurvey/DeviceSurveyView.vue'
+import InstructionsView from '@/builtins/instructions/InstructionsView.vue'
+import InstructionsQuizView from '@/builtins/instructionsQuiz/InstructionsQuiz.vue'
+import DebriefView from '@/builtins/debrief/DebriefView.vue'
+import TaskFeedbackSurveyView from '@/builtins/taskFeedbackSurvey/TaskFeedbackSurveyView.vue'
+import ThanksView from '@/builtins/thanks/ThanksView.vue'
+import WithdrawView from '@/builtins/withdraw/WithdrawView.vue'
+import WindowSizerView from '@/builtins/windowSizer/WindowSizerView.vue'
 
 // 2. Import user View components
-import Exp from '@/builtins/tasks/ExpView.vue'
-import Task1 from '@/builtins/tasks/Task1View.vue'
-import Task2 from '@/builtins/tasks/Task2View.vue'
-import StroopExp from '@/user/components/stroop_exp/StroopView.vue'
+import ExpView from '@/builtins/demoTasks/ExpView.vue'
+import Task1View from '@/builtins/demoTasks/Task1View.vue'
+import Task2View from '@/builtins/demoTasks/Task2View.vue'
+import StroopExpView from '@/user/components/stroop_exp/StroopExpView.vue'
 
 // #3. Import smile API and timeline
 import useAPI from '@/core/composables/useAPI'
@@ -45,6 +45,9 @@ const timeline = new Timeline(api)
 // #4.  Set runtime configuration options
 //      See http://smile.gureckislab.org/configuration.html#experiment-options-env
 api.setRuntimeConfig('allowRepeats', false)
+
+api.setRuntimeConfig('colorMode', 'light')
+api.setRuntimeConfig('responsiveUI', true)
 
 api.setRuntimeConfig('windowsizerRequest', { width: 800, height: 600 })
 api.setRuntimeConfig('windowsizerAggressive', true)
@@ -106,7 +109,7 @@ api.randomAssignCondition({
 timeline.pushSeqView({
   path: '/welcome',
   name: 'welcome_anonymous',
-  component: Advertisement,
+  component: AdvertisementView,
   meta: {
     prev: undefined,
     next: 'consent',
@@ -122,7 +125,7 @@ timeline.pushSeqView({
 timeline.pushSeqView({
   path: '/welcome/:service',
   name: 'welcome_referred',
-  component: Advertisement,
+  component: AdvertisementView,
   meta: {
     prev: undefined,
     next: 'consent',
@@ -140,7 +143,7 @@ timeline.pushSeqView({
 // this is a the special page that loads in the iframe on mturk.com
 timeline.registerView({
   name: 'mturk',
-  component: MTurk,
+  component: MTurkRecruitView,
   props: {
     estimated_time: api.getConfig('estimated_time'),
     payrate: api.getConfig('payrate'),
@@ -155,7 +158,7 @@ timeline.registerView({
 // consent
 timeline.pushSeqView({
   name: 'consent',
-  component: Consent,
+  component: InformedConsentView,
   props: {
     informedConsentText: markRaw(InformedConsentText), // provide the informed consent text
   },
@@ -168,19 +171,19 @@ timeline.pushSeqView({
 // demographic survey
 timeline.pushSeqView({
   name: 'demograph',
-  component: DemographicSurvey,
+  component: DemographicSurveyView,
 })
 
 // windowsizer
 timeline.pushSeqView({
   name: 'windowsizer',
-  component: WindowSizer,
+  component: WindowSizerView,
 })
 
 // instructions
 timeline.pushSeqView({
   name: 'instructions',
-  component: Instructions,
+  component: InstructionsView,
 })
 
 // import the quiz questions
@@ -188,7 +191,7 @@ import { QUIZ_QUESTIONS } from './components/quizQuestions'
 // instructions quiz
 timeline.pushSeqView({
   name: 'quiz',
-  component: InstructionsQuiz,
+  component: InstructionsQuizView,
   props: {
     questions: QUIZ_QUESTIONS,
     returnTo: 'instructions',
@@ -202,7 +205,7 @@ timeline.pushSeqView({
 timeline.pushSeqView({
   name: 'exp',
   path: '/experiment',
-  component: Exp,
+  component: ExpView,
 })
 
 ////// example of randomized branching routes
@@ -211,12 +214,12 @@ timeline.pushSeqView({
 // routes must be initially registered, to tell the timeline they exist
 timeline.registerView({
   name: 'task1',
-  component: Task1,
+  component: Task1View,
 })
 
 timeline.registerView({
   name: 'task2',
-  component: Task2,
+  component: Task2View,
 })
 
 timeline.pushRandomizedNode({
@@ -227,14 +230,14 @@ timeline.pushRandomizedNode({
 // stroop exp
 timeline.pushSeqView({
   name: 'stroop',
-  component: StroopExp,
+  component: StroopExpView,
 })
 
 // debriefing form
 import DebriefText from '@/user/components/DebriefText.vue' // get access to the global store
 timeline.pushSeqView({
   name: 'debrief',
-  component: Debrief,
+  component: DebriefView,
   props: {
     debriefText: markRaw(DebriefText),
   },
@@ -243,20 +246,20 @@ timeline.pushSeqView({
 // device survey
 timeline.pushSeqView({
   name: 'device',
-  component: DeviceSurvey,
+  component: DeviceSurveyView,
 })
 
 // debriefing form
 timeline.pushSeqView({
   name: 'feedback',
-  component: TaskFeedbackSurvey,
+  component: TaskFeedbackSurveyView,
   meta: { setDone: true }, // this is the last form
 })
 
 // thanks/submit page
 timeline.pushSeqView({
   name: 'thanks',
-  component: Thanks,
+  component: ThanksView,
   meta: {
     requiresDone: true,
     resetApp: api.getConfig('allowRepeats'),
@@ -270,7 +273,7 @@ timeline.registerView({
     requiresWithdraw: true,
     resetApp: api.getConfig('allowRepeats'),
   },
-  component: Withdraw,
+  component: WithdrawView,
 })
 
 timeline.build()

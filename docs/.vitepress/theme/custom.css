@@ -1,9 +1,13 @@
 /**
  * Colors: Solid
  * -------------------------------------------------------------------------- */
-@import 'bulma-prefixed.min.css';
+@import '../../../src/core/main.css';
+/* process the base smile files */
 
-:root {
+@source '../../../docs/**/*.{md,vue,js,ts,css}';
+@source '../../../src/**/*.{md,vue,js,ts,css}';
+
+::root {
   --vp-c-white: #ffffff;
   --vp-c-black: #000000;
 
@@ -566,6 +570,14 @@
   --vp-local-search-result-selected-border: var(--vp-c-brand-1);
   --vp-local-search-highlight-bg: var(--vp-c-brand-1);
   --vp-local-search-highlight-text: var(--vp-c-neutral-inverse);
+}
+
+.VPDoc.has-aside .content-container {
+  max-width: 100%;
+}
+
+.VPDoc.has-aside .content-container[data-v-10119189] {
+  max-width: 100%;
 }
 
 mark {
