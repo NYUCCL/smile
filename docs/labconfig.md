@@ -144,6 +144,14 @@ organization was `hartleylabnyu`):
 
 ![Github overview](/images/labconfig-github-overview.png)
 
+By default, Github will not run Workflows on a forked repository. <SmileText/>
+uses Github Workflows to automatically deploy your experiment whenever changes
+are pushed to Github (see [deploy](/recruit/deploying) docs for full details).
+If you'd like to take advantage of this functionality, you'll need to enable
+Workflows on your new template repository. Go to the "Actions" tab for your new
+Github repo, and click the button to enable Workflows:
+![Enable workflows](/images/labconfig-enable-workflows.png)
+
 Next, you should clone a local copy of this repo to your computer with the link
 found under the "Use this template" tab shown below:
 
@@ -212,7 +220,7 @@ Here is an example of the rules file that works well with Smile experiments (in
 
 ## Setup Slack
 
-When you're developing an experiment and push changed to Github, your experiment
+When you're developing an experiment and push changes to Github, your experiment
 code goes through a pre-processing step, which optimizes the speed at which the
 code is delievered to participants. Also, when your code builds successfully it
 is deployed to a unique URL (see [deploy](/recruit/deploying) docs for full
@@ -237,7 +245,7 @@ Next select "Webhook" as the type of workflow you are creating.
 ![Slack config](/images/labconfig-slack2.png)
 
 Click add variables and add the following three variables names to your workflow
-(`github_username`, `deployURL`, and `github_hash`):
+(`github_username`, `deploy_url`, and `github_hash`):
 
 ![Slack config](/images/labconfig-slack3.png)
 
