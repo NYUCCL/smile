@@ -1,8 +1,8 @@
-# Forms and Quizes
+# Forms and Quizzes
 
 Forms are a critical component of many psychological experiments and research
-studies. Smile provides several tools which can make developing quizes and forms
-easy.
+studies. Smile provides several tools which can make developing quizzes and
+forms easy.
 
 ## Building a Feedback Survey: TaskFeedbackSurveyView Example
 

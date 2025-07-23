@@ -76,8 +76,8 @@ import { TwoCol } from '@/uikit/layouts'
 
 :::
 
-Here is using a different width for the left column and right column goes on top
-when smushed:
+Here is an example using a different width for the left column, and the right
+column goes on top when the layout is compressed:
 
 ::: raw
 
@@ -137,7 +137,7 @@ section" :raw-code="TitleTwoColLeftFirstExampleRaw"  height="500px">
 
 :::
 
-This show what happens when the right column is first.
+This shows what happens when the right column is first.
 
 ::: raw
 

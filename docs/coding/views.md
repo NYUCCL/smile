@@ -19,21 +19,21 @@ consider the following examples:
 
 - A consent form might be one View but be composed of many components (e.g., a
   consent text component, a signature component, a submit button component,
-  etc...).
+  etc.).
 - A welcome page might be one View but be composed of many components (e.g., a
-  welcome text component, a start button component, etc...).
+  welcome text component, a start button component, etc.).
 - A block of trials in an experiment might be one View but be composed of many
   components (e.g., a trial component, a fixation component, a feedback
-  component, etc...).
+  component, etc.).
 
 Each View is associated with one Vue component that is responsible for rendering
 the content of that View. A View can, of course, be made up of many smaller
 components. By convention, the filename of any component that is treated as a
-View should end in `View.vue` for example `WelcomeView.vue`, `ConsentView.vue`,
-etc...
+View should end in `View.vue`, for example, `WelcomeView.vue`,
+`ConsentView.vue`, etc.
 
 Views are a useful way of thinking about bigger parts or phases of an
-experiment. Views tend be to modular and reusable "sections" of an experiment
+experiment. Views tend to be modular and reusable "sections" of an experiment
 that you might use in different experiments or different parts of the same
 experiment. The sequencing of different Views is controlled by the
 [**Timeline**](/coding/timeline) (and more specifically `@/user/design.js`).

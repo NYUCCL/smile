@@ -1,10 +1,10 @@
 # Timeline and Design File
 
 Web experiments are often composed of several parts presented in sequence. For
-example, we might show a welcome page &rarr; informed consent &rarr;
-instructions &rarr; etc. <SmileText /> provides a central "sequencing" feature
-which makes it easy to configure, customize, and move through different stages
-of an experiment. We call this the **"timeline."**
+example, we might show a welcome page → informed consent → instructions → etc.
+<SmileText /> provides a central "sequencing" feature which makes it easy to
+configure, customize, and move through different stages of an experiment. We
+call this the **"timeline."**
 
 The timeline feature is more than just a way to control the presentation order
 of different phases. It also acts as a way to prevent subjects from doing things

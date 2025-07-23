@@ -20,20 +20,20 @@ import BadgeExampleRaw from '../examples/BadgeExample.vue?raw'
 
 </script>
 
-# Components
+# UI Components
 
-Smile provides a library of built-in lower level components which are styled and
+Smile provides a library of built-in lower-level components which are styled and
 themed to match the overall project. These components build on
 [Radix-Vue](https://www.radix-vue.com/) and
-[Shadcn-vue](https://www.shadcn-vue.com/) and help you quickly develop consisent
-interfaces with themed colors, dark mode support, and a consistent look and
-feel. We anticipate adding more here over time.
+[Shadcn-vue](https://www.shadcn-vue.com/) and help you quickly develop
+consistent interfaces with themed colors, dark mode support, and a consistent
+look and feel. We anticipate adding more here over time.
 
 ## Importing Components
 
 All UIkit components can be imported from the `@/uikit/components` directory.
 The full list of available components is in the file. Most are in fact imported
-from [Shadcn-vue](https://www.shadcn-vue.com/) but some have been extended for
+from [Shadcn-vue](https://www.shadcn-vue.com/), but some have been extended for
 use in Smile and are documented here:
 
 ```javascript
@@ -66,7 +66,7 @@ supports various styles, sizes, and can include icons.
 :::
 
 There are also many color variants controlled by the main Tailwind theme sheet
-(`src/core/main.css`)/
+(`src/core/main.css`).
 
 ::: raw
 

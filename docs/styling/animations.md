@@ -245,7 +245,7 @@ const items = ref([
 - Use `transform` properties (x, y, scale, rotate) instead of layout properties
   when possible
 - Avoid animating properties that trigger layout recalculations
-- Use `will-change` CSS property for elements that will animate frequently
+- Use `will-change` CSS property for elements that will animate frequently.
 
 ### 2. Accessibility
 
@@ -257,7 +257,7 @@ const items = ref([
 
 - Keep animations short (200-500ms for most interactions)
 - Use easing functions that feel natural
-- Don't over-animate - less is often more
+- Don't over-animate—less is often more.
 
 ### 4. Responsive Design
 

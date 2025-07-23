@@ -7,7 +7,7 @@ a perceptually important way.
 
 Smile allows customization of the dark mode settings for your experiment. You
 can set it to always prefer light mode, always prefer dark mode, or to fall back
-to the users "system" setting which are usually passed through by the browser.
+to the user's "system" setting, which is usually passed through by the browser.
 
 ## Configuration
 

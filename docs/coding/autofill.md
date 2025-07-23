@@ -1,6 +1,6 @@
 # Autofill
 
-When developing and debugging your experiment it is useful to have a way to
+When developing and debugging your experiment, it is useful to have a way to
 "fake" data for various components. This serves two purposes:
 
 - It let you quickly jump ahead to test different parts of the code

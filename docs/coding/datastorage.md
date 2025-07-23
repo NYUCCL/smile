@@ -1,9 +1,9 @@
 # Data Storage
 
-Data recording and storage are critical functions of an experiment that enables
-[analysis](/analysis). When a user participates in an experiment we would like a
-centralized place to organize the data from each participant. We would like this
-storage system to be secure, robust, scalable, and fault tolerant.
+Data recording and storage are critical functions of an experiment that enable
+[analysis](/analysis). When a user participates in an experiment, we would like
+a centralized place to organize the data from each participant. We would like
+this storage system to be secure, robust, scalable, and fault tolerant.
 
 Depending on your experiment design you may need to develop custom data storage
 code (e.g., real-time multiplayer games). But in most cases that cover

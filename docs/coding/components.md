@@ -5,12 +5,12 @@ import TextInput from '/coding/components/TextInput.vue'
 
 # Components
 
-A key to making development faster and more fun in <SmileText/> is to organize
-parts of the overall experiment into smaller, modular units called
+A key to making development faster and more enjoyable in <SmileText/> is to
+organize parts of the overall experiment into smaller, modular units called
 **components**. Using components, the meaningful parts of a complex webpage or
-application are broken down into smaller elements which are then built up into a
-hierarchy. The code for these smaller elements can, in many cases, be developed
-completely independently from the rest of the project or webpage.
+application are broken down into smaller elements, which are then built up into
+a hierarchy. The code for these smaller elements can, in many cases, be
+developed completely independently from the rest of the project or webpage.
 
 ![components](/images/components.png)
 

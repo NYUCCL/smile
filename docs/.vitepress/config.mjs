@@ -140,7 +140,7 @@ export default defineConfig({
           { text: 'Tailwind CSS', link: '/styling/tailwind' },
           { text: 'Dark Mode', link: '/styling/darkmode' },
           { text: 'Layouts', link: '/styling/layouts' },
-          { text: 'Components', link: '/styling/uikit' },
+          { text: 'UI Components', link: '/styling/uikit' },
           { text: 'Icons', link: '/styling/icons' },
           { text: 'Forms and Quizes', link: '/styling/forms' },
           { text: 'Images and Videos', link: '/styling/imagesvideo.md' },

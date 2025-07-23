@@ -28,7 +28,7 @@ Icons in this project use the UnoCSS naming convention:
 <i-{library}-{icon-name} />
 ```
 
-You can made this your default format for copying icons on the iconify website
+You can make this your default format for copying icons on the Iconify website
 to make life easier.
 
 ### Examples:

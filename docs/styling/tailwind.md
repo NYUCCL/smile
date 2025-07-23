@@ -2,7 +2,7 @@
 
 In modern web design, the look and feel of an application are determined jointly
 by three types of files: HTML (for the basic structure/content), CSS (for the
-style/colors/shapes/spacing), and Javascript (for the dynamic interaction,
+style/colors/shapes/spacing), and JavaScript (for the dynamic interaction,
 clicking, dragging, etc...).[^vue]
 
 [^vue]:
@@ -82,9 +82,9 @@ CSS. Instead, you use utility classes that directly apply specific styles:
 - `rounded-md` = `border-radius: 0.375rem`
 - `font-medium` = `font-weight: 500`
 
-One neat feature of Tailwind is that is analyzes your entire project and only
-includes the styles you actually used in your project. This makes the CSS
-payload smaller and more efficient.
+One neat feature of Tailwind is that it analyzes your entire project and only
+includes the styles you actually use in your project. This makes the CSS payload
+smaller and more efficient.
 
 ## Building a Simple Component with Tailwind
 
@@ -268,7 +268,7 @@ Here are some frequently used Tailwind utility classes:
 
 - `text-sm` - font-size: 0.875rem
 - `text-lg` - font-size: 1.125rem
-- `text=[4rem]` - font-size: 4rem
+- `text-4xl` - font-size: 2.25rem
 - `font-bold` - font-weight: 700
 - `text-center` - text-align: center
 
@@ -292,6 +292,6 @@ Now that you understand the basics of Tailwind CSS, you can explore the
 A very helpful resource is the
 [Tailwind CSS Cheat Sheet](https://nerdcave.com/tailwind-cheat-sheet).
 
-In addition it can be helpful to install the
+In addition, it can be helpful to install the
 [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
 extension for VSCode. This will help you autocomplete Tailwind classes.

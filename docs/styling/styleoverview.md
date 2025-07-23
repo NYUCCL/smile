@@ -3,15 +3,15 @@
 Styling the look and feel of your experiment elements is often a time-consuming
 process. However, it is worthwhile because participants are likely to view your
 task as more professional, user-friendly, and engaging if there is an appealing
-design. Smile provides a number of tools to help you cleanly and consistenly
+design. Smile provides a number of tools to help you cleanly and consistently
 style your experiments.
 
 ## Tailwind CSS
 
-Smile uses the Tailwind CSS framework for help with styling interface elements
+Smile uses the Tailwind CSS framework to help with styling interface elements
 and layouts. Tailwind is a particular approach to CSS that favors atomic
 classes. Tailwind also provides easy ways to support theming, color modes, color
-pallets, etc... We describe
+palettes, etc... We describe
 [how to use Tailwind to determine the look and feel of your experiment](/styling/tailwind).
 Of course, you can style your components with custom CSS as well or overwrite
 Smile defaults for your entire project.
@@ -31,10 +31,10 @@ you save time and ensure that your Views are consistent and easy to understand.
 
 ## Components
 
-Smile provides a number of built in components to help you style your
+Smile provides a number of built-in components to help you style your
 experiments. We describe how to use these components in your experiments
-[here](/styling/uikit). These components build upon Radix UI and Shadcn-Vue
-which provides high levels of accessibility and design consistency.
+[here](/styling/uikit). These components build upon Radix UI and Shadcn-Vue,
+which provide high levels of accessibility and design consistency.
 
 ## Icons
 
@@ -43,7 +43,7 @@ We describe how to use these icons in your experiments [here](/styling/icons).
 
 ## Forms and Quizes
 
-Smile provieds some built in tools to help you build forms and quizes. We
+Smile provides some built-in tools to help you build forms and quizzes. We
 describe how to use these tools [here](/styling/forms).
 
 ## Image and Videos

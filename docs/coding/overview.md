@@ -1,7 +1,7 @@
 # Coding Overview
 
 The following sections describe how to design experiments using the <SmileText/>
-project. It covers the basic of programming new task elements, configuring the
+project. It covers the basics of programming new task elements, configuring the
 timeline/flow of your experiments, and customizing the look and feel of your
 experiments.
 
@@ -12,7 +12,7 @@ it is useful to interact with Smile using a web server running on your local
 computer (i.e., your laptop or desktop). <SmileText/> provides a special local
 developer mode, which adds some interface elements to the page that help you
 debug and test your experiment. You can learn more about developer mode
-[here](/coding/developing). But the TL;DR is
+[here](/coding/developing). But the TL;DR is:
 
 ```
 npm run dev
@@ -22,12 +22,12 @@ in the project folder to get started.
 
 ## Configuring
 
-Every experiment is different and requires different configurations options for
-things like the database credentials, etc... In <SmileText/>, configs are set
-using `.env` files. Some of these are automatically generated, some are passed
-from the [base repo](/labconfig) to child repos, and some need to be customized
-for each experiment. [This section](/coding/configuration) of the documentation
-explains all the configuration settings avaialble.
+Every experiment is different and requires different configuration options for
+things like database credentials, etc. In <SmileText/>, configs are set using
+`.env` files. Some of these are automatically generated, some are passed from
+the [base repo](/labconfig) to child repos, and some need to be customized for
+each experiment. [This section](/coding/configuration) of the documentation
+explains all the configuration settings available.
 
 ## Components
 
@@ -46,10 +46,10 @@ component for your task, or borrowing from an existing one.
 
 ## Views
 
-Most experiments are made of of several phases (e.g., welcome, informed consent,
-instructions, debriefing, etc...). We call the phases "Views" and each major
-phase of an experiment is associated with its own Vue component. Learn about
-views [here](/coding/views).
+Most experiments are made up of several phases (e.g., welcome, informed consent,
+instructions, debriefing, etc.). We call the phases "Views" and each major phase
+of an experiment is associated with its own Vue component. Learn about views
+[here](/coding/views).
 
 <img src="/images/viewstimeline.png" width="600" alt="timeline example" style="margin: auto;">
 
@@ -70,7 +70,7 @@ The timeline is configured in an important file in every <SmileText/> project
 called the [design file](/coding/timeline#the-design-file-user-design-js)
 (located at `src/user/design.js`). This file is where you configure the timeline
 for your experiment, including which phases are included and the order in which
-they appear. In addition the design is used to specify randomization across
+they appear. In addition, the design is used to specify randomization across
 conditions, preloading of content, and other important features of your
 experiment.
 
@@ -81,7 +81,7 @@ You almost certainly will need to edit this file for your experiment.
 Many experiments are organized into a series of repeated events called "trials".
 Trials are different than Views because they often repeat the same basic
 structure many times (analogous to the difference between a 'slide' and a 'build
-step' in a Keynote/Powerpoint presentation). Smile provides several features for
+step' in a Keynote/PowerPoint presentation). Smile provides several features for
 [stepping views through a series of trials](/coding/steps). We introduce the
 concept of a "step" and how to programmatically advance through a sequence of
 steps within a particular View. The same concept is also used to add sequential
@@ -94,7 +94,7 @@ up where they left off.
 
 ## Autofill
 
-When developing and debugging your experiment it is useful to have a way to
+When developing and debugging your experiment, it is useful to have a way to
 "fake" data from participants. This can be used to quickly advance through the
 experiment to test different parts of the code. Smile provides a way to
 [autofill forms](/coding/autofill) with fake data. In addition, you can generate
@@ -110,7 +110,7 @@ flow of experiments.
 
 ## Persistence
 
-An important aspect of Smile is that is can be fully _peristent_, meaning that
+An important aspect of Smile is that it can be fully _persistent_, meaning that
 if the participant reloads the browser page (or closes it and comes back), they
 will pick up where they left off. This property has several important
 implications for development and debugging.
@@ -118,7 +118,7 @@ implications for development and debugging.
 ## Saving and Recording Data
 
 The most important function of any web experiment platform is securely saving
-data. Smile provides serveral ways to
-[save and record data](/coding/datastorage). In addition the Smile API provides
+data. Smile provides several ways to
+[save and record data](/coding/datastorage). In addition, the Smile API provides
 convenience functions for data saving, making it quick and easy to save and
 store what you need.

@@ -71,7 +71,7 @@ them to go back to the trial where they left off. If you set all random numbers
 at the beginning, the participant can easily pick up from trial 10 with the same
 randomization (all random numbers are regenerated upon refresh, and the stepper
 will correctly point to the 10th random number for the 10th trial). However, if
-you set random numbers within each trial, the partcipant will get a different
+you set random numbers within each trial, the participant will get a different
 random number on trial 10 before page refresh (the 10th random number after
 seeding) and after page refresh (the 1st random number after seeding).
 
@@ -111,8 +111,8 @@ component), you can do:
 import useAPI from '@/core/composables/useAPI'
 const api = useAPI()
 
-api.getConditionByName(taskOrder)
-api.getConditionByName(variation)
+api.getConditionByName('taskOrder')
+api.getConditionByName('variation')
 ```
 
 As long as the condition has already been set, this will return the value
@@ -239,7 +239,7 @@ It is possible to randomize the order of routes in the timeline. See
 ## "Unseeded" random number generation
 
 In rare cases, it may be desirable to generate "true" or "unseeded" random
-numbers. To do so, you can use the smile API:
+numbers. To do so, you can use the Smile API:
 
 ```js
 const api = useAPI()
@@ -283,7 +283,7 @@ clicking on the dropdown for each condition:
 
 ![Nav bar condition override](/images/conditionoverride.png)
 
-This could be useful e.g. if you want to preview what different in-View
+This could be useful, e.g., if you want to preview what different in-View
 randomization outputs might look like without re-starting the whole experiment.
 For example, if you click on a different instructionsVersion condition in the
 example shown above, the page will immediately reload to show the new condition.

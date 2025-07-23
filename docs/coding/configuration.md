@@ -16,7 +16,7 @@ details on adding new configuration options specific for your project.
 ## Getting started quickly
 
 Configuration options in <SmileText /> are either stored in the `env/` folder or
-or can be configured at runtime using the `api.setRuntimeConfig()` function (see
+can be configured at runtime using the `api.setRuntimeConfig()` function (see
 the full API docs [here](/api)).
 
 [Dotenv](https://dotenv.org) files are simply plain text files that define
