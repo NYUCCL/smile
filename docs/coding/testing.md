@@ -25,8 +25,7 @@ tests**.
 
 ### Unit/Component tests
 
-Unit tests apply to a particular piece of code in isolation. For example, a test
-might be written to verify a function or component. Testing for the web is
+Unit tests apply to a particular piece of code in isolation. For example, a test might be written to verify a function or component. Testing for the web is
 complicated by the fact that your code runs and interacts with several other
 programs such as the browser or possible databases. In the unit testing approach
 we will consider, we will use tools that are called "headless" in the sense that
