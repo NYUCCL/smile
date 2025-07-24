@@ -28,8 +28,21 @@ jobs:
       - name: Run Prettier
         run: npx prettier --write .
 
-      - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v3.x
+      - name: Run autofix
+        uses: autofix-ci/action@635ffb0c9798bd160680f18fd73371e355b85f27
+
+  test:
+    runs-on: ubuntu-latest
+    needs: prettier # Remove this line if you want to run tests in parallel
+    env:
+      GITHUB_COMMIT_MESSAGE: '${{ github.event.head_commit.message }}'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Expose git-specific information to the Vite environment
         env:
@@ -138,6 +151,3 @@ jobs:
       - name: Run tests
         id: run-tests
         run: npm run test
-
-      - name: Run autofix
-        uses: autofix-ci/action@635ffb0c9798bd160680f18fd73371e355b85f27
