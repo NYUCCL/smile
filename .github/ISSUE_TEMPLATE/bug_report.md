@@ -27,6 +27,6 @@ Steps to reproduce the behavior:
 **Environment**
 
 - Smile version (or githash):
-- Node version (node -v):
+- Node version (`node -v`):
 - Browser:
 - OS:
