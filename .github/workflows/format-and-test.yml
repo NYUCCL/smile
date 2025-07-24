@@ -1,7 +1,7 @@
 name: Format and Test
 
 on:
-  pull_request:
+  pull_request_target:
     branches: [main]
   workflow_dispatch:
 
@@ -102,16 +102,30 @@ jobs:
           echo "VITE_CODE_NAME          = ${CODENAME}" >> $ENV_FILE
           cat $ENV_FILE
 
-      # put the full path name in VITE_DEPLOY_BASE_PATH
-
-      # Configure secure information configuration
-      - name: Expose secret information to the Vite environment
+      # place the deploy settings into the environment files
+      # this one needs to be made available to vite.config.js
+      - name: create mock deploy file
         env:
-          SECRET_APP_CONFIG: ${{ secrets.SECRET_APP_CONFIG }}
-          SECRET_ENV_FILE: 'env/.env.local'
+          DEPLOY_ENV_FILE: 'env/.env.local'
         run: |
-          echo "------"
-          echo $SECRET_APP_CONFIG | base64 --decode > $SECRET_ENV_FILE
+          echo "VITE_FIREBASE_APIKEY=mock-api-key" > $DEPLOY_ENV_FILE
+          echo "VITE_FIREBASE_AUTHDOMAIN=mock-auth-domain" >> $DEPLOY_ENV_FILE
+          echo "VITE_FIREBASE_PROJECTID=mock-project-id" >> $DEPLOY_ENV_FILE
+          echo "VITE_FIREBASE_STORAGEBUCKET=mock-storage-bucket" >> $DEPLOY_ENV_FILE
+          echo "VITE_FIREBASE_MESSAGINGSENDERID=mock-messaging-sender-id" >> $DEPLOY_ENV_FILE
+          echo "VITE_FIREBASE_APPID=mock-app-id" >> $DEPLOY_ENV_FILE
+          cat $DEPLOY_ENV_FILE
+
+      # place the deploy settings into the environment files
+      # this one needs to be made available to vite.config.js
+      - name: create mock deploy.local file
+        env:
+          DEPLOY_ENV_FILE: 'env/.env.deploy.local'
+        run: |
+          echo "VITE_DEPLOY_BASE_PATH      =  '/mock-owner/mock-repo/mock-branch/'" > $DEPLOY_ENV_FILE
+          echo "VITE_DEPLOY_URL = 'https://mock-deploy-host/mock-owner/mock-repo/mock-branch/'" >> $DEPLOY_ENV_FILE
+          echo 'VITE_CODE_NAME_DEPLOY_URL         =  "https://mock-deploy-host/e/mock-code-name"' >> $DEPLOY_ENV_FILE
+          cat $DEPLOY_ENV_FILE
 
       # load the environment
       - name: Load the github dotenv file
@@ -126,20 +140,11 @@ jobs:
         with:
           path: './env/.env.local'
 
-      # echo all the environment variables
-      - name: echo the environment variables
-        run: |
-          echo "deploy url: ${{ secrets.EXP_DEPLOY_PATH }}${{ steps.dotenv_github.outputs.VITE_DEPLOY_BASE_PATH }}"
-
-      # place the deploy settings into the environment files
-      # this one needs to be made available to vite.config.js
-      - name: create deploy file
-        env:
-          DEPLOY_ENV_FILE: 'env/.env.deploy.local'
-        run: |
-          echo "VITE_DEPLOY_URL = 'https://${{ secrets.EXP_DEPLOY_HOST }}${{ steps.dotenv_github.outputs.VITE_DEPLOY_BASE_PATH }}'" > $DEPLOY_ENV_FILE
-          echo 'VITE_CODE_NAME_DEPLOY_URL         =  "https://${{ secrets.EXP_DEPLOY_HOST }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }}"' >> $DEPLOY_ENV_FILE
-          cat $DEPLOY_ENV_FILE
+      - name: Load the deploy general config dotenv file
+        id: dotenv_deploy
+        uses: falti/dotenv-action@v1.1
+        with:
+          path: './env/.env.deploy.local'
 
       # check code formatting
       - name: Check code formatting
