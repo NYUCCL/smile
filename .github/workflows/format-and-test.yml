@@ -106,7 +106,7 @@ jobs:
       # this one needs to be made available to vite.config.js
       - name: create mock deploy file
         env:
-          DEPLOY_ENV_FILE: 'env/.env.deploy.local'
+          DEPLOY_ENV_FILE: 'env/.env.local'
         run: |
           echo "VITE_FIREBASE_APIKEY=mock-api-key" > $DEPLOY_ENV_FILE
           echo "VITE_FIREBASE_AUTHDOMAIN=mock-auth-domain" >> $DEPLOY_ENV_FILE
