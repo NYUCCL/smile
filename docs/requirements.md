@@ -14,9 +14,9 @@ items on your local computer.
 You will need to install Node.js on your computer. You can download the latest
 version [here](https://nodejs.org/en/download/). After the installation
 completes, verify that you have the `npm` command in your terminal program of
-choice. If you already have Node installed, verify that the version of npm is
+choice. If you already have Node installed, verify that the version of Node.js is
 greater than or equal to {{ theme.nodeVersion }}. You can check your installed
-version by typing `npm -v`.
+version by typing `node -v`.
 
 ## 2. Create a GitHub account if you haven't and install the command-line tool
 
