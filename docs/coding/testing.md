@@ -7,9 +7,7 @@ and add to participant frustration.
 Helping to integrate testing the code for your experiments into your project is
 one of the key features of <SmileText/>.
 
-In
-[test driven development](https://en.wikipedia.org/wiki/Test-driven_development)
-you first write tests that describe how you want your software to behave, which
+In [test driven development](https://en.wikipedia.org/wiki/Test-driven_development) you first write tests that describe how you want your software to behave, which
 initially will all fail. Then as you implement your code you will begin passing
 the test. Later, as your project matures, old tests help make sure that new
 changes do not break existing code.
