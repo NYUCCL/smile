@@ -14,6 +14,7 @@ on:
       - analysis # want this to be all branches eventually
       - models
       - docs
+      - 'feat-*'
     paths-ignore: # ignore any changes to the docs for this workflow or unimportant files
       - 'docs/**'
       - '.github/workflows/docs-deploy.yml'
