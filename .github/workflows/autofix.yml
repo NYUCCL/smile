@@ -44,6 +44,14 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
 
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node_version'
+
+      - name: Install node dependencies
+        run: npm ci
+
       - name: Expose git-specific information to the Vite environment
         env:
           ENV_FILE: 'env/.env.git.local'
