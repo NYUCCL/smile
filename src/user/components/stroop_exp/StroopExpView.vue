@@ -8,6 +8,9 @@ import { ConstrainedTaskWindow } from '@/uikit/layouts'
 
 const api = useViewAPI()
 
+const sad_src = api.getStaticUrl(`sad.png`)
+const happy_src = api.getStaticUrl(`happy/happy.png`)
+
 // define the trials for the experiment as a spec
 const trials = api.steps.append([
   {
@@ -99,22 +102,17 @@ function finish() {
 </script>
 
 <template>
-  <ConstrainedTaskWindow
-    variant="ghost"
-    :responsiveUI="api.config.responsiveUI"
-    :width="api.config.windowsizerRequest.width"
-    :height="api.config.windowsizerRequest.height"
-  >
+  <ConstrainedTaskWindow variant="ghost" :responsiveUI="api.config.responsiveUI"
+    :width="api.config.windowsizerRequest.width" :height="api.config.windowsizerRequest.height">
     <!-- Show this for each trial -->
+    <img :src="sad_src" alt="Sad face" />
+    <img :src="happy_src" alt="Happy face" />
     <div class="text-center" v-if="api.path[0] == 'stroop'">
-      <h1
-        class="text-6xl font-bold mb-8"
-        :class="{
-          'text-red-500': api.stepData.color === 'red',
-          'text-blue-500': api.stepData.color === 'blue',
-          'text-green-500': api.stepData.color === 'green',
-        }"
-      >
+      <h1 class="text-6xl font-bold mb-8" :class="{
+        'text-red-500': api.stepData.color === 'red',
+        'text-blue-500': api.stepData.color === 'blue',
+        'text-green-500': api.stepData.color === 'green',
+      }">
         {{ api.stepData.word }}
       </h1>
       <p class="text-lg text-muted-foreground" id="prompt">Type "R" for Red, "B" for blue, "G" for green.</p>
@@ -133,11 +131,9 @@ function finish() {
       <Button variant="default" size="lg" id="finish" @click="finish()">
         Continue
         <svg class="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 20 20">
-          <path
-            fill-rule="evenodd"
+          <path fill-rule="evenodd"
             d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-            clip-rule="evenodd"
-          />
+            clip-rule="evenodd" />
         </svg>
       </Button>
     </div>
