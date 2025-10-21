@@ -15,13 +15,7 @@ import {
   CalendarHeader,
   CalendarHeading,
 } from '@/uikit/components/ui/calendar'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/uikit/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/uikit/components/ui/select'
 
 const props = defineProps({
   defaultValue: { type: null, required: false },
@@ -70,21 +64,24 @@ function calendarDateToIso(calendarDate) {
 
 // Internal state for placeholder (controls which month/year is shown)
 const placeholderRef = ref(
-  (props.modelValue && typeof props.modelValue === 'string')
+  props.modelValue && typeof props.modelValue === 'string'
     ? isoToCalendarDate(props.modelValue)
     : today(getLocalTimeZone())
 )
 
 // Watch for external changes to modelValue and update placeholder
-watch(() => props.modelValue, (newValue) => {
-  if (!newValue || typeof newValue !== 'string') {
-    return
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    if (!newValue || typeof newValue !== 'string') {
+      return
+    }
+    const newDate = isoToCalendarDate(newValue)
+    if (newDate && (!placeholderRef.value || calendarDateToIso(newDate) !== calendarDateToIso(placeholderRef.value))) {
+      placeholderRef.value = newDate
+    }
   }
-  const newDate = isoToCalendarDate(newValue)
-  if (newDate && (!placeholderRef.value || calendarDateToIso(newDate) !== calendarDateToIso(placeholderRef.value))) {
-    placeholderRef.value = newDate
-  }
-})
+)
 
 // Forward only the props we need to CalendarRoot (exclude modelValue, placeholder, class)
 const calendarProps = computed(() => {
@@ -104,11 +101,13 @@ const yearRange = createDecade({ dateObj: currentDate, startIndex: -100, endInde
     v-slot="{ grid, weekDays, date }"
     v-model:placeholder="placeholderRef"
     :model-value="isoToCalendarDate(props.modelValue)"
-    @update:model-value="(val) => {
-      if (val) {
-        emits('update:modelValue', calendarDateToIso(val))
+    @update:model-value="
+      (val) => {
+        if (val) {
+          emits('update:modelValue', calendarDateToIso(val))
+        }
       }
-    }"
+    "
     @update:placeholder="(val) => emits('update:placeholder', val)"
     :class="cn('p-3', props.class)"
     v-bind="calendarProps"
@@ -117,16 +116,18 @@ const yearRange = createDecade({ dateObj: currentDate, startIndex: -100, endInde
       <CalendarHeading class="flex w-full items-center justify-between gap-2">
         <Select
           :model-value="placeholderRef.month.toString()"
-          @update:model-value="(v) => {
-            if (!v || !placeholderRef) return;
-            if (Number(v) === placeholderRef.month) return;
-            const newPlaceholder = placeholderRef.set({ month: Number(v) })
-            placeholderRef = newPlaceholder
-            // If there's a selected date, update it too
-            if (props.modelValue) {
-              emits('update:modelValue', calendarDateToIso(newPlaceholder))
+          @update:model-value="
+            (v) => {
+              if (!v || !placeholderRef) return
+              if (Number(v) === placeholderRef.month) return
+              const newPlaceholder = placeholderRef.set({ month: Number(v) })
+              placeholderRef = newPlaceholder
+              // If there's a selected date, update it too
+              if (props.modelValue) {
+                emits('update:modelValue', calendarDateToIso(newPlaceholder))
+              }
             }
-          }"
+          "
         >
           <SelectTrigger aria-label="Select month" class="w-[60%]">
             <SelectValue placeholder="Select month" />
@@ -144,26 +145,24 @@ const yearRange = createDecade({ dateObj: currentDate, startIndex: -100, endInde
 
         <Select
           :model-value="placeholderRef.year.toString()"
-          @update:model-value="(v) => {
-            if (!v || !placeholderRef) return;
-            if (Number(v) === placeholderRef.year) return;
-            const newPlaceholder = placeholderRef.set({ year: Number(v) })
-            placeholderRef = newPlaceholder
-            // If there's a selected date, update it too
-            if (props.modelValue) {
-              emits('update:modelValue', calendarDateToIso(newPlaceholder))
+          @update:model-value="
+            (v) => {
+              if (!v || !placeholderRef) return
+              if (Number(v) === placeholderRef.year) return
+              const newPlaceholder = placeholderRef.set({ year: Number(v) })
+              placeholderRef = newPlaceholder
+              // If there's a selected date, update it too
+              if (props.modelValue) {
+                emits('update:modelValue', calendarDateToIso(newPlaceholder))
+              }
             }
-          }"
+          "
         >
           <SelectTrigger aria-label="Select year" class="w-[40%]">
             <SelectValue placeholder="Select year" />
           </SelectTrigger>
           <SelectContent class="max-h-[200px]">
-            <SelectItem
-              v-for="yearValue in yearRange"
-              :key="yearValue.toString()"
-              :value="yearValue.year.toString()"
-            >
+            <SelectItem v-for="yearValue in yearRange" :key="yearValue.toString()" :value="yearValue.year.toString()">
               {{ yearValue.year }}
             </SelectItem>
           </SelectContent>

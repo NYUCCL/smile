@@ -196,13 +196,7 @@ function finish() {
               <PopoverContent class="w-auto p-0">
                 <MonthYearDayPicker v-model="api.persist.forminfo.dob" initial-focus />
                 <div class="p-3 border-t border-border">
-                  <Button
-                    variant="default"
-                    class="w-full"
-                    @click="isPopoverOpen = false"
-                  >
-                    Done
-                  </Button>
+                  <Button variant="default" class="w-full" @click="isPopoverOpen = false"> Done </Button>
                 </div>
               </PopoverContent>
             </Popover>
