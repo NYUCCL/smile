@@ -1,12 +1,11 @@
 <script setup>
-import { reactive, computed, ref, watch } from 'vue'
-import { DateFormatter, getLocalTimeZone, CalendarDate } from '@internationalized/date'
+import { reactive, computed, ref } from 'vue'
 import { CalendarIcon } from 'lucide-vue-next'
 
 // Import and initialize Smile API
 import useViewAPI from '@/core/composables/useViewAPI'
 import { Button } from '@/uikit/components/ui/button'
-import { Calendar } from '@/uikit/components/ui/calendar'
+import MonthYearDayPicker from '@/uikit/components/forms/MonthYearDayPicker.vue'
 import { Popover, PopoverContent, PopoverTrigger } from '@/uikit/components/ui/popover'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/uikit/components/ui/select'
 import { cn } from '@/uikit/lib/utils'
@@ -21,18 +20,6 @@ const api = useViewAPI()
  * Configure the survey steps for the demographic survey
  */
 api.steps.append([{ id: 'survey_page1' }, { id: 'survey_page2' }, { id: 'survey_page3' }])
-
-/**
- * Date formatter for displaying dates in long format
- */
-const df = new DateFormatter('en-US', {
-  dateStyle: 'long',
-})
-
-/**
- * Reactive reference for the selected date value
- */
-const dateValue = ref()
 
 /**
  * Reactive reference for controlling the date picker popover state
@@ -63,34 +50,13 @@ if (!api.persist.isDefined('forminfo')) {
 }
 
 /**
- * Watch for date changes and update the form data
- * Converts CalendarDate to ISO string format and closes popover
+ * Computed property to format the date for display
  */
-watch(dateValue, (newValue) => {
-  if (newValue) {
-    const date = newValue.toDate(getLocalTimeZone())
-    api.persist.forminfo.dob = date.toISOString().split('T')[0] // Format as YYYY-MM-DD
-    isPopoverOpen.value = false // Close popover when date is selected
-  }
+const formattedDate = computed(() => {
+  if (!api.persist.forminfo.dob) return 'Pick a date'
+  const date = new Date(api.persist.forminfo.dob + 'T00:00:00')
+  return new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(date)
 })
-
-/**
- * Watch for form data changes and update the date picker
- * Synchronizes the date picker with the stored form data
- */
-watch(
-  () => api.persist.forminfo.dob,
-  (newValue) => {
-    if (newValue && newValue !== '') {
-      // Parse the date string and create a CalendarDate object
-      const [year, month, day] = newValue.split('-').map(Number)
-      dateValue.value = new CalendarDate(year, month, day)
-    } else {
-      dateValue.value = null
-    }
-  },
-  { immediate: true }
-)
 
 /**
  * Computed property to check if page one is complete
@@ -133,8 +99,7 @@ const page_three_complete = computed(
  * Pre-populates the form with sample data
  */
 function autofill() {
-  // Set the date value first so the watcher can handle it
-  dateValue.value = new CalendarDate(1978, 9, 12)
+  api.persist.forminfo.dob = '1978-09-12'
   api.persist.forminfo.gender = 'Male'
   api.persist.forminfo.race = 'Caucasian/White'
   api.persist.forminfo.hispanic = 'No'
@@ -220,16 +185,25 @@ function finish() {
                   :class="
                     cn(
                       'w-full justify-start text-left font-normal text-base border border-input bg-background hover:bg-background',
-                      !dateValue && 'text-muted-foreground'
+                      !api.persist.forminfo.dob && 'text-muted-foreground'
                     )
                   "
                 >
                   <CalendarIcon class="mr-2 h-4 w-4" />
-                  {{ dateValue ? df.format(dateValue.toDate(getLocalTimeZone())) : 'Pick a date' }}
+                  {{ formattedDate }}
                 </Button>
               </PopoverTrigger>
               <PopoverContent class="w-auto p-0">
-                <Calendar v-model="dateValue" initial-focus />
+                <MonthYearDayPicker v-model="api.persist.forminfo.dob" initial-focus />
+                <div class="p-3 border-t border-border">
+                  <Button
+                    variant="default"
+                    class="w-full"
+                    @click="isPopoverOpen = false"
+                  >
+                    Done
+                  </Button>
+                </div>
               </PopoverContent>
             </Popover>
             <p class="text-xs text-muted-foreground mt-1">Enter your birthday (required)</p>
