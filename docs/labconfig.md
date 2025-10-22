@@ -200,18 +200,40 @@ later:
 
 ![Firebase get credentials](/images/labconfig-firebase-credentials-6.png)
 
+### Enable anonymous authentication
+
+You need to enable anonymous authentication for your Firebase project. When
+participants access your experiment, they will be authenticated anonymously.
+This means they can only write or read to their own data and not the data of
+other participants.
+
+To do this choose "Authentication" from the left sidebar:
+
+<img src="/images/labconfig-firebase-anonymous-1.png" width="250" alt="Firebase enable anonymous authentication">
+
+and then click "Get started".
+
+Under "Sign in method" click "Anonymous" and then click "Enable".
+
+![Firebase enable anonymous authentication](/images/labconfig-firebase-anonymous-2.png)
+
+![Firebase enable anonymous authentication](/images/labconfig-firebase-anonymous-3.png)
+
+Then click "Save".
+
 ### Setup Firebase rules
 
-You need to set up the rules for your Firebase database. These rules are used to
-define the structure of the database and the permissions for accessing it. The
-`firebase.rules` file in the /firebase/ directory of your project has an example
-of the rules which work well for most Smile Experiments. These rules allow
-participants to write data to the database and read their own data, but not the
-data of other participants. In addition, private data (personally identifiable
-information) is more heavily protected and is write-only. You can upload these
-rules to your Firestore database in the Firebase console. Read more about
-Firebase rules in the
-[Firebase rules documentation](https://firebase.google.com/docs/rules).
+You next need to set up the rules for your Firebase database. These rules are
+used to define the structure of the database and the permissions for accessing
+it. The `firebase.rules` file in the /firebase/ directory of your project has an
+example of the rules which work well for most Smile Experiments. These rules
+allow participants to write data to the database and read their own data, but
+not the data of other participants. In addition, private data (personally
+identifiable information) is more heavily protected and is write-only. You can
+upload these rules to your Firestore database in the Firebase console. Read more
+about Firebase rules in the
+[Firebase rules documentation](https://firebase.google.com/docs/rules). These
+rules rely on the anonymous authentication you enabled above.
 
 Here is an example of the rules file that works well with Smile experiments (in
 `firebase/firebase.rules` of the main Smile repo):
