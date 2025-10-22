@@ -27,12 +27,6 @@ const api = useAPI()
 const emit = defineEmits(['selected'])
 
 /**
- * Compute the height percentage for the list display area
- * @returns {string} Height in pixels
- */
-const height_pct = computed(() => `${api.store.dev.consoleBarHeight - 90}px`)
-
-/**
  * Compute the header text from the configuration path
  * @returns {string|null} Header text or null if no data
  */
@@ -99,7 +93,7 @@ function option_selected(option) {
     </div>
 
     <!-- Scrollable list content -->
-    <div class="flex-1 overflow-y-auto overflow-x-hidden" :style="{ height: height_pct }">
+    <div class="flex-1 overflow-y-auto overflow-x-hidden">
       <ul class="space-y-0.5 p-1">
         <!-- Empty state message -->
         <li

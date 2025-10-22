@@ -125,7 +125,7 @@ function panel_jump(index) {
 
 <template>
   <!-- Database browsing panel with breadcrumb navigation and three-panel layout -->
-  <div class="h-full p-0 m-0">
+  <div class="h-full p-0 m-0 flex flex-col">
     <!-- Breadcrumb navigation bar -->
     <Breadcrumb class="bg-muted border-b border-t border-dev-lines px-3 py-2 font-mono">
       <BreadcrumbList>
@@ -146,7 +146,7 @@ function panel_jump(index) {
     </Breadcrumb>
 
     <!-- Three-panel layout for hierarchical data navigation -->
-    <div class="flex h-full">
+    <div class="flex flex-1 overflow-hidden">
       <!-- Left panel - 25% width -->
       <div class="w-1/4 h-full border-r border-dev-lines p-0 m-0">
         <!-- two from end -->

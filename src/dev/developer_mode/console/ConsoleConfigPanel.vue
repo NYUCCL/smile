@@ -136,7 +136,7 @@ function resetDevState() {
 
 <template>
   <!-- Configuration panel with breadcrumb navigation and three-panel layout -->
-  <div class="h-full m-0 p-0">
+  <div class="h-full m-0 p-0 flex flex-col">
     <!-- Breadcrumb navigation bar -->
     <Breadcrumb class="bg-muted border-b border-t border-dev-lines px-3 py-2 font-mono">
       <BreadcrumbList>
@@ -157,7 +157,7 @@ function resetDevState() {
     </Breadcrumb>
 
     <!-- Main content area with sidebar and three-panel layout -->
-    <div class="flex flex-row h-[calc(100%-30px)]">
+    <div class="flex flex-row flex-1 overflow-hidden">
       <!-- Left sidebar with documentation link -->
       <div class="flex flex-col w-1/6 min-w-[120px] border-r border-l border-dev-lines bg-muted p-2 gap-2">
         <div class="text-xs text-left mb-2 font-mono">
