@@ -227,6 +227,21 @@ export class SmileAPI {
   sampleWithoutReplacement = sampleWithoutReplacement
 
   // URL helpers
+
+  /**
+   * Eagerly import all user assets using Vite's glob import
+   * This allows dynamic path resolution for nested directories
+   * @private
+   */
+  #userAssets = import.meta.glob('../../user/assets/**/*', { eager: true, query: '?url', import: 'default' })
+
+  /**
+   * Eagerly import all core assets using Vite's glob import
+   * This allows dynamic path resolution for nested directories
+   * @private
+   */
+  #coreAssets = import.meta.glob('../../assets/**/*', { eager: true, query: '?url', import: 'default' })
+
   /**
    * Get the URL for a public asset using the deployment base path
    * @param {string} name - The name/path of the public asset
@@ -239,14 +254,30 @@ export class SmileAPI {
    * @param {string} name - The name/path of the core static asset
    * @returns {string} The complete URL for the core static asset
    */
-  getCoreStaticUrl = (name) => new URL(`../../assets/${name}`, import.meta.url).href
+  getCoreStaticUrl = (name) => {
+    const assetKey = `../../assets/${name}`
+    if (this.#coreAssets[assetKey]) {
+      return this.#coreAssets[assetKey]
+    }
+    // Fallback to original method if glob doesn't find it
+    console.warn(`Core asset not found in glob imports: ${name}`)
+    return new URL(`../../assets/${name}`, import.meta.url).href
+  }
 
   /**
    * Get the URL for a user static asset from the user assets directory
    * @param {string} name - The name/path of the user static asset
    * @returns {string} The complete URL for the user static asset
    */
-  getStaticUrl = (name) => new URL(`../../user/assets/${name}`, import.meta.url).href
+  getStaticUrl = (name) => {
+    const assetKey = `../../user/assets/${name}`
+    if (this.#userAssets[assetKey]) {
+      return this.#userAssets[assetKey]
+    }
+    // Fallback to original method if glob doesn't find it
+    console.warn(`User asset not found in glob imports: ${name}`)
+    return new URL(`../../user/assets/${name}`, import.meta.url).href
+  }
 
   /**
    * Reset the entire application state
