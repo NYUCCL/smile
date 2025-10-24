@@ -4,7 +4,7 @@
 </a>
 
 <p align="center">
-<i>A happy approach to online behavioral research.</i>
+<i>A happy approach to online behavioral research</i>
 </p>
 
 <p align="center">
