@@ -28,6 +28,7 @@ vi.mock('firebase/firestore', () => ({
   Timestamp: {
     now: vi.fn(() => ({ seconds: 1234567890, nanoseconds: 123456789 })),
   },
+  serverTimestamp: vi.fn(() => ({ seconds: 1234567890, nanoseconds: 123456789 })),
   connectFirestoreEmulator: vi.fn(),
 }))
 
@@ -67,9 +68,9 @@ import {
   fsnow,
 } from '@/core/stores/firestore-db'
 
-import { getAuth, signInAnonymously } from 'firebase/auth'
+import { signInAnonymously } from 'firebase/auth'
 
-import { doc, getDoc, addDoc, setDoc, updateDoc, Timestamp } from 'firebase/firestore'
+import { getDoc, addDoc, setDoc, updateDoc, Timestamp } from 'firebase/firestore'
 
 describe('firestore-db', () => {
   beforeEach(() => {
