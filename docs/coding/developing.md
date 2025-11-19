@@ -163,7 +163,8 @@ Fetch only the current state of the template (without its full git history):
 git fetch smile main --depth=1
 ```
 
-Create a patch file showing all differences between your project and the template:
+Create a patch file showing all differences between your project and the
+template:
 
 ```bash
 git diff HEAD smile/main > template_changes.patch
@@ -177,24 +178,26 @@ git apply template_changes.patch
 
 ### Handling merge conflicts
 
-If the patch applies cleanly, skip to the commit step below. If you see conflicts,
-git will report which files failed. To resolve them:
+If the patch applies cleanly, skip to the commit step below. If you see
+conflicts, git will report which files failed. To resolve them:
 
 1. Open each conflicted file in your editor
-2. Look for conflict markers that git inserted (they look like `<<<<<<<`, `=======`, `>>>>>>>`)
+2. Look for conflict markers that git inserted (they look like `<<<<<<<`,
+   `=======`, `>>>>>>>`)
 3. Manually edit the file to keep the changes you want
 4. Save the file
 5. Continue with any remaining conflicted files
 
-Alternatively, you can apply the patch with a 3-way merge strategy which can handle
-some conflicts automatically:
+Alternatively, you can apply the patch with a 3-way merge strategy which can
+handle some conflicts automatically:
 
 ```bash
 git apply --3way template_changes.patch
 ```
 
-This will apply what it can and mark conflicts in files using standard git conflict
-markers, which you can then resolve using your normal merge conflict workflow.
+This will apply what it can and mark conflicts in files using standard git
+conflict markers, which you can then resolve using your normal merge conflict
+workflow.
 
 After resolving all conflicts, stage your changes:
 
@@ -221,8 +224,8 @@ git checkout main
 git merge update-template
 ```
 
-You should re-run node's package installer in case any of the required
-packages changed:
+You should re-run node's package installer in case any of the required packages
+changed:
 
 ```bash
 npm i
