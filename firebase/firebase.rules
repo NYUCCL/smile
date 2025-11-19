@@ -17,6 +17,8 @@ service cloud.firestore {
     match /testing/{studyID} {
       allow create: if isAuthenticated() && !exists(/databases/$(database)/documents/testing/$(studyID));
       allow read: if isAuthenticated();  // Add this line
+      allow update: if isAuthenticated() &&
+                      request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastUpdated']);
       match /data/{partID} {
         allow create: if isAuthenticated() && 
                         request.resource.data.firebaseAnonAuthID == request.auth.uid;
@@ -36,6 +38,8 @@ service cloud.firestore {
     match /real/{studyID} {
       allow create: if isAuthenticated() && !exists(/databases/$(database)/documents/real/$(studyID));
       allow read: if isAuthenticated();  // Add this line
+      allow update: if isAuthenticated() &&
+                      request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastUpdated']);
       match /data/{partID} {
         allow create: if isAuthenticated() && 
                         request.resource.data.firebaseAnonAuthID  == request.auth.uid;
