@@ -144,69 +144,86 @@ the base Smile repo for your lab as a new remote. For example, if your lab
 organization is called `NYUCCL` on Github and the template repo is called
 `smile`, you'd type the following command:
 
-```
+```bash
 git remote add smile https://github.com/NYUCCL/smile.git
 ```
 
 You only need to do this once. Next time, the Smile template will already be
 added as a remote.
 
-Next, fetch the current template from the Smile repo:
+Next, create a new branch for the update:
 
-```
-git fetch smile
-```
-
-If this is your first time merging changes from the template, create a branch
-called smile_template in your project, and switch to that branch:
-
-```
-git checkout -b smile_template
+```bash
+git checkout -b update-template
 ```
 
-If you've done this before, the branch already exists, so just switch to the
-branch:
+Fetch only the current state of the template (without its full git history):
 
-```
-git checkout smile_template
-```
-
-Then, merge the main branch of the current smile template into the
-smile_template branch, and push the changes in smile_template to origin:
-
-```
-git merge smile/main --allow-unrelated-histories -X theirs
-git push
+```bash
+git fetch smile main --depth=1
 ```
 
-Make a new branch called update, based off the current branch your study is
-being developed on:
+Create a patch file showing all differences between your project and the template:
 
-```
-git checkout -b update
-```
-
-Merge the smile_template branch into update, and resolve conflicts:
-
-```
-git merge smile_template
+```bash
+git diff HEAD smile/main > template_changes.patch
 ```
 
-Merge update into your experiment's branch, for example called main:
+Apply the patch to your branch:
 
+```bash
+git apply template_changes.patch
 ```
+
+### Handling merge conflicts
+
+If the patch applies cleanly, skip to the commit step below. If you see conflicts,
+git will report which files failed. To resolve them:
+
+1. Open each conflicted file in your editor
+2. Look for conflict markers that git inserted (they look like `<<<<<<<`, `=======`, `>>>>>>>`)
+3. Manually edit the file to keep the changes you want
+4. Save the file
+5. Continue with any remaining conflicted files
+
+Alternatively, you can apply the patch with a 3-way merge strategy which can handle
+some conflicts automatically:
+
+```bash
+git apply --3way template_changes.patch
+```
+
+This will apply what it can and mark conflicts in files using standard git conflict
+markers, which you can then resolve using your normal merge conflict workflow.
+
+After resolving all conflicts, stage your changes:
+
+```bash
+git add .
+```
+
+Commit the template updates with a descriptive message:
+
+```bash
+git commit -m "Update from Smile template
+
+Applied latest changes from the Smile template repository.
+This update brings in new features and bug fixes without
+importing the template's full git history.
+
+Resolved conflicts in: [list any files where you manually resolved conflicts]"
+```
+
+Finally, merge the update branch into your main development branch:
+
+```bash
 git checkout main
-git merge update
+git merge update-template
 ```
 
-Voila, your Smile has been updated to be even bigger! The extra step (creating
-another additional update branch) prevented the entire commit history of the
-NYUCCL/smile repository from being added to your project, which helps keep
-things nice and clean.
-
-Finally, you should re-run node's package installer in case any of the required
+You should re-run node's package installer in case any of the required
 packages changed:
 
-```
+```bash
 npm i
 ```
