@@ -27,6 +27,7 @@ import {
   updateDoc,
   getDoc,
   Timestamp,
+  serverTimestamp,
   connectFirestoreEmulator,
 } from 'firebase/firestore'
 import appconfig from '@/core/config'
@@ -148,7 +149,11 @@ export const updateSubjectDataRecord = async (data, docid) => {
   try {
     validateFirestoreData(data)
     const docRef = doc(db, `${mode}/${appconfig.projectRef}/data/`, docid)
-    await setDoc(docRef, data, { merge: true })
+    await setDoc(docRef, { ...data, lastUpdated: serverTimestamp() }, { merge: true })
+
+    // Also update the parent project document's lastUpdated field
+    const projectRef = doc(db, mode, appconfig.projectRef)
+    await setDoc(projectRef, { lastUpdated: serverTimestamp() }, { merge: true })
   } catch (e) {
     log.error('FIRESTORE-DB: Error updating document:', e.message)
     throw e // Re-throw to allow caller to handle the error
@@ -167,9 +172,13 @@ export const updatePrivateSubjectDataRecord = async (data, docid) => {
   // is it weird to have a aync method that doesn't return anything?
   try {
     const docRef = doc(db, `${mode}/${appconfig.projectRef}/data/${docid}/private/`, 'private_data')
-    setDoc(docRef, data, {
+    await setDoc(docRef, { ...data, lastUpdated: serverTimestamp() }, {
       merge: true,
     })
+
+    // Also update the parent project document's lastUpdated field
+    const projectRef = doc(db, mode, appconfig.projectRef)
+    await setDoc(projectRef, { lastUpdated: serverTimestamp() }, { merge: true })
   } catch (e) {
     log.error('FIRESTORE-DB: Error updating private document', e)
     throw e
@@ -232,6 +241,7 @@ export const createDoc = async (data) => {
         projectRef: appconfig.projectRef,
         codeName: appconfig.codeName,
         codeNameURL: appconfig.codeNameURL,
+        lastUpdated: serverTimestamp(),
       })
       log.log('FIRESTORE-DB: New experiment registered with ID: ', `${mode}/${appconfig.projectRef}`)
     }
@@ -242,11 +252,13 @@ export const createDoc = async (data) => {
     const docRef = await addDoc(collection(db, `${mode}/${appconfig.projectRef}/data`), {
       ...data,
       firebaseAnonAuthID: user.uid,
+      lastUpdated: serverTimestamp(),
     })
 
     // Update the document with its own ID
     await updateDoc(docRef, {
       firebaseDocID: docRef.id,
+      lastUpdated: serverTimestamp(),
     })
 
     data.firebaseAnonAuthID = user.uid
@@ -277,7 +289,13 @@ export const createPrivateDoc = async (data, docId) => {
     await setDoc(docRef, {
       ...data,
       firebaseAnonAuthID: user.uid,
+      lastUpdated: serverTimestamp(),
     })
+
+    // Also update the parent project document's lastUpdated field
+    const projectRef = doc(db, mode, appconfig.projectRef)
+    await setDoc(projectRef, { lastUpdated: serverTimestamp() }, { merge: true })
+
     log.log(`FIRESTORE-DB: Private document written with ID: `, docRef.id)
     return docRef.id
   } catch (e) {
