@@ -172,9 +172,13 @@ export const updatePrivateSubjectDataRecord = async (data, docid) => {
   // is it weird to have a aync method that doesn't return anything?
   try {
     const docRef = doc(db, `${mode}/${appconfig.projectRef}/data/${docid}/private/`, 'private_data')
-    await setDoc(docRef, { ...data, lastUpdated: serverTimestamp() }, {
-      merge: true,
-    })
+    await setDoc(
+      docRef,
+      { ...data, lastUpdated: serverTimestamp() },
+      {
+        merge: true,
+      }
+    )
 
     // Also update the parent project document's lastUpdated field
     const projectRef = doc(db, mode, appconfig.projectRef)
