@@ -156,11 +156,27 @@ function submitQuiz() {
 }
 
 /**
+ * Clear all answer data from quiz questions without destroying the stepper structure
+ */
+function clearQuizAnswers() {
+  // Get all page data and clear the answer property from each question
+  const pages = api.queryStepData('pages*')
+  pages.forEach((page) => {
+    if (page.questions && Array.isArray(page.questions)) {
+      page.questions.forEach((question) => {
+        delete question.answer
+      })
+    }
+  })
+}
+
+/**
  * Return to instructions page and increment attempt counter
  */
 function returnInstructions() {
-  api.goFirstStep() // reset the quiz
-  api.clear() // don't remember across reloads
+  clearQuizAnswers() // Clear answers but preserve stepper structure
+  api.goFirstStep() // reset the quiz to first page
+
   api.persist.attempts = api.persist.attempts + 1 // increment attempts
   api.goToView(props.returnTo) // go back to instructions
 }

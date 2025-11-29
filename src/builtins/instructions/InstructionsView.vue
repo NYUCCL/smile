@@ -38,6 +38,7 @@ const instText = computed(() => {
  * @param {boolean} [goto] - Optional parameter for navigation control (unused in current implementation)
  */
 function finish(goto) {
+  api.goFirstStep() // reset the state in case you loop back (only needed if using stepper)
   api.goNextView()
 }
 </script>
