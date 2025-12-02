@@ -53,6 +53,7 @@ api.setAutofill(autofill)
  */
 function finish() {
   api.recordForm('feedbackForm', api.persist.forminfo)
+  api.saveData()
   api.goNextView()
 }
 </script>

@@ -31,10 +31,9 @@ const isUploading = ref(true)
 const uploadProgress = ref(0)
 
 /**
- * Initialize API and force data save
+ * Initialize API
  */
 const api = useAPI()
-api.saveData(true) // force a data save
 
 /**
  * Computes a unique completion code based on study data
@@ -80,8 +79,13 @@ onMounted(() => {
     api.log.debug(`code copied to clipboard ${e.trigger.id}`)
   })
 
-  // Animate progress bar from 0 to 100 over 15 seconds
-  const duration = 15000 // 15 seconds
+  // Delay saveData by 4 seconds to avoid minWriteInterval rate limit
+  setTimeout(() => {
+    api.saveData(true) // force a data save
+  }, 4000)
+
+  // Animate progress bar from 0 to 100 over 20 seconds
+  const duration = 20000 // 20 seconds
   const startTime = Date.now()
 
   const updateProgress = () => {
