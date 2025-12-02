@@ -26,15 +26,13 @@ if (!api.persist.isDefined('forminfo')) {
 }
 
 /**
- * Computed property to check if all form fields are completed
+ * Computed property to check if required form fields are completed
  * @returns {boolean} True if all required fields have values
  */
 const complete = computed(
   () =>
     api.persist.forminfo.difficulty_rating !== '' &&
-    api.persist.forminfo.enjoyment_rating !== '' &&
-    api.persist.forminfo.feedback !== '' &&
-    api.persist.forminfo.issues !== ''
+    api.persist.forminfo.enjoyment_rating !== ''
 )
 
 /**
@@ -140,10 +138,10 @@ function finish() {
             <p class="text-xs text-muted-foreground mt-1">Select your rating</p>
           </div>
 
-          <!-- General feedback textarea -->
+          <!-- General feedback textarea (optional) -->
           <div class="mb-3">
             <label class="block text-md font-semibold text-foreground mb-2">
-              Any general feedback for the study team?
+              Any general feedback for the study team? <span class="font-normal text-muted-foreground">(optional)</span>
             </label>
             <Textarea
               v-model="api.persist.forminfo.feedback"
@@ -154,10 +152,10 @@ function finish() {
             <p class="text-xs text-muted-foreground mt-1">Share your general thoughts and reactions</p>
           </div>
 
-          <!-- Issues reporting textarea -->
+          <!-- Issues reporting textarea (optional) -->
           <div class="mb-3">
             <label class="block text-md font-semibold text-foreground mb-2">
-              Any specific issues to report that might improve the study?
+              Any specific issues to report that might improve the study? <span class="font-normal text-muted-foreground">(optional)</span>
             </label>
             <Textarea
               v-model="api.persist.forminfo.issues"
