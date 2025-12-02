@@ -30,9 +30,7 @@ if (!api.persist.isDefined('forminfo')) {
  * @returns {boolean} True if all required fields have values
  */
 const complete = computed(
-  () =>
-    api.persist.forminfo.difficulty_rating !== '' &&
-    api.persist.forminfo.enjoyment_rating !== ''
+  () => api.persist.forminfo.difficulty_rating !== '' && api.persist.forminfo.enjoyment_rating !== ''
 )
 
 /**
@@ -155,7 +153,8 @@ function finish() {
           <!-- Issues reporting textarea (optional) -->
           <div class="mb-3">
             <label class="block text-md font-semibold text-foreground mb-2">
-              Any specific issues to report that might improve the study? <span class="font-normal text-muted-foreground">(optional)</span>
+              Any specific issues to report that might improve the study?
+              <span class="font-normal text-muted-foreground">(optional)</span>
             </label>
             <Textarea
               v-model="api.persist.forminfo.issues"
