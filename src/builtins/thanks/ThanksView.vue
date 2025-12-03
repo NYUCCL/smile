@@ -44,8 +44,8 @@ const api = useAPI()
  * @returns {string} A unique completion code with status suffix
  */
 function computeCompletionCode() {
-  // stringify the data for consistent hashing
-  const data = stringify(api.data)
+  // stringify only the studyData for consistent hashing
+  const data = stringify(api.data.studyData)
   const hashDigest = Base64url.stringify(sha256(data))
 
   const codes = {
