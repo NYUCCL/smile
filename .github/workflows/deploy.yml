@@ -235,7 +235,13 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             { 
+              "deploy_base": "https://${{ secrets.EXP_DEPLOY_HOST }}${{ steps.dotenv_github.outputs.VITE_DEPLOY_BASE_PATH }}",
+              "deploy_base_codename": "https://${{ secrets.EXP_DEPLOY_HOST }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }}",
               "github_username": "${{ github.actor }}",
-              "deploy_url": "https://${{ secrets.EXP_DEPLOY_HOST }}${{ steps.dotenv_github.outputs.VITE_DEPLOY_BASE_PATH }} although you should tell people https://${{ secrets.EXP_DEPLOY_HOST }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }} .  Your QR Code is to the site is here: https://${{ secrets.EXP_DEPLOY_HOST }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }}/qr.svg",
-              "github_hash": "https://github.com/${{ steps.dotenv_github.outputs.VITE_GIT_OWNER }}/${{ steps.dotenv_github.outputs.VITE_GIT_REPO_NAME }}/commit/${{ steps.dotenv_github.outputs.VITE_GIT_HASH }}"
+              "github_hash": "https://github.com/${{ steps.dotenv_github.outputs.VITE_GIT_OWNER }}/${{ steps.dotenv_github.outputs.VITE_GIT_REPO_NAME }}/commit/${{ steps.dotenv_github.outputs.VITE_GIT_HASH }}",
+              "qr_code": "https://${{ secrets.EXP_DEPLOY_HOST }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }}/qr.svg",
+              "prolific_url": "https://${{ secrets.EXP_DEPLOY_HOST }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }}/#/welcome/prolific/",
+              "cloudresearch_url": "https://${{ secrets.EXP_DEPLOY_HOST }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }}/#/welcome/cloudresearch/",
+              "mturk_url": "https://${{ secrets.EXP_DEPLOY_HOST }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }}/#/welcome/mturk/",
+              "citizen_url": "https://${{ secrets.EXP_DEPLOY_HOST }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }}/#/welcome/citizen/"            
             }

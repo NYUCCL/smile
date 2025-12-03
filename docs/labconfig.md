@@ -266,8 +266,10 @@ Next, select "Webhook" as the type of workflow you are creating.
 
 ![Slack config](/images/labconfig-slack2.png)
 
-Click add variables and add the following three variable names to your workflow
-(`github_username`, `deploy_url`, and `github_hash`):
+Click add variables and add the following variable names to your workflow
+`deploy_base`, `deploy_base_codename`, `github_username`,`github_hash`,
+`qr_code`, `prolific_url`, `cloudresearch_url`, `mturk_url`, `citizen_url`. This
+screenshot shows only a subset being added:
 
 ![Slack config](/images/labconfig-slack3.png)
 
@@ -278,7 +280,25 @@ for fun):
 
 ![Slack config](/images/labconfig-slack4.png)
 
-Click save and you'll see your settings like this:
+Here is an example you could build from (with placeholder values for the
+variables, you have to click the "Insert a variable" button in the Slack UI to
+add the variables to the message):
+
+```
+:robot_face: Hi, github_username just automatically deployed an experiment to deploy_base.  Hooray!
+
+- Prolific URL: prolific_url
+- CloudResearch URL: cloudresearch_url
+- MTurk URL: mturk_url
+- Citizen URL: citizen_url
+
+QR Code: qr_code
+The GitHub hash for this commit: github_hash
+```
+
+Click save and you'll see get something like this (although Slack updates the UI
+slightly differently over time):
+
 ![Slack config](/images/labconfig-slack5.png)
 
 You can make some changes here, including making a custom icon for your bot,
