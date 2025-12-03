@@ -228,8 +228,12 @@ export default defineStore('smilestore', {
       consented: false,
       verifiedVisibility: false,
       done: false,
-      starttime: null, // time consented
-      endtime: null, // time finished or withdrew
+      starttime: null, // time consented (server timestamp)
+      endtime: null, // time finished or withdrew (server timestamp)
+      starttimeLocal: null, // time consented in user's local time (ISO string)
+      endtimeLocal: null, // time finished or withdrew in user's local time (ISO string)
+      userTimezone: null, // user's timezone (e.g., "America/New_York")
+      userTimezoneOffset: null, // user's UTC offset in minutes (e.g., -300 for EST)
       recruitmentService: 'web', // fake
       browserData: [], // empty
       withdrawn: false, // false
@@ -314,6 +318,9 @@ export default defineStore('smilestore', {
       this.browserPersisted.consented = true
       this.data.consented = true
       this.data.starttime = fsnow()
+      this.data.starttimeLocal = new Date().toISOString()
+      this.data.userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+      this.data.userTimezoneOffset = new Date().getTimezoneOffset()
     },
 
     /**
@@ -336,6 +343,7 @@ export default defineStore('smilestore', {
       this.data.withdrawn = true
       this.private.withdrawData = forminfo
       this.data.endtime = fsnow()
+      this.data.endtimeLocal = new Date().toISOString()
     },
 
     verifyVisibility(value) {
@@ -352,6 +360,7 @@ export default defineStore('smilestore', {
       this.browserPersisted.done = true
       this.data.done = true
       this.data.endtime = fsnow()
+      this.data.endtimeLocal = new Date().toISOString()
     },
 
     /**
