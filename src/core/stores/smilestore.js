@@ -70,6 +70,29 @@ if (seed) {
   )
 }
 
+/**
+ * Returns the current local time as an ISO-like string in the user's timezone
+ * @returns {string} Local time string (e.g., "2024-12-03T16:04:00.000-05:00")
+ */
+function getLocalTimeString() {
+  const now = new Date()
+  const offset = -now.getTimezoneOffset()
+  const sign = offset >= 0 ? '+' : '-'
+  const pad = (n) => String(Math.abs(n)).padStart(2, '0')
+  const offsetHours = pad(Math.floor(Math.abs(offset) / 60))
+  const offsetMins = pad(Math.abs(offset) % 60)
+
+  const year = now.getFullYear()
+  const month = pad(now.getMonth() + 1)
+  const day = pad(now.getDate())
+  const hours = pad(now.getHours())
+  const minutes = pad(now.getMinutes())
+  const seconds = pad(now.getSeconds())
+  const ms = String(now.getMilliseconds()).padStart(3, '0')
+
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${ms}${sign}${offsetHours}:${offsetMins}`
+}
+
 /////// continue with setting up smilestore ///////
 /**
  * Determines the initial route based on application mode
@@ -318,7 +341,7 @@ export default defineStore('smilestore', {
       this.browserPersisted.consented = true
       this.data.consented = true
       this.data.starttime = fsnow()
-      this.data.starttimeLocal = new Date().toISOString()
+      this.data.starttimeLocal = getLocalTimeString()
       this.data.userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
       this.data.userTimezoneOffset = new Date().getTimezoneOffset()
     },
@@ -343,7 +366,7 @@ export default defineStore('smilestore', {
       this.data.withdrawn = true
       this.private.withdrawData = forminfo
       this.data.endtime = fsnow()
-      this.data.endtimeLocal = new Date().toISOString()
+      this.data.endtimeLocal = getLocalTimeString()
     },
 
     verifyVisibility(value) {
@@ -360,7 +383,7 @@ export default defineStore('smilestore', {
       this.browserPersisted.done = true
       this.data.done = true
       this.data.endtime = fsnow()
-      this.data.endtimeLocal = new Date().toISOString()
+      this.data.endtimeLocal = getLocalTimeString()
     },
 
     /**
