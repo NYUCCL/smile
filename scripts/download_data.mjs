@@ -28,13 +28,13 @@ const init = () => {
 async function askQuestions() {
   const program = new Command()
   program
-    .addOption(new Option('-t, --type ', 'type of data to download').choices(['testing', 'real']))
+    .addOption(new Option('-t, --type <type>', 'type of data to download').choices(['testing', 'real']))
     .addOption(
       new Option('-c, --complete_only <complete_only>', 'complete only or all data').choices(['all', 'complete_only'])
     )
     .option('-b, --branch_name <branch_name>', 'branch name')
-    .option('-f, --filename ', 'filename')
-    .option('-r', '--save_recruitment_info', 'save recruitment info')
+    .option('-f, --filename <filename>', 'filename')
+    .option('-r, --save_recruitment_info', 'save recruitment info')
 
   program.parse()
   const options = program.opts()
