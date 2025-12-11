@@ -132,8 +132,11 @@ function finish() {
 
 <template>
   <!-- Main container with responsive layout -->
-  <ConstrainedPage :responsiveUI="api.config.responsiveUI" :width="api.config.windowsizerRequest.width"
-    :height="api.config.windowsizerRequest.height">
+  <ConstrainedPage
+    :responsiveUI="api.config.responsiveUI"
+    :width="api.config.windowsizerRequest.width"
+    :height="api.config.windowsizerRequest.height"
+  >
     <!-- Two-column layout with title and form content -->
     <TitleTwoCol leftFirst leftWidth="w-1/3" :responsiveUI="api.config.responsiveUI">
       <!-- Page title and description section -->
@@ -177,11 +180,15 @@ function finish() {
             <label class="block text-md font-semibold text-foreground mb-2"> Date of Birth </label>
             <Popover v-model:open="isPopoverOpen">
               <PopoverTrigger as-child>
-                <Button variant="secondary" :class="cn(
-                  'w-full justify-start text-left font-normal text-base border border-input bg-background hover:bg-background',
-                  !api.persist.forminfo.dob && 'text-muted-foreground'
-                )
-                  ">
+                <Button
+                  variant="secondary"
+                  :class="
+                    cn(
+                      'w-full justify-start text-left font-normal text-base border border-input bg-background hover:bg-background',
+                      !api.persist.forminfo.dob && 'text-muted-foreground'
+                    )
+                  "
+                >
                   <CalendarIcon class="mr-2 h-4 w-4" />
                   {{ formattedDate }}
                 </Button>
@@ -263,9 +270,7 @@ function finish() {
                 <SelectItem value="I prefer not to say">I prefer not to say</SelectItem>
               </SelectContent>
             </Select>
-            <p class="text-xs text-muted-foreground mt-1">
-              Are you able to speak and understand English? (required)
-            </p>
+            <p class="text-xs text-muted-foreground mt-1">Are you able to speak and understand English? (required)</p>
           </div>
 
           <!-- Navigation section -->
@@ -279,8 +284,10 @@ function finish() {
         </div>
 
         <!-- Page 2: Health and vision information -->
-        <div v-else-if="api.pathString === 'survey_page2'"
-          class="border border-border text-left bg-muted p-6 rounded-lg">
+        <div
+          v-else-if="api.pathString === 'survey_page2'"
+          class="border border-border text-left bg-muted p-6 rounded-lg"
+        >
           <!-- Vision field -->
           <div class="mb-3">
             <label class="block text-md font-semibold text-foreground mb-2">
@@ -393,8 +400,10 @@ function finish() {
         </div>
 
         <!-- Page 3: Location and background information -->
-        <div v-else-if="api.pathString === 'survey_page3'"
-          class="border border-border text-left bg-muted p-6 rounded-lg">
+        <div
+          v-else-if="api.pathString === 'survey_page3'"
+          class="border border-border text-left bg-muted p-6 rounded-lg"
+        >
           <!-- Country field -->
           <div class="mb-3">
             <label class="block text-md font-semibold text-foreground mb-2"> Country </label>
@@ -607,8 +616,12 @@ function finish() {
           <!-- Zipcode field -->
           <div class="mb-3">
             <label class="block text-md font-semibold text-foreground mb-2"> Zipcode/Postal Code </label>
-            <input type="text" v-model="api.persist.forminfo.zipcode" placeholder="Enter zip or postal code"
-              class="w-full px-3 py-2 border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring" />
+            <input
+              type="text"
+              v-model="api.persist.forminfo.zipcode"
+              placeholder="Enter zip or postal code"
+              class="w-full px-3 py-2 border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring"
+            />
             <p class="text-xs text-muted-foreground mt-1">
               Select zipcode or postal code of your primary residence. (optional)
             </p>
