@@ -42,7 +42,8 @@
     "setup_project": "sh scripts/setup_project.sh",
     "force_deploy": "sh scripts/force_deploy.sh",
     "upload_config": "sh scripts/update_config.sh",
-    "release": "bumpp package.json"
+    "release": "bumpp package.json",
+    "prettier": "npx prettier --write ."
   },
   "dependencies": {
     "@codenamize/codenamize": "1.1.1",
