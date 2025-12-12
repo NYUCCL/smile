@@ -22,6 +22,9 @@ import useLog from '@/core/stores/log'
 import useTimeline from '@/core/composables/useTimeline'
 import seedrandom from 'seedrandom'
 import { v4 as uuidv4 } from 'uuid'
+import sha256 from 'crypto-js/sha256'
+import Base64url from 'crypto-js/enc-base64'
+import stringify from 'json-stable-stringify'
 
 import {
   randomInt,
@@ -440,12 +443,15 @@ export class SmileAPI {
 
   /**
    * Records a form submission in the store
+   * @deprecated Use recordPageData() instead. This method will be removed in a future version.
    * @param {string} name - The name/identifier of the form
    * @param {*} data - The form data to store
    * @returns {void}
    */
   recordForm(name, data) {
-    this.store.recordProperty(name, data)
+    this.logStore.warn('SMILE API: recordForm() is deprecated. Use recordPageData() instead.')
+    this.store.recordProperty(name, data) // Keep for backward compat
+    this.recordPageData(data) // Also record to new format
   }
 
   /**
@@ -456,6 +462,160 @@ export class SmileAPI {
    */
   recordProperty(name, data) {
     this.store.recordProperty(name, data)
+  }
+
+  /**
+   * Validates data for Firestore compatibility.
+   * Firestore does not support:
+   * - Nested arrays (arrays containing arrays)
+   * - Functions or Symbols
+   * - Keys containing ".", "/", "[", "]", or "*"
+   *
+   * @param {*} value - The value to validate
+   * @param {string} [path=''] - Current path for error messages
+   * @returns {{valid: boolean, error: string|null}} Validation result
+   * @private
+   */
+  validateFirestoreData(value, path = '') {
+    // Null/undefined are valid
+    if (value === null || value === undefined) {
+      return { valid: true, error: null }
+    }
+
+    // Primitives are valid
+    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || value instanceof Date) {
+      return { valid: true, error: null }
+    }
+
+    // Check for unsupported types
+    if (typeof value === 'function') {
+      return { valid: false, error: `Functions are not supported at path: ${path || 'root'}` }
+    }
+    if (typeof value === 'symbol') {
+      return { valid: false, error: `Symbols are not supported at path: ${path || 'root'}` }
+    }
+
+    // Check arrays
+    if (Array.isArray(value)) {
+      for (let i = 0; i < value.length; i++) {
+        // Check for nested arrays
+        if (Array.isArray(value[i])) {
+          return {
+            valid: false,
+            error: `Nested arrays are not allowed in Firestore at path: ${path}[${i}]`,
+          }
+        }
+        // Recursively validate array elements
+        const result = this.validateFirestoreData(value[i], `${path}[${i}]`)
+        if (!result.valid) {
+          return result
+        }
+      }
+      return { valid: true, error: null }
+    }
+
+    // Check objects
+    if (typeof value === 'object') {
+      for (const [key, val] of Object.entries(value)) {
+        // Check for invalid key characters
+        if (/[.\/\[\]*]/.test(key)) {
+          return {
+            valid: false,
+            error: `Invalid key name "${key}" at path: ${path || 'root'}. Keys cannot contain ".", "/", "[", "]", or "*"`,
+          }
+        }
+        // Recursively validate object values
+        const result = this.validateFirestoreData(val, path ? `${path}.${key}` : key)
+        if (!result.valid) {
+          return result
+        }
+      }
+      return { valid: true, error: null }
+    }
+
+    return { valid: false, error: `Unsupported data type at path: ${path || 'root'}` }
+  }
+
+  /**
+   * Records data associated with a specific page/route.
+   * Data is organized by visit number using visit_N keys (visit_0, visit_1, etc.).
+   * Multiple calls within the same visit append to that visit's timestamps and data arrays.
+   *
+   * Note: Data must be Firestore-compatible. Arrays at the top level are not allowed
+   * because they would create nested arrays when stored. Use an object wrapper instead.
+   *
+   * @param {Object} data - The data to record for this page (must be an object, not an array)
+   * @param {string} [routeName] - Optional route name override. Uses current route if not provided
+   * @returns {boolean} True if data was recorded successfully, false if validation failed
+   *
+   * @example
+   * // Record data for current page (uses current route name)
+   * api.recordPageData({ response: 'yes', rt: 1234 })
+   *
+   * // Record data with explicit route name
+   * api.recordPageData({ response: 'no' }, 'custom_page')
+   *
+   * // Data structure after multiple visits:
+   * // pageData_trial: {
+   * //   visit_0: { timestamps: [...], data: [...] },
+   * //   visit_1: { timestamps: [...], data: [...] }
+   * // }
+   *
+   * // WRONG: Don't pass arrays directly (will be rejected)
+   * api.recordPageData([1, 2, 3]) // Error: use { items: [1, 2, 3] } instead
+   */
+  recordPageData(data, routeName = null) {
+    const pageName = routeName || this.route.name
+    if (!pageName) {
+      this.logStore.error('SMILE API: recordPageData() - No route name available')
+      return false
+    }
+
+    // Validate that data is not an array (would create nested arrays)
+    if (Array.isArray(data)) {
+      this.logStore.error(
+        'SMILE API: recordPageData() - Data cannot be an array (would create nested arrays in Firestore). ' +
+          'Wrap your array in an object, e.g., { items: [...] }'
+      )
+      return false
+    }
+
+    // Validate Firestore compatibility
+    const validation = this.validateFirestoreData(data)
+    if (!validation.valid) {
+      this.logStore.error(`SMILE API: recordPageData() - Invalid data: ${validation.error}`)
+      return false
+    }
+
+    const fieldName = `pageData_${pageName}`
+
+    // Calculate current visit index from routeOrder
+    const visitCount = this.store.data.routeOrder
+      ? this.store.data.routeOrder.filter((entry) => entry.route === pageName).length
+      : 0
+    const currentVisitIndex = Math.max(0, visitCount - 1) // -1 because current visit is already in routeOrder
+    const visitKey = `visit_${currentVisitIndex}`
+
+    // Initialize pageData field if it doesn't exist
+    if (!this.store.data[fieldName]) {
+      this.store.data[fieldName] = {}
+    }
+
+    // Initialize visit structure if it doesn't exist
+    if (!this.store.data[fieldName][visitKey]) {
+      this.store.data[fieldName][visitKey] = {
+        timestamps: [],
+        data: [],
+      }
+    }
+
+    // Append timestamp and data to the current visit
+    this.store.data[fieldName][visitKey].timestamps.push(Date.now())
+    this.store.data[fieldName][visitKey].data.push(JSON.parse(JSON.stringify(data)))
+
+    this.logStore.debug(`SMILE API: recordPageData() recorded to ${fieldName}.${visitKey}`, data)
+
+    return true
   }
 
   /**
@@ -517,6 +677,45 @@ export class SmileAPI {
    */
   setCompletionCode(code) {
     this.store.setCompletionCode(code)
+  }
+
+  /**
+   * Computes a unique completion code based on study data.
+   * Creates a hash of all pageData_* fields and appends status indicators.
+   * Falls back to studyData for backward compatibility if no pageData fields exist.
+   *
+   * @returns {string} A unique completion code with status suffix
+   */
+  computeCompletionCode() {
+    // Collect all pageData_* fields
+    const pageDataFields = {}
+    for (const key in this.store.data) {
+      if (key.startsWith('pageData_')) {
+        pageDataFields[key] = this.store.data[key]
+      }
+    }
+
+    // Use pageData if available, fallback to studyData for backward compat
+    let dataToHash
+    if (Object.keys(pageDataFields).length > 0) {
+      dataToHash = stringify(pageDataFields)
+    } else {
+      dataToHash = stringify(this.store.data.studyData)
+    }
+
+    const hashDigest = Base64url.stringify(sha256(dataToHash))
+
+    const codes = {
+      withdrew: 'xx',
+      completed: 'oo',
+    }
+    let endCode = ''
+    if (this.store.browserPersisted.withdrawn) {
+      endCode = codes['withdrew']
+    } else if (this.store.browserPersisted.done) {
+      endCode = codes['completed']
+    }
+    return hashDigest.slice(0, 20) + endCode
   }
 
   /**
@@ -609,13 +808,15 @@ export class SmileAPI {
 
   /**
    * Records trial data and increments trial counter
+   * @deprecated Use recordPageData() instead. The studyData array will be maintained for backward compatibility but is deprecated.
    * @param {*} data - The trial data to record
    * @returns {void}
    */
   recordData(data) {
+    this.logStore.warn('SMILE API: recordData() is deprecated. Use recordPageData() instead.')
     this.store.data.trialNum += 1
-    this.store.recordData(data)
-    this.logStore.debug('SMILE API: data ', this.store.data.studyData)
+    this.store.recordData(data) // Keep for backward compat
+    this.recordPageData(data) // Also record to new format
   }
 
   // Randomization and conditions

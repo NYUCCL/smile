@@ -286,6 +286,19 @@ export default defineStore('smilestore', {
     getConditions: (state) => state.browserPersisted.conditions,
     getRandomizedRoutes: (state) => state.browserPersisted.randomizedRoutes,
     verifiedVisibility: (state) => state.data.verifiedVisibility,
+    /**
+     * Gets all pageData fields from the data store
+     * @returns {Object} Object containing all pageData_* fields
+     */
+    getAllPageData: (state) => {
+      const pageDataFields = {}
+      for (const key in state.data) {
+        if (key.startsWith('pageData_')) {
+          pageDataFields[key] = state.data[key]
+        }
+      }
+      return pageDataFields
+    },
     getShortId: (state) => {
       if (!state.browserPersisted.docRef || typeof state.browserPersisted.docRef !== 'string') return 'N/A'
       //const lastDashIndex = state.browserPersisted.docRef.lastIndexOf('-')

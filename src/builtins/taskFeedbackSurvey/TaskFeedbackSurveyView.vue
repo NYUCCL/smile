@@ -52,7 +52,7 @@ api.setAutofill(autofill)
  * Records form data and saves to database before proceeding
  */
 function finish() {
-  api.recordForm('feedbackForm', api.persist.forminfo)
+  api.recordPageData(api.persist.forminfo)
   api.saveData()
   api.goNextView()
 }

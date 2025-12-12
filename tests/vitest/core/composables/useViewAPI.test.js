@@ -596,9 +596,9 @@ describe('useViewAPI composable', () => {
     expect(api.stepData).toEqual({ id: 'step1', test: 'value' })
 
     // Test data recording
-    const recordDataSpy = vi.spyOn(api, 'recordData')
+    const recordPageDataSpy = vi.spyOn(api, 'recordPageData')
     api.recordStep()
-    expect(recordDataSpy).toHaveBeenCalledWith({ id: 'step1', test: 'value' })
+    expect(recordPageDataSpy).toHaveBeenCalledWith({ id: 'step1', test: 'value' })
 
     // Test stepper data retrieval
     const data = api.queryStepData()

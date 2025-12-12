@@ -293,24 +293,65 @@ using these methods, ensure your data objects are Firestore-safe:
 Complex JavaScript objects (like functions, classes, or objects with circular
 references) must be converted to Firestore-safe formats before saving.
 
-- `recordForm(name, myFirestoreSafeObject)`: Saves form data for any arbitrarily
-  named form (see [DemographicSurvey](/coding/views#demographic-survey) for an
-  example). The object must be Firestore-safe.
+- `recordPageData(data, routeName?)`: **Recommended** - Records data organized
+  by route/page name and visit number. Data is stored in `pageData_<routeName>`
+  with separate `visit_N` objects for each time the route is visited (e.g.,
+  `visit_0`, `visit_1`, etc.). Each visit contains `timestamps` and `data`
+  arrays that grow with each call during that visit. If routeName is omitted,
+  uses the current route name. Returns `true` on success, `false` on validation
+  failure. The data must be Firestore-safe and will be validated before
+  recording:
+  - Must be an object (not an array) - arrays would create nested arrays which
+    Firestore doesn't support
+  - Cannot contain nested arrays (e.g., `[[1,2], [3,4]]`)
+  - Cannot contain functions or symbols
+  - Keys cannot contain `.`, `/`, `[`, `]`, or `*`
+
+  Example stored structure:
+
+  ```javascript
+  pageData_trial: {
+    visit_0: {  // First visit to this route
+      timestamps: [
+        1702300000000,  // [0] first recordPageData() call
+        1702300001000   // [1] second recordPageData() call
+      ],
+      data: [
+        { response: 'A', rt: 450 },  // [0] first recordPageData() call
+        { response: 'B', rt: 520 }   // [1] second recordPageData() call
+      ]
+    },
+    visit_1: {  // Second visit to this route (e.g., participant returned)
+      timestamps: [1702300100000],
+      data: [
+        { response: 'C', rt: 380 }
+      ]
+    }
+  }
+  ```
+
+  Within each visit, `timestamps[i]` corresponds to `data[i]`. Each call to
+  `recordPageData()` appends one timestamp and one data object to the current
+  visit.
+
 - `recordProperty(name, FirestoreSafeObject)`: Saves a Firestore-safe object at
   the top level of the data object. This does not save the data to the database,
   but it does record it in the local state. The next call to `saveData()` will
   save the data to the database.
-- `recordStep()`: Records the current step in the stepper. This does not save
-  the data to the database, but it does record it in the local state. The next
-  call to `saveData()` will save the data to the database.
-- `recordData(myFirestoreSafeObject)`: Records a Firestore-safe object in the
-  trials. This does not save the data to the database, but it does record it in
-  the local state. The next call to `saveData()` will save the data to the
-  database.
+- `recordStep()`: Records the current step data using `recordPageData()`. This
+  does not save the data to the database, but it does record it in the local
+  state. The next call to `saveData()` will save the data to the database.
 - `recordWindowEvent(type, event_data = null)`: Records a window event. The
   event_data must be Firestore-safe if provided.
 - `saveData(force)`: Saves the current data to the database (force save if
   specified). All data must be Firestore-safe.
+- `computeCompletionCode()`: Generates a unique completion code by hashing all
+  `pageData_*` fields (falls back to `studyData` for backward compatibility).
+
+**Deprecated methods** (still functional but will log warnings):
+
+- `recordForm(name, data)`: Use `recordPageData(data)` instead.
+- `recordData(data)`: Use `recordPageData(data)` instead.
 
 ### Data Query Methods
 

@@ -204,21 +204,107 @@ Firebase/Firestore or the LocalStorage in the browser.
 
 ## Writing Data to the Global Store
 
-The preferred way to write data to the store is to use the [Smile API](/api):
+The preferred way to write data to the store is to use the [Smile API](/api).
+
+### Recording Page-Based Data (Recommended)
+
+The `recordPageData()` method organizes data by route/page name, making it easy
+to track which data came from which part of your experiment:
 
 ```vue
 <script setup>
-import SmileAPI from '@/core/composables/useAPI'
-const api = SmileAPI()
+import useAPI from '@/core/composables/useAPI'
+const api = useAPI()
 
-api.recordData({
-        trialnum: step_index.value,
-        word: step.value.word,
-        color: step.value.color,
-        condition: step.value.condition,
-        response: e.key,
-      })
+// Records to pageData_<current_route_name>
+api.recordPageData({
+  trialNum: 1,
+  response: 'correct',
+  rt: 543,
+})
+
+// Or specify explicit page name
+api.recordPageData({ data: 'value' }, 'custom_page')
+</script>
 ```
+
+Data is automatically organized by visit, so if a participant visits the same
+page multiple times, each visit's data is tracked separately:
+
+```javascript
+// Example data structure in Firestore
+{
+  pageData_consent: [
+    {
+      visitIndex: 0,
+      timestamps: [1701619200000, 1701619205000],  // timestamps[i] corresponds to data[i]
+      data: [{ agreed: true }, { additionalInfo: "..." }]
+    }
+  ],
+  pageData_experiment: [
+    {
+      visitIndex: 0,
+      timestamps: [1701619210000, 1701619215000, 1701619220000],
+      data: [{ trial: 1, rt: 500 }, { trial: 2, rt: 450 }, { trial: 3, rt: 480 }]
+    }
+  ]
+}
+```
+
+### Deprecated Methods
+
+:::warning Deprecated The following methods are deprecated and will be removed
+in a future version. They still work but will log deprecation warnings. Please
+migrate to `recordPageData()`. :::
+
+**`recordData(data)`** - Previously used to append data to a generic `studyData`
+array:
+
+```vue
+<script setup>
+// DEPRECATED - use recordPageData() instead
+api.recordData({
+  trialnum: step_index.value,
+  word: step.value.word,
+  response: e.key,
+})
+</script>
+```
+
+**`recordForm(name, data)`** - Previously used to record form submissions:
+
+```vue
+<script setup>
+// DEPRECATED - use recordPageData() instead
+api.recordForm('demographicForm', formData)
+</script>
+```
+
+### Completion Codes
+
+The `computeCompletionCode()` method generates a unique completion code based on
+the recorded data. This is useful for verifying participant completion across
+recruitment platforms:
+
+```vue
+<script setup>
+import useAPI from '@/core/composables/useAPI'
+const api = useAPI()
+
+// Generate and set completion code
+const completionCode = api.computeCompletionCode()
+api.setCompletionCode(completionCode)
+</script>
+```
+
+The completion code is a hash of all `pageData_*` fields (or `studyData` for
+backward compatibility) with a status suffix:
+
+- `oo` - participant completed the study
+- `xx` - participant withdrew
+
+This method is automatically called in the default `ThanksView.vue` component,
+but you can call it manually if needed elsewhere.
 
 The API provides several useful methods for saving data to the store (see the
 [full docs](/api)).

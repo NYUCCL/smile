@@ -28,7 +28,7 @@ const faveColor = ref('')
 function finish() {
   // do stuff if you want
   // for example, save the data
-  api.recordProperty('favoriteColor', faveColor.value)
+  api.recordPageData({ favoriteColor: faveColor.value })
 
   // then go to the next view
   api.goNextView()

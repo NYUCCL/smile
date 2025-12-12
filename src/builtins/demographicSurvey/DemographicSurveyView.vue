@@ -125,7 +125,7 @@ api.setAutofill(autofill)
  * Saves the demographic survey responses and navigates to the next step
  */
 function finish() {
-  api.recordForm('demographicForm', api.persist.forminfo)
+  api.recordPageData(api.persist.forminfo)
   api.goNextView()
 }
 </script>

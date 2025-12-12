@@ -189,6 +189,8 @@ describe('useAPI composable', () => {
     // Check data and save methods
     expect(api.saveData).toBeInstanceOf(Function)
     expect(api.recordData).toBeInstanceOf(Function)
+    expect(api.recordPageData).toBeInstanceOf(Function)
+    expect(api.computeCompletionCode).toBeInstanceOf(Function)
 
     // Check randomization and conditions
     expect(api.randomSeed).toBeInstanceOf(Function)
@@ -323,5 +325,425 @@ describe('useAPI composable', () => {
 
     api.log.addToHistory('test history')
     expect(api.log.addToHistory).toHaveBeenCalledWith('test history')
+  })
+
+  describe('recordPageData', () => {
+    it('should create pageData_<routeName> field with visit_0 structure', async () => {
+      // Navigate to landing page so we have a route name
+      await router.push('/landing')
+      await flushPromises()
+
+      // Simulate route being recorded in routeOrder (first visit)
+      api.store.data.routeOrder = [{ route: 'landing', timestamp: Date.now() }]
+
+      api.recordPageData({ response: 'test', rt: 100 })
+
+      expect(api.data.pageData_landing).toBeDefined()
+      expect(api.data.pageData_landing.visit_0).toBeDefined()
+      expect(api.data.pageData_landing.visit_0.timestamps).toBeInstanceOf(Array)
+      expect(api.data.pageData_landing.visit_0.timestamps).toHaveLength(1)
+      expect(api.data.pageData_landing.visit_0.data).toBeInstanceOf(Array)
+      expect(api.data.pageData_landing.visit_0.data).toHaveLength(1)
+      expect(api.data.pageData_landing.visit_0.data[0]).toEqual({ response: 'test', rt: 100 })
+    })
+
+    it('should append to same visit on multiple calls within same visit', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      api.store.data.routeOrder = [{ route: 'landing', timestamp: Date.now() }]
+
+      // First call
+      api.recordPageData({ trial: 1 })
+      // Second call (same visit)
+      api.recordPageData({ trial: 2 })
+
+      expect(api.data.pageData_landing.visit_0.timestamps).toHaveLength(2)
+      expect(api.data.pageData_landing.visit_0.data).toHaveLength(2)
+      expect(api.data.pageData_landing.visit_0.data[0]).toEqual({ trial: 1 })
+      expect(api.data.pageData_landing.visit_0.data[1]).toEqual({ trial: 2 })
+    })
+
+    it('should create new visit_N structure when route is visited multiple times', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      // First visit
+      api.store.data.routeOrder = [{ route: 'landing', timestamp: Date.now() }]
+      api.recordPageData({ visit: 'first' })
+
+      expect(api.data.pageData_landing.visit_0).toBeDefined()
+      expect(api.data.pageData_landing.visit_0.data[0]).toEqual({ visit: 'first' })
+
+      // Second visit (add another entry to routeOrder)
+      api.store.data.routeOrder.push({ route: 'landing', timestamp: Date.now() + 1000 })
+      api.recordPageData({ visit: 'second' })
+
+      expect(api.data.pageData_landing.visit_1).toBeDefined()
+      expect(api.data.pageData_landing.visit_1.data[0]).toEqual({ visit: 'second' })
+
+      // Verify visit_0 is unchanged
+      expect(api.data.pageData_landing.visit_0.data).toHaveLength(1)
+    })
+
+    it('should use explicit routeName parameter when provided', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      api.recordPageData({ data: 'test' }, 'custom_page')
+
+      expect(api.data.pageData_custom_page).toBeDefined()
+      expect(api.data.pageData_custom_page.visit_0).toBeDefined()
+      expect(api.data.pageData_landing).toBeUndefined()
+    })
+
+    it('should log error when no route name available', () => {
+      const errorSpy = vi.spyOn(api.logStore, 'error')
+
+      // Call with explicit null routeName and ensure current route has no name
+      // by not navigating anywhere first (route.name will be undefined at root)
+      api.recordPageData({ data: 'test' }, null)
+
+      // Since we're at root with no name and passed null, it should error
+      // Actually the root route '/' has name 'welcome_anonymous', so let's test differently
+      // Create a mock api with no route name using Object.defineProperty
+      const originalRoute = api.route
+      Object.defineProperty(api, 'route', {
+        value: { name: undefined },
+        writable: true,
+        configurable: true,
+      })
+
+      api.recordPageData({ data: 'test' })
+
+      expect(errorSpy).toHaveBeenCalledWith('SMILE API: recordPageData() - No route name available')
+
+      // Restore
+      Object.defineProperty(api, 'route', {
+        value: originalRoute,
+        writable: true,
+        configurable: true,
+      })
+    })
+  })
+
+  describe('deprecated methods', () => {
+    it('should log deprecation warning for recordForm', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      const warnSpy = vi.spyOn(api.logStore, 'warn')
+      api.store.data.routeOrder = [{ route: 'landing', timestamp: Date.now() }]
+
+      api.recordForm('testForm', { field: 'value' })
+
+      expect(warnSpy).toHaveBeenCalledWith('SMILE API: recordForm() is deprecated. Use recordPageData() instead.')
+    })
+
+    it('should log deprecation warning for recordData', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      const warnSpy = vi.spyOn(api.logStore, 'warn')
+      api.store.data.routeOrder = [{ route: 'landing', timestamp: Date.now() }]
+
+      api.recordData({ trial: 1 })
+
+      expect(warnSpy).toHaveBeenCalledWith('SMILE API: recordData() is deprecated. Use recordPageData() instead.')
+    })
+
+    it('should still record to studyData for backward compatibility', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      api.store.data.routeOrder = [{ route: 'landing', timestamp: Date.now() }]
+      api.store.data.studyData = []
+
+      api.recordData({ trial: 1 })
+
+      // Should record to both old and new formats
+      expect(api.store.data.studyData).toHaveLength(1)
+      expect(api.data.pageData_landing).toBeDefined()
+    })
+
+    it('should reject arrays at top level (prevents nested arrays in Firestore)', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      api.store.data.routeOrder = [{ route: 'landing', timestamp: Date.now() }]
+      const errorSpy = vi.spyOn(api.logStore, 'error')
+
+      const result = api.recordPageData([1, 2, 3])
+
+      expect(result).toBe(false)
+      expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining('Data cannot be an array'))
+      expect(api.data.pageData_landing).toBeUndefined()
+    })
+
+    it('should reject nested arrays within objects', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      api.store.data.routeOrder = [{ route: 'landing', timestamp: Date.now() }]
+      const errorSpy = vi.spyOn(api.logStore, 'error')
+
+      const result = api.recordPageData({
+        items: [
+          [1, 2],
+          [3, 4],
+        ],
+      })
+
+      expect(result).toBe(false)
+      expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining('Nested arrays are not allowed'))
+    })
+
+    it('should reject functions in data', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      api.store.data.routeOrder = [{ route: 'landing', timestamp: Date.now() }]
+      const errorSpy = vi.spyOn(api.logStore, 'error')
+
+      const result = api.recordPageData({ callback: () => {} })
+
+      expect(result).toBe(false)
+      expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining('Functions are not supported'))
+    })
+
+    it('should reject invalid key names', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      api.store.data.routeOrder = [{ route: 'landing', timestamp: Date.now() }]
+      const errorSpy = vi.spyOn(api.logStore, 'error')
+
+      const result = api.recordPageData({ 'invalid.key': 'value' })
+
+      expect(result).toBe(false)
+      expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining('Invalid key name'))
+    })
+
+    it('should allow valid nested objects with arrays of primitives', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      const result = api.recordPageData({
+        responses: ['a', 'b', 'c'],
+        nested: { values: [1, 2, 3] },
+        meta: { name: 'test', count: 5 },
+      })
+
+      expect(result).toBe(true)
+      expect(api.data.pageData_landing).toBeDefined()
+      expect(api.data.pageData_landing.visit_0.data[0]).toEqual({
+        responses: ['a', 'b', 'c'],
+        nested: { values: [1, 2, 3] },
+        meta: { name: 'test', count: 5 },
+      })
+    })
+
+    it('should return true on successful recording', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      const result = api.recordPageData({ test: 'value' })
+
+      expect(result).toBe(true)
+    })
+
+    it('should return false when no route name available', async () => {
+      const originalRoute = api.route
+
+      Object.defineProperty(api, 'route', {
+        value: { name: undefined },
+        writable: true,
+        configurable: true,
+      })
+
+      const result = api.recordPageData({ test: 'value' })
+
+      expect(result).toBe(false)
+
+      Object.defineProperty(api, 'route', {
+        value: originalRoute,
+        writable: true,
+        configurable: true,
+      })
+    })
+  })
+
+  describe('computeCompletionCode', () => {
+    it('should generate completion code from pageData fields', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      api.store.data.routeOrder = [{ route: 'landing', timestamp: Date.now() }]
+      api.recordPageData({ response: 'test' })
+
+      const code = api.computeCompletionCode()
+
+      expect(code).toBeDefined()
+      expect(typeof code).toBe('string')
+      expect(code.length).toBeGreaterThan(0)
+    })
+
+    it('should fall back to studyData when no pageData exists', () => {
+      api.store.data.studyData = [{ trial: 1 }]
+
+      const code = api.computeCompletionCode()
+
+      expect(code).toBeDefined()
+      expect(typeof code).toBe('string')
+    })
+
+    it('should append status suffix based on completion state', () => {
+      api.store.data.studyData = [{ trial: 1 }]
+
+      // Test completed state
+      api.store.browserPersisted.done = true
+      api.store.browserPersisted.withdrawn = false
+      const completedCode = api.computeCompletionCode()
+      expect(completedCode.endsWith('oo')).toBe(true)
+
+      // Test withdrawn state
+      api.store.browserPersisted.done = false
+      api.store.browserPersisted.withdrawn = true
+      const withdrawnCode = api.computeCompletionCode()
+      expect(withdrawnCode.endsWith('xx')).toBe(true)
+    })
+
+    it('should be deterministic - same data produces same code', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      // Set up identical data twice
+      api.store.data.pageData_landing = {
+        visit_0: {
+          timestamps: [1000],
+          data: [{ response: 'test', rt: 500 }],
+        },
+      }
+
+      const code1 = api.computeCompletionCode()
+      const code2 = api.computeCompletionCode()
+
+      expect(code1).toBe(code2)
+    })
+
+    it('should produce different codes for different data', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      // First data set
+      api.store.data.pageData_landing = {
+        visit_0: {
+          timestamps: [1000],
+          data: [{ response: 'A' }],
+        },
+      }
+      const code1 = api.computeCompletionCode()
+
+      // Different data set
+      api.store.data.pageData_landing = {
+        visit_0: {
+          timestamps: [1000],
+          data: [{ response: 'B' }],
+        },
+      }
+      const code2 = api.computeCompletionCode()
+
+      expect(code1).not.toBe(code2)
+    })
+
+    it('should generate code with correct length', () => {
+      api.store.data.studyData = [{ trial: 1 }]
+
+      // Without suffix (neither done nor withdrawn)
+      api.store.browserPersisted.done = false
+      api.store.browserPersisted.withdrawn = false
+      const codeNoSuffix = api.computeCompletionCode()
+      expect(codeNoSuffix.length).toBe(20)
+
+      // With suffix (completed)
+      api.store.browserPersisted.done = true
+      const codeWithSuffix = api.computeCompletionCode()
+      expect(codeWithSuffix.length).toBe(22) // 20 + 'oo'
+    })
+
+    it('should handle empty data gracefully', () => {
+      api.store.data.studyData = []
+      api.store.browserPersisted.done = false
+      api.store.browserPersisted.withdrawn = false
+
+      const code = api.computeCompletionCode()
+
+      expect(code).toBeDefined()
+      expect(typeof code).toBe('string')
+      expect(code.length).toBe(20)
+    })
+
+    it('should prefer pageData over studyData when both exist', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      // Set up studyData
+      api.store.data.studyData = [{ oldFormat: 'data' }]
+
+      // Get code with only studyData
+      const studyDataCode = api.computeCompletionCode()
+
+      // Now add pageData
+      api.store.data.pageData_landing = {
+        visit_0: {
+          timestamps: [1000],
+          data: [{ newFormat: 'data' }],
+        },
+      }
+      const pageDataCode = api.computeCompletionCode()
+
+      // Codes should be different because pageData takes precedence
+      expect(pageDataCode).not.toBe(studyDataCode)
+    })
+
+    it('should include all pageData fields in hash', async () => {
+      await router.push('/landing')
+      await flushPromises()
+
+      // Set up one pageData field
+      api.store.data.pageData_landing = {
+        visit_0: {
+          timestamps: [1000],
+          data: [{ page: 'landing' }],
+        },
+      }
+      const singleFieldCode = api.computeCompletionCode()
+
+      // Add another pageData field
+      api.store.data.pageData_trial = {
+        visit_0: {
+          timestamps: [2000],
+          data: [{ page: 'trial' }],
+        },
+      }
+      const multiFieldCode = api.computeCompletionCode()
+
+      // Codes should be different when more data is added
+      expect(multiFieldCode).not.toBe(singleFieldCode)
+    })
+
+    it('should prioritize withdrawn status over done status', () => {
+      api.store.data.studyData = [{ trial: 1 }]
+
+      // Both withdrawn and done are true
+      api.store.browserPersisted.withdrawn = true
+      api.store.browserPersisted.done = true
+
+      const code = api.computeCompletionCode()
+
+      // Should use withdrawn suffix, not completed
+      expect(code.endsWith('xx')).toBe(true)
+      expect(code.endsWith('oo')).toBe(false)
+    })
   })
 })

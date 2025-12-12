@@ -133,7 +133,7 @@ function autofill() {
 
     var t = api.faker.render(trials[step.index()])
     api.debug(t)
-    api.recordData(t)
+    api.recordPageData(t)
 
     step.next()
   }
@@ -149,7 +149,7 @@ function is steps through each trial, rendering the data for that trial, saving
 it to the smilestore database, then advancing to the next step. The rendering
 step calls the `api.faker.*()` methods as defined and makes "fake" data for the
 trial. This data is then [recorded to the database](/coding/datastorage) using
-`api.recordData()`.
+`api.recordPageData()`.
 
 ## The Autofill API
 

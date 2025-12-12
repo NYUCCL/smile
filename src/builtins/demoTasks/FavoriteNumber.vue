@@ -28,7 +28,7 @@ const faveNumber = ref('1')
 function finish() {
   // do stuff if you want
   // for example, save the data
-  api.recordProperty('favoriteNumber', faveNumber.value)
+  api.recordPageData({ favoriteNumber: faveNumber.value })
 
   // then go to the next view
   api.goNextView()

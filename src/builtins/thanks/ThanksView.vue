@@ -9,9 +9,6 @@
 
 // External library imports
 import Clipboard from 'clipboard'
-import sha256 from 'crypto-js/sha256'
-import Base64url from 'crypto-js/enc-base64'
-import stringify from 'json-stable-stringify'
 
 // Vue imports
 import { onMounted, ref } from 'vue'
@@ -36,35 +33,9 @@ const uploadProgress = ref(0)
 const api = useAPI()
 
 /**
- * Computes a unique completion code based on study data
- *
- * Creates a hash of the study data and appends status indicators.
- * Used for participant verification across different recruitment platforms.
- *
- * @returns {string} A unique completion code with status suffix
- */
-function computeCompletionCode() {
-  // stringify only the studyData for consistent hashing
-  const data = stringify(api.data.studyData)
-  const hashDigest = Base64url.stringify(sha256(data))
-
-  const codes = {
-    withdrew: 'xx',
-    completed: 'oo',
-  }
-  let end_code = ''
-  if (api.store.browserPersisted.withdrawn) {
-    end_code = codes['withdrew']
-  } else if (api.store.browserPersisted.done) {
-    end_code = codes['completed']
-  }
-  return hashDigest.slice(0, 20) + end_code // only use first 20 characters, may need to update to shortest possible code
-}
-
-/**
  * Generate completion code and set it in the API
  */
-const completionCode = computeCompletionCode()
+const completionCode = api.computeCompletionCode()
 api.setCompletionCode(completionCode)
 
 /**

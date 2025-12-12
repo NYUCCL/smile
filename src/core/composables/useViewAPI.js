@@ -798,11 +798,11 @@ class ViewAPI extends SmileAPI {
    * @method recordStep
    * @memberof ViewAPI
    * @instance
-   * @description Logs the current step data and records it to the experiment data store using recordData
+   * @description Logs the current step data and records it to the experiment data store using recordPageData
    * @returns {void}
    */
   recordStep() {
-    this.recordData(this.stepData)
+    this.recordPageData(this.stepData)
   }
 
   /**

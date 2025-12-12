@@ -82,7 +82,7 @@ api.setAutofill(autofill)
  * Records form data and navigates to the next view in the experiment flow
  */
 function finish() {
-  api.recordForm('deviceForm', api.persist.forminfo)
+  api.recordPageData(api.persist.forminfo)
   api.goNextView()
 }
 </script>

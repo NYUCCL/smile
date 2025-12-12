@@ -143,7 +143,7 @@ const currentPageComplete = computed(() => {
  * Submit the quiz and navigate to success or retry page based on results
  */
 function submitQuiz() {
-  api.recordData({
+  api.recordPageData({
     phase: 'instructionsQuiz',
     questions: api.queryStepData('pages*'), // Update to use randomized questions
     persist: api.persist,
