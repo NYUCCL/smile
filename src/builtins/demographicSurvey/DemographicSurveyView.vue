@@ -270,9 +270,7 @@ function finish() {
                 <SelectItem value="I prefer not to say">I prefer not to say</SelectItem>
               </SelectContent>
             </Select>
-            <p class="text-xs text-muted-foreground mt-1">
-              Are you able to speak and understanding English? (required)
-            </p>
+            <p class="text-xs text-muted-foreground mt-1">Are you able to speak and understand English? (required)</p>
           </div>
 
           <!-- Navigation section -->
