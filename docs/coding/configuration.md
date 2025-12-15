@@ -401,8 +401,7 @@ EXP_DEPLOY_KEY         = "-----BEGIN RSA PRIVATE KEY-----\n-----END RSA PRIVATE 
 - `EXP_DEPLOY_KEY` is the RSA private key used to access your server via
   passwordless ssh[^rsakey]
 
-[^rsakey]:
-    The key needs to be all on one line with `\n` character coding new lines.
+[^rsakey]: The key needs to be all on one line with `\n` character coding new lines.
 
 ## Configuring your deployment settings on GitHub
 
