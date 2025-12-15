@@ -253,9 +253,11 @@ page multiple times, each visit's data is tracked separately:
 
 ### Deprecated Methods
 
-:::warning Deprecated The following methods are deprecated and will be removed
+::: warning Deprecated
+
+The following two methods are deprecated and will be removed
 in a future version. They still work but will log deprecation warnings. Please
-migrate to `recordPageData()`. :::
+migrate to `recordPageData()`.
 
 **`recordData(data)`** - Previously used to append data to a generic `studyData`
 array:
@@ -279,6 +281,8 @@ api.recordData({
 api.recordForm('demographicForm', formData)
 </script>
 ```
+
+:::
 
 ### Completion Codes
 
