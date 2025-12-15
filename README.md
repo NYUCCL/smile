@@ -40,6 +40,7 @@ Online docs: [https://smile.gureckislab.org](https://smile.gureckislab.org)
   including Prolific, MTurk, CloudResearch, and more.
 - 📝 [Data provenance features](https://smile.gureckislab.org/analysis.html#data-provenance) include an audit trail
   of which version of the code was used to create each data file.
+- 🐍 Easy-to-use [Python library](https://smile.gureckislab.org/analysis.html#python-analysis-library-smiledata) for data analysis with Polars DataFrames, built-in plotting, and support for Jupyter and Marimo notebooks.
 - 😎 Great-looking and detailed docs, if we do say so ourselves!
 
 ## License

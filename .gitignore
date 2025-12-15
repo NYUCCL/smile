@@ -37,3 +37,18 @@ env/*.zip
 *.service-account*
 components.d.ts
 /.vite
+
+# Python
+analysis/.venv/
+analysis/__pycache__/
+analysis/*.egg-info/
+analysis/.ruff_cache/
+*.pyc
+__pycache__/
+.marimo/
+
+# Test coverage
+analysis/htmlcov/
+analysis/.coverage
+.pytest_cache/
+analysis/notebooks/__marimo__/session

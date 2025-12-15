@@ -1,0 +1,33 @@
+/* Load Inter from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root {
+  --marimo-heading-font: 'Inter', sans-serif;
+  --light-text: rgb(199, 199, 199);
+  --dark-text: rgb(19, 19, 21);
+}
+
+/* Increase paragraph font size and change color */
+.paragraph {
+  font-size: 1rem;
+  font-weight: 500;
+  color: light-dark(var(--dark-text), var(--light-text));
+}
+
+.prose h1 {
+  font-size: 2.1 rem;
+  font-weight: bold;
+  color: light-dark(var(--dark-text), var(--light-text));
+}
+
+.prose h2 {
+  font-size: 1.4 rem;
+  font-weight: 600;
+  color: light-dark(var(--dark-text), var(--light-text));
+}
+
+.prose h3 {
+  font-size: 1.2 rem;
+  font-weight: 500;
+  color: light-dark(var(--dark-text), var(--light-text));
+}
