@@ -5,17 +5,10 @@
   "printWidth": 120,
   "overrides": [
     {
-      "files": "docs/*.md",
+      "files": "docs/**/*.md",
       "options": {
         "printWidth": 80,
-        "proseWrap": "always"
-      }
-    },
-    {
-      "files": "docs/*/*.md",
-      "options": {
-        "printWidth": 80,
-        "proseWrap": "always"
+        "proseWrap": "preserve"
       }
     }
   ]
