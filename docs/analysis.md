@@ -235,9 +235,15 @@ quiz_df = data.to_page_data_df("instructionsQuiz")
 ### Extracting Page Data into DataFrames
 
 <SmileText/> uses route-based data recording, where each page/route in your
+<<<<<<< HEAD
 experiment can record its own data. This data is stored in
 `pageData_<routeName>` fields. The `smiledata` library provides convenient
 methods to extract this data into DataFrames for analysis.
+=======
+experiment can record its own data. This data is stored in `pageData_<routeName>`
+fields. The `smiledata` library provides convenient methods to extract this data
+into DataFrames for analysis.
+>>>>>>> 351d66f (feat: add Python library for reading and parsing Smile data sets (closes #245))
 
 #### Discovering Available Pages
 

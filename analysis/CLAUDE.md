@@ -72,7 +72,6 @@ quiz_df = data.to_page_data_df("quiz")
 ```
 
 The resulting DataFrame from `to_page_data_df()` or `to_trials_df(page=...)` includes automatic columns:
-
 - `participant_id`: Firebase document ID
 - `visit`: Visit number (0-indexed) if participant visited the page multiple times
 - `index`: Index of entry within the visit
@@ -85,7 +84,6 @@ Plus all fields recorded in each data entry.
 For `to_page_data_df()` and `to_trials_df(page=...)` to produce clean DataFrames, the data recorded must be organized consistently:
 
 **Consistent field names** - Each data entry should have the same field names across all entries and participants:
-
 ```javascript
 // Good: Consistent field names
 recordPageData({ trial_num: 1, stimulus: 'A', response: 'left', rt: 523 })
@@ -97,11 +95,10 @@ recordPageData({ trial_num: 2, stimulus: 'B', response: 'right', rt: 612 })
 ```
 
 **Consistent data types** - Keep types consistent for each field:
-
 ```javascript
 // Good: rt is always a number
 recordPageData({ rt: 523 })
-recordPageData({ rt: null, status: 'timeout' }) // Use null for missing values
+recordPageData({ rt: null, status: 'timeout' })  // Use null for missing values
 
 // Bad: Mixed types cause issues
 recordPageData({ rt: 523 })
@@ -109,7 +106,6 @@ recordPageData({ rt: 'timeout' })
 ```
 
 **Flat structure preferred** - Keep entries flat for easy DataFrame conversion:
-
 ```javascript
 // Good: Flat
 recordPageData({ trial_num: 1, stimulus_type: 'congruent', rt: 523 })
@@ -119,7 +115,6 @@ recordPageData({ trial: { num: 1, stimulus: { type: 'congruent' } }, response: {
 ```
 
 If you have nested data, use `flatten_nested()`:
-
 ```python
 from smiledata.transforms import flatten_nested
 flat = flatten_nested({"a": {"b": 1, "c": 2}})

@@ -37,8 +37,13 @@ programmers (or AI-assisted programmers) accomplish more in less time.
   Prolific, MTurk, CloudResearch, and more.
 - 📝 [Data provenance features](/analysis#data-provenance) include an audit
   trail of which version of the code was used to create each data file.
+<<<<<<< HEAD
 - 🐍 Easy-to-use [Python library](/analysis#python-analysis-library-smiledata)
   for data analysis with Polars DataFrames, built-in plotting, and support for
+=======
+- 🐍 Easy-to-use [Python library](/analysis#python-analysis-library-smiledata) for
+  data analysis with Polars DataFrames, built-in plotting, and support for
+>>>>>>> 351d66f (feat: add Python library for reading and parsing Smile data sets (closes #245))
   Jupyter and Marimo notebooks.
 - 😎 Great-looking and detailed docs, if we do say so ourselves!
 
