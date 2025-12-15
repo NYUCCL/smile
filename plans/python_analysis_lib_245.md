@@ -1536,10 +1536,7 @@ if __name__ == "__main__":
       "cell_type": "code",
       "execution_count": null,
       "metadata": {},
-      "source": [
-        "from smiledata import load_json\n",
-        "import polars as pl"
-      ],
+      "source": ["from smiledata import load_json\n", "import polars as pl"],
       "outputs": []
     },
     {
@@ -1584,11 +1581,7 @@ if __name__ == "__main__":
       "cell_type": "code",
       "execution_count": null,
       "metadata": {},
-      "source": [
-        "# Get trial-level DataFrame\n",
-        "trials = complete.to_trials_df()\n",
-        "trials.head(10)"
-      ],
+      "source": ["# Get trial-level DataFrame\n", "trials = complete.to_trials_df()\n", "trials.head(10)"],
       "outputs": []
     },
     {
@@ -1647,10 +1640,7 @@ if __name__ == "__main__":
       "cell_type": "code",
       "execution_count": null,
       "metadata": {},
-      "source": [
-        "# Plot RT distribution\n",
-        "plot_trial_rt_distribution(trials, rt_column='rt')"
-      ],
+      "source": ["# Plot RT distribution\n", "plot_trial_rt_distribution(trials, rt_column='rt')"],
       "outputs": []
     }
   ],
