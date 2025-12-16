@@ -212,6 +212,24 @@ jobs:
           port: ${{ secrets.EXP_DEPLOY_PORT }}
           script: rm ${{ secrets.EXP_DEPLOY_PATH }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }}; ln -sf ${{ secrets.EXP_DEPLOY_PATH }}/${{ steps.dotenv_github.outputs.VITE_DEPLOY_BASE_PATH }} ${{ secrets.EXP_DEPLOY_PATH }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }}
 
+      # Validate deploy variables before rsync --delete (safety check)
+      - name: Validate deploy path variables
+        run: |
+          if [ -z "${{ secrets.EXP_DEPLOY_PATH }}" ]; then
+            echo "::error::EXP_DEPLOY_PATH secret is not set. Aborting to prevent rsync --delete in wrong directory."
+            exit 1
+          fi
+          if [ -z "${{ steps.dotenv_github.outputs.VITE_DEPLOY_BASE_PATH }}" ]; then
+            echo "::error::VITE_DEPLOY_BASE_PATH is not set. Aborting to prevent rsync --delete in wrong directory."
+            exit 1
+          fi
+          FULL_PATH="${{ secrets.EXP_DEPLOY_PATH }}/${{ steps.dotenv_github.outputs.VITE_DEPLOY_BASE_PATH }}"
+          if [ -z "$FULL_PATH" ] || [ "$FULL_PATH" = "/" ]; then
+            echo "::error::Computed deploy path is empty or root. Aborting to prevent rsync --delete in wrong directory."
+            exit 1
+          fi
+          echo "Deploy path validated: $FULL_PATH"
+
       # Deploy files to web server
       - name: rsync to server
         uses: burnett01/rsync-deployments@5.2

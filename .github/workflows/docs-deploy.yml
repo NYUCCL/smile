@@ -159,6 +159,19 @@ jobs:
       - name: Rebuild docs
         run: npm run docs:build
 
+      # Validate deploy variables before rsync --delete (safety check)
+      - name: Validate deploy path variables
+        run: |
+          if [ -z "${{ secrets.DOCS_DEPLOY_PATH }}" ]; then
+            echo "::error::DOCS_DEPLOY_PATH secret is not set. Aborting to prevent rsync --delete in wrong directory."
+            exit 1
+          fi
+          if [ "${{ secrets.DOCS_DEPLOY_PATH }}" = "/" ]; then
+            echo "::error::DOCS_DEPLOY_PATH is root. Aborting to prevent rsync --delete in wrong directory."
+            exit 1
+          fi
+          echo "Deploy path validated: ${{ secrets.DOCS_DEPLOY_PATH }}"
+
       # Deploy files to web server
       - name: rsync to server
         uses: burnett01/rsync-deployments@5.2
