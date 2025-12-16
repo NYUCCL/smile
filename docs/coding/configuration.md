@@ -384,6 +384,7 @@ EXP_DEPLOY_USER        = user
 EXP_DEPLOY_MODE        = production
 SLACK_WEBHOOK_URL      = https://hooks.slack.com/workflows/something
 SLACK_WEBHOOK_ERROR_URL= https://hooks.slack.com/workflows/somethingelse
+SLACK_DOCS_WEBHOOK_URL = https://hooks.slack.com/workflows/docswebhook
 EXP_DEPLOY_KEY         = "-----BEGIN RSA PRIVATE KEY-----\n-----END RSA PRIVATE KEY-----"
 
 ```
@@ -398,6 +399,8 @@ EXP_DEPLOY_KEY         = "-----BEGIN RSA PRIVATE KEY-----\n-----END RSA PRIVATE 
   messages
 - `SLACK_WEBHOOK_ERROR_URL` is the url for the Slack Webhook for posting error
   messages
+- `SLACK_DOCS_WEBHOOK_URL` is the url for the Slack Webhook for posting
+  documentation deployment messages (only needed on the base Smile repo)
 - `EXP_DEPLOY_KEY` is the RSA private key used to access your server via
   passwordless ssh[^rsakey]
 

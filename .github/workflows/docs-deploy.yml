@@ -174,8 +174,8 @@ jobs:
       # send a notification at the end
       - name: Send notification to lab slack
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        if: ${{ env.SLACK_WEBHOOK_URL != '' }} # this should only run if SLACK_WEBHOOK exists
+          SLACK_DOCS_WEBHOOK_URL: ${{ secrets.SLACK_DOCS_WEBHOOK_URL }}
+        if: ${{ env.SLACK_DOCS_WEBHOOK_URL != '' }} # this should only run if SLACK_DOCS_WEBHOOK_URL exists
         id: slack
         uses: slackapi/slack-github-action@v1.25.0
         with:
@@ -183,6 +183,5 @@ jobs:
           payload: |
             { 
               "github_username": "${{ github.actor }}",
-              "deploy_url": "Docs were updated at https://smile.gureckislab.org/",
               "github_hash": "https://github.com/${{ steps.dotenv_github.outputs.VITE_GIT_OWNER }}/${{ steps.dotenv_github.outputs.VITE_GIT_REPO_NAME }}/commit/${{ steps.dotenv_github.outputs.VITE_GIT_HASH }}"
             }

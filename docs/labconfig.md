@@ -389,6 +389,7 @@ EXP_DEPLOY_PORT        = 22
 EXP_DEPLOY_USER        = xxx
 SLACK_WEBHOOK_URL      = https://hooks.slack.com/workflows/xxx
 SLACK_WEBHOOK_ERROR_URL= https://hooks.slack.com/workflows/xxx
+SLACK_DOCS_WEBHOOK_URL = https://hooks.slack.com/workflows/xxx
 EXP_DEPLOY_KEY         = "-----BEGIN RSA PRIVATE KEY-----\nxxx\n-----END RSA PRIVATE KEY-----"
 ```
 
@@ -401,7 +402,10 @@ of the account you use to access your http hosting service. The
 `SLACK_WEBHOOK_URL` is the URL you received when setting up your first Slack
 workflow above (for successful deployments). The `SLACK_WEBHOOK_ERROR_URL` is
 the URL you received when setting up your second Slack workflow above (for
-errors). Finally, `EXP_DEPLOY_KEY` should be the private SSH key you use to
+errors). The `SLACK_DOCS_WEBHOOK_URL` is optional and only needed if you are
+hosting your own documentation site (typically only the base Smile repo needs
+this). If you set up this webhook, it should accept `github_username` and
+`github_hash` as payloads. Finally, `EXP_DEPLOY_KEY` should be the private SSH key you use to
 access your HTTP server using passwordless ssh. Instructions on creating that
 key are provided
 [here for Dreamhost](https://help.dreamhost.com/hc/en-us/articles/216499537-How-to-configure-passwordless-login-in-Mac-OS-X-and-Linux).
