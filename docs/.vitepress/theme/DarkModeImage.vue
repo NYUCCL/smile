@@ -1,9 +1,6 @@
 <template></template>
 <style>
-.dark img {
+.dark img.dark-aware-img {
   filter: invert(1);
-}
-img {
-  filter: invert(0);
 }
 </style>
