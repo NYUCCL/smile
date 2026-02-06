@@ -479,6 +479,372 @@ describe('Timeline tests', () => {
     expect(timeline.seqtimeline[3].meta.prev).toBe('one-b') // three prev is two
     expect(timeline.seqtimeline[4].meta.prev).toBe('three') // four prev is three
   })
+  describe('Randomized nodes', () => {
+    beforeEach(() => {
+      // Mock store methods for randomized routes
+      api.store.getRandomizedRouteByName = vi.fn().mockReturnValue(null)
+      api.store.setRandomizedRoute = vi.fn()
+      // Mock sampleWithReplacement to return first option deterministically
+      api.sampleWithReplacement = vi.fn().mockImplementation((options) => [options[0]])
+    })
+
+    it('should push a randomized node and connect routes in correct order', () => {
+      const timeline = new Timeline(api)
+      addWelcomeRoute(timeline)
+
+      // Register the views first (not in sequence)
+      timeline.registerView({
+        name: 'task1',
+        component: MockComponent,
+      })
+      timeline.registerView({
+        name: 'task2',
+        component: MockComponent,
+      })
+
+      const options = [
+        ['task1', 'task2'],
+        ['task2', 'task1'],
+      ]
+
+      // Push the randomized node - will select first option ['task1', 'task2']
+      timeline.pushRandomizedNode({
+        name: 'randomOrder',
+        options,
+      })
+
+      timeline.build()
+
+      // Verify sampleWithReplacement was called with correct arguments
+      expect(api.sampleWithReplacement).toHaveBeenCalledWith(options, 1, undefined)
+
+      // Verify the selection was persisted
+      expect(api.store.setRandomizedRoute).toHaveBeenCalledWith('randomOrder', ['task1', 'task2'])
+
+      // Verify the sequential timeline has correct order
+      expect(timeline.seqtimeline.length).toBe(3) // welcome + 2 tasks
+      expect(timeline.seqtimeline[0].name).toBe('welcome_anonymous')
+      expect(timeline.seqtimeline[1].name).toBe('task1')
+      expect(timeline.seqtimeline[2].name).toBe('task2')
+
+      // Verify next/prev links form correct traversal
+      expect(timeline.seqtimeline[0].meta.next).toBe('task1')
+      expect(timeline.seqtimeline[1].meta.next).toBe('task2')
+      expect(timeline.seqtimeline[2].meta.next).toBe(null)
+
+      expect(timeline.seqtimeline[0].meta.prev).toBe(null)
+      expect(timeline.seqtimeline[1].meta.prev).toBe('welcome_anonymous')
+      expect(timeline.seqtimeline[2].meta.prev).toBe('task1')
+    })
+
+    it('should select second option when randomizer returns it', () => {
+      // Change mock to return second option
+      api.sampleWithReplacement = vi.fn().mockImplementation((options) => [options[1]])
+
+      const timeline = new Timeline(api)
+      addWelcomeRoute(timeline)
+
+      timeline.registerView({ name: 'task1', component: MockComponent })
+      timeline.registerView({ name: 'task2', component: MockComponent })
+
+      const options = [
+        ['task1', 'task2'],
+        ['task2', 'task1'],
+      ]
+
+      timeline.pushRandomizedNode({
+        name: 'randomOrder',
+        options,
+      })
+
+      timeline.build()
+
+      // Verify sampleWithReplacement was called with correct arguments
+      expect(api.sampleWithReplacement).toHaveBeenCalledWith(options, 1, undefined)
+
+      // Verify the second option was persisted
+      expect(api.store.setRandomizedRoute).toHaveBeenCalledWith('randomOrder', ['task2', 'task1'])
+
+      // Verify reversed order
+      expect(timeline.seqtimeline[1].name).toBe('task2')
+      expect(timeline.seqtimeline[2].name).toBe('task1')
+
+      // Verify traversal links
+      expect(timeline.seqtimeline[0].meta.next).toBe('task2')
+      expect(timeline.seqtimeline[1].meta.next).toBe('task1')
+      expect(timeline.seqtimeline[2].meta.next).toBe(null)
+    })
+
+    it('should use stored route if already assigned', () => {
+      // Mock that route was already assigned
+      api.store.getRandomizedRouteByName = vi.fn().mockReturnValue(['task2', 'task1'])
+
+      const timeline = new Timeline(api)
+      addWelcomeRoute(timeline)
+
+      timeline.registerView({ name: 'task1', component: MockComponent })
+      timeline.registerView({ name: 'task2', component: MockComponent })
+
+      timeline.pushRandomizedNode({
+        name: 'randomOrder',
+        options: [
+          ['task1', 'task2'],
+          ['task2', 'task1'],
+        ],
+      })
+
+      timeline.build()
+
+      // Verify stored route was looked up
+      expect(api.store.getRandomizedRouteByName).toHaveBeenCalledWith('randomOrder')
+
+      // Should NOT call sampleWithReplacement when route is already stored
+      expect(api.sampleWithReplacement).not.toHaveBeenCalled()
+
+      // Should use stored order
+      expect(timeline.seqtimeline[1].name).toBe('task2')
+      expect(timeline.seqtimeline[2].name).toBe('task1')
+    })
+
+    it('should throw error if randomized option not found', () => {
+      const timeline = new Timeline(api)
+      addWelcomeRoute(timeline)
+
+      expect(() => {
+        timeline.pushRandomizedNode({
+          name: 'randomOrder',
+          options: [['nonexistent_task']],
+        })
+      }).toThrow('RandomizedNodeOptionNotFoundError')
+    })
+
+    it('should throw error if options and weights length mismatch', () => {
+      const timeline = new Timeline(api)
+      addWelcomeRoute(timeline)
+
+      timeline.registerView({ name: 'task1', component: MockComponent })
+
+      expect(() => {
+        timeline.pushRandomizedNode({
+          name: 'randomOrder',
+          options: [['task1']],
+          weights: [1, 2], // mismatched length
+        })
+      }).toThrow('OptionsWeightsLengthMismatchError')
+    })
+  })
+
+  describe('Conditional nodes', () => {
+    beforeEach(() => {
+      // Mock getConditionByName to return 'AB' condition
+      api.getConditionByName = vi.fn().mockReturnValue('AB')
+      api.randomAssignCondition = vi.fn().mockReturnValue('AB')
+    })
+
+    it('should push conditional node and connect routes based on condition', () => {
+      const timeline = new Timeline(api)
+      addWelcomeRoute(timeline)
+
+      timeline.registerView({ name: 'taskA', component: MockComponent })
+      timeline.registerView({ name: 'taskB', component: MockComponent })
+
+      timeline.pushConditionalNode({
+        name: 'conditionalOrder',
+        taskOrder: {
+          AB: ['taskA', 'taskB'],
+          BA: ['taskB', 'taskA'],
+        },
+      })
+
+      timeline.build()
+
+      // Verify condition was looked up by the correct name (the condition property key)
+      expect(api.getConditionByName).toHaveBeenCalledWith('taskOrder')
+
+      // Condition is 'AB', so order should be taskA -> taskB
+      expect(timeline.seqtimeline.length).toBe(3)
+      expect(timeline.seqtimeline[0].name).toBe('welcome_anonymous')
+      expect(timeline.seqtimeline[1].name).toBe('taskA')
+      expect(timeline.seqtimeline[2].name).toBe('taskB')
+
+      // Verify traversal links
+      expect(timeline.seqtimeline[0].meta.next).toBe('taskA')
+      expect(timeline.seqtimeline[1].meta.next).toBe('taskB')
+      expect(timeline.seqtimeline[2].meta.next).toBe(null)
+
+      expect(timeline.seqtimeline[0].meta.prev).toBe(null)
+      expect(timeline.seqtimeline[1].meta.prev).toBe('welcome_anonymous')
+      expect(timeline.seqtimeline[2].meta.prev).toBe('taskA')
+    })
+
+    it('should use different order for different condition', () => {
+      // Change condition to 'BA'
+      api.getConditionByName = vi.fn().mockReturnValue('BA')
+
+      const timeline = new Timeline(api)
+      addWelcomeRoute(timeline)
+
+      timeline.registerView({ name: 'taskA', component: MockComponent })
+      timeline.registerView({ name: 'taskB', component: MockComponent })
+
+      timeline.pushConditionalNode({
+        name: 'conditionalOrder',
+        taskOrder: {
+          AB: ['taskA', 'taskB'],
+          BA: ['taskB', 'taskA'],
+        },
+      })
+
+      timeline.build()
+
+      // Verify condition was looked up
+      expect(api.getConditionByName).toHaveBeenCalledWith('taskOrder')
+
+      // Condition is 'BA', so order should be taskB -> taskA
+      expect(timeline.seqtimeline[1].name).toBe('taskB')
+      expect(timeline.seqtimeline[2].name).toBe('taskA')
+
+      // Verify traversal links
+      expect(timeline.seqtimeline[0].meta.next).toBe('taskB')
+      expect(timeline.seqtimeline[1].meta.next).toBe('taskA')
+    })
+
+    it('should handle conditional node with explicit path property', () => {
+      // This test verifies the fix for the bug where 'path' was being
+      // treated as a condition name instead of being ignored
+      const timeline = new Timeline(api)
+      addWelcomeRoute(timeline)
+
+      timeline.registerView({ name: 'taskA', component: MockComponent })
+      timeline.registerView({ name: 'taskB', component: MockComponent })
+
+      // Push conditional node with explicit path - this should NOT throw
+      // Before the fix, this would throw TooManyConditionNamesError
+      // because 'path' was being counted as a second condition name
+      timeline.pushConditionalNode({
+        name: 'conditionalOrder',
+        path: '/conditional',
+        taskOrder: {
+          AB: ['taskA', 'taskB'],
+          BA: ['taskB', 'taskA'],
+        },
+      })
+
+      timeline.build()
+
+      // CRITICAL: Verify the condition lookup used 'taskOrder', NOT 'path'
+      // This is the key assertion that verifies the bug fix
+      expect(api.getConditionByName).toHaveBeenCalledWith('taskOrder')
+      expect(api.getConditionByName).not.toHaveBeenCalledWith('path')
+
+      // Should work correctly with condition 'AB'
+      expect(timeline.seqtimeline.length).toBe(3)
+      expect(timeline.seqtimeline[1].name).toBe('taskA')
+      expect(timeline.seqtimeline[2].name).toBe('taskB')
+
+      // Verify traversal is correct
+      expect(timeline.seqtimeline[0].meta.next).toBe('taskA')
+      expect(timeline.seqtimeline[1].meta.next).toBe('taskB')
+    })
+
+    it('should throw error with multiple condition names', () => {
+      const timeline = new Timeline(api)
+      addWelcomeRoute(timeline)
+
+      timeline.registerView({ name: 'taskA', component: MockComponent })
+
+      // Two condition names should throw - using realistic property names
+      // that a developer might accidentally add (e.g., taskOrder AND variation)
+      expect(() => {
+        timeline.pushConditionalNode({
+          name: 'conditionalOrder',
+          taskOrder: { AB: ['taskA'], BA: ['taskA'] },
+          variation: { X: ['taskA'], Y: ['taskA'] },
+        })
+      }).toThrow('TooManyConditionNamesError')
+    })
+
+    it('should randomly assign condition if not already set', () => {
+      api.getConditionByName = vi.fn().mockReturnValue(null)
+      api.randomAssignCondition = vi.fn().mockReturnValue('AB')
+
+      const timeline = new Timeline(api)
+      addWelcomeRoute(timeline)
+
+      timeline.registerView({ name: 'taskA', component: MockComponent })
+      timeline.registerView({ name: 'taskB', component: MockComponent })
+
+      timeline.pushConditionalNode({
+        name: 'conditionalOrder',
+        taskOrder: {
+          AB: ['taskA', 'taskB'],
+          BA: ['taskB', 'taskA'],
+        },
+      })
+
+      timeline.build()
+
+      // Verify getConditionByName was checked first
+      expect(api.getConditionByName).toHaveBeenCalledWith('taskOrder')
+
+      // Should have called randomAssignCondition with the possible condition values
+      expect(api.randomAssignCondition).toHaveBeenCalledWith({
+        conditionname: ['AB', 'BA'],
+      })
+
+      // And still produce correct traversal based on randomly assigned 'AB'
+      expect(timeline.seqtimeline[1].name).toBe('taskA')
+      expect(timeline.seqtimeline[2].name).toBe('taskB')
+    })
+
+    it('should connect conditional node between other sequential views', () => {
+      const timeline = new Timeline(api)
+      addWelcomeRoute(timeline)
+
+      // Push instructions before conditional node
+      timeline.pushSeqView({
+        name: 'instructions',
+        component: MockComponent,
+      })
+
+      timeline.registerView({ name: 'taskA', component: MockComponent })
+      timeline.registerView({ name: 'taskB', component: MockComponent })
+
+      timeline.pushConditionalNode({
+        name: 'conditionalOrder',
+        taskOrder: {
+          AB: ['taskA', 'taskB'],
+          BA: ['taskB', 'taskA'],
+        },
+      })
+
+      // Push debrief after conditional node
+      timeline.pushSeqView({
+        name: 'debrief',
+        component: MockComponent,
+      })
+
+      timeline.build()
+
+      // Verify full sequence: welcome -> instructions -> taskA -> taskB -> debrief
+      expect(timeline.seqtimeline.length).toBe(5)
+      expect(timeline.seqtimeline.map((r) => r.name)).toEqual([
+        'welcome_anonymous',
+        'instructions',
+        'taskA',
+        'taskB',
+        'debrief',
+      ])
+
+      // Verify complete traversal chain
+      expect(timeline.seqtimeline[0].meta.next).toBe('instructions')
+      expect(timeline.seqtimeline[1].meta.next).toBe('taskA')
+      expect(timeline.seqtimeline[2].meta.next).toBe('taskB')
+      expect(timeline.seqtimeline[3].meta.next).toBe('debrief')
+      expect(timeline.seqtimeline[4].meta.next).toBe(null)
+    })
+  })
+
   /*
   it('should compute the progress correctly', () => {
     const MockComponentOne = { template: '<div>Mock Component One</div>' }

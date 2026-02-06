@@ -359,8 +359,8 @@ class Timeline {
       }
     }
 
-    // get condition name—anything that's not name
-    const conditionname = Object.keys(newroute).filter((key) => key !== 'name')
+    // get condition name—anything that's not name or path
+    const conditionname = Object.keys(newroute).filter((key) => key !== 'name' && key !== 'path')
     if (conditionname.length > 1) {
       this.api.log.error('Can only branch routes based on one condition at a time')
       throw new Error('TooManyConditionNamesError')
