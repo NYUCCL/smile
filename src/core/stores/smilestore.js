@@ -202,6 +202,8 @@ const initBrowserEphemeral = {
       '#/mturk/?assignmentId=123RVWYBAZW00EXAMPLE456RVWYBAZW00EXAMPLE&hitId=123RVWYBAZW00EXAMPLE&turkSubmitTo=https://www.mturk.com/&workerId=AZ3456EXAMPLE',
     citizensci:
       '#/welcome/citizensci/?CITIZEN_ID=XXXXX&CITIZEN_STUDY_ID=123RVWYBAZW00EXAMPLE&CITIZEN_SESSION_ID=AZ3456EXAMPLE',
+    sona: '#/welcome/sona/?survey_code=SONA_TEST_12345',
+    sona_paid: '#/welcome/sona_paid/?survey_code=SONA_PAID_TEST_67890',
     web: '#/welcome',
   },
 }

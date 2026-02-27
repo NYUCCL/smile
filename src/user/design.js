@@ -53,6 +53,7 @@ api.setRuntimeConfig('windowsizerRequest', { width: 800, height: 600 })
 api.setRuntimeConfig('windowsizerAggressive', true)
 
 api.setRuntimeConfig('anonymousMode', false)
+//api.setRuntimeConfig('unpaidStudy', true) // set to true for unpaid/credit studies (e.g., SONA)
 api.setRuntimeConfig('labURL', 'https://gureckislab.org')
 api.setRuntimeConfig('brandLogoFn', 'universitylogo.png')
 

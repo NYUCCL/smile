@@ -233,6 +233,111 @@ htt?ps://exps.gureckislab.org/e/note-useless-uncle#/welcome/mturk/assignmentId=1
 which loads slightly different content. You can customize aspects of this via
 the `recruitment/MTurkRecruitPage.vue` component.
 
+## SONA
+
+[SONA Systems](https://www.sona-systems.com) is a participant management
+platform commonly used at universities for recruiting research participants from
+subject pools. Participants typically receive course credit for their
+participation, though SONA also supports paid studies.
+
+<SmileText /> supports both **SONA (credit)** and **SONA (paid)** as recruitment
+services.
+
+### Configuration
+
+SONA requires several environment variables to be set in your `env/.env.local`
+file. You will need to obtain these values from your SONA administrator or from
+your SONA experiment settings page.
+
+```
+# sona (credit)
+VITE_SONA_URL                    = 'https://yourschool.sona-systems.com'
+VITE_SONA_EXPERIMENT_ID          = 'your_experiment_id'
+VITE_SONA_CREDIT_TOKEN           = 'your_credit_token'
+
+# sona (paid)
+VITE_SONA_PAID_URL               = 'https://yourschool.sona-systems.com'
+VITE_SONA_PAID_EXPERIMENT_ID     = 'your_experiment_id'
+VITE_SONA_PAID_CREDIT_TOKEN      = 'your_credit_token'
+```
+
+You only need to fill in the set that matches your study type (credit or paid).
+After updating these values, run `npm run upload_config` to sync them to GitHub
+for deployment.
+
+- `VITE_SONA_URL` / `VITE_SONA_PAID_URL` is the base URL of your institution's
+  SONA instance (e.g., `https://yourschool.sona-systems.com`)
+- `VITE_SONA_EXPERIMENT_ID` / `VITE_SONA_PAID_EXPERIMENT_ID` is the experiment
+  ID assigned by SONA when you create the study
+- `VITE_SONA_CREDIT_TOKEN` / `VITE_SONA_PAID_CREDIT_TOKEN` is the
+  authentication token SONA provides for automatic credit/payment granting via
+  web studies
+
+### Setting up your study URL in SONA
+
+When creating a web study in SONA, you need to provide the study URL. SONA will
+append a `survey_code` parameter that identifies each participant. Your study URL
+should follow this pattern:
+
+For credit-based studies:
+```
+https://exps.gureckislab.org/e/note-useless-uncle/#/welcome/sona/?survey_code=%SURVEY_CODE%
+```
+
+For paid studies:
+```
+https://exps.gureckislab.org/e/note-useless-uncle/#/welcome/sona_paid/?survey_code=%SURVEY_CODE%
+```
+
+Replace `note-useless-uncle` with your project's code name. The `%SURVEY_CODE%`
+placeholder is automatically replaced by SONA with the participant's unique
+survey code.
+
+### Informed consent for unpaid studies
+
+SONA credit-based studies are unpaid, so the default informed consent language
+about monetary payment is inappropriate. To show course-credit-appropriate
+consent language, set the `unpaidStudy` runtime config option in your
+`design.js`:
+
+```js
+api.setRuntimeConfig('unpaidStudy', true)
+```
+
+This changes the compensation bullet in the default `InformedConsentText.vue`
+from payment language to course credit language. See the
+[configuration docs](/coding/configuration) for more on runtime config. You can
+also toggle this setting in the developer tools sidebar using the "Unpaid"
+switch.
+
+::: tip
+The `unpaidStudy` option is not specific to SONA — it can be used for any
+recruitment service where participants are not paid (e.g., citizen science
+studies).
+:::
+
+### How completion works
+
+When a participant finishes the study, the thanks page automatically provides a
+button that redirects them back to SONA. This redirect URL includes the
+participant's survey code and your credit/payment token, so SONA can
+automatically grant credit or payment without any manual intervention.
+
+For credit studies, the redirect goes to:
+```
+{SONA_URL}/webstudy_credit.aspx?experiment_id={ID}&credit_token={TOKEN}&survey_code={CODE}
+```
+
+This means participants are credited immediately upon clicking the button — no
+completion codes to copy and paste.
+
+### Testing in developer mode
+
+In the developer tools sidebar, you can select "sona" or "sona_paid" from the
+**Service** dropdown to simulate SONA recruitment during development. This lets
+you test the full flow including the thanks/credit page without needing an
+actual SONA participant.
+
 ## Crowd-sourcing
 
 In the future the lab might make a citizen science recruitment portal. To

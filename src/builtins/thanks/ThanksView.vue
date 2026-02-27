@@ -231,6 +231,76 @@ onMounted(() => {
         </TitleTwoCol>
       </div>
 
+      <!-- SONA (credit) recruitment service completion -->
+      <div v-if="api.getRecruitmentService() == 'sona'">
+        <TitleTwoCol leftFirst leftWidth="w-1/3" :responsiveUI="api.config.responsiveUI">
+          <template #title>
+            <h1 class="text-3xl font-bold mb-4">
+              <i-fa6-solid-square-check class="inline mr-2" />&nbsp;Thanks, let's record your credit!
+            </h1>
+            <p class="text-lg mb-8">
+              Please click the button below to return to SONA and receive credit for completing this study. We really
+              appreciate your time.
+            </p>
+          </template>
+          <template #left>
+            <div class="text-left text-muted-foreground">
+              <h3 class="text-lg font-bold mb-2">Credit Process</h3>
+              <p class="text-sm text-muted-foreground">
+                Click the button to return to SONA and automatically receive credit for this study.
+              </p>
+            </div>
+          </template>
+          <template #right>
+            <div class="border border-border text-left bg-muted p-6 rounded-lg">
+              <Button
+                variant="default"
+                as="a"
+                :href="`${appconfig.sona.url}/webstudy_credit.aspx?experiment_id=${appconfig.sona.experimentId}&credit_token=${appconfig.sona.creditToken}&survey_code=${api.private.recruitmentInfo.survey_code}`"
+              >
+                Return to SONA for credit
+                <i-fa6-solid-arrow-right />
+              </Button>
+            </div>
+          </template>
+        </TitleTwoCol>
+      </div>
+
+      <!-- SONA (paid) recruitment service completion -->
+      <div v-if="api.getRecruitmentService() == 'sona_paid'">
+        <TitleTwoCol leftFirst leftWidth="w-1/3" :responsiveUI="api.config.responsiveUI">
+          <template #title>
+            <h1 class="text-3xl font-bold mb-4">
+              <i-fa6-solid-square-check class="inline mr-2" />&nbsp;Thanks, let's begin the payment process!
+            </h1>
+            <p class="text-lg mb-8">
+              Please click the button below to return to SONA and receive payment for completing this study. We really
+              appreciate your time.
+            </p>
+          </template>
+          <template #left>
+            <div class="text-left text-muted-foreground">
+              <h3 class="text-lg font-bold mb-2">Payment Process</h3>
+              <p class="text-sm text-muted-foreground">
+                Click the button to return to SONA and automatically receive payment for this study.
+              </p>
+            </div>
+          </template>
+          <template #right>
+            <div class="border border-border text-left bg-muted p-6 rounded-lg">
+              <Button
+                variant="default"
+                as="a"
+                :href="`${appconfig.sonaPaid.url}/webstudy_credit.aspx?experiment_id=${appconfig.sonaPaid.experimentId}&credit_token=${appconfig.sonaPaid.creditToken}&survey_code=${api.private.recruitmentInfo.survey_code}`"
+              >
+                Return to SONA for payment
+                <i-fa6-solid-arrow-right />
+              </Button>
+            </div>
+          </template>
+        </TitleTwoCol>
+      </div>
+
       <!-- Web recruitment service completion -->
       <div v-if="api.getRecruitmentService() == 'web'">
         <TitleTwoCol leftFirst leftWidth="w-1/3" :responsiveUI="api.config.responsiveUI">

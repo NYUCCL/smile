@@ -92,6 +92,17 @@ export default {
   windowsizerRequest: parseWidthHeight(import.meta.env.VITE_WINDOWSIZER_REQUEST),
   windowsizerAggressive: import.meta.env.VITE_WINDOWSIZER_AGGRESSIVE === 'true',
   anonymousMode: import.meta.env.VITE_ANONYMOUS_MODE === 'true',
+  unpaidStudy: false,
+  sona: {
+    url: import.meta.env.VITE_SONA_URL,
+    experimentId: import.meta.env.VITE_SONA_EXPERIMENT_ID,
+    creditToken: import.meta.env.VITE_SONA_CREDIT_TOKEN,
+  },
+  sonaPaid: {
+    url: import.meta.env.VITE_SONA_PAID_URL,
+    experimentId: import.meta.env.VITE_SONA_PAID_EXPERIMENT_ID,
+    creditToken: import.meta.env.VITE_SONA_PAID_CREDIT_TOKEN,
+  },
   firebaseConfig: {
     apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
     authDomain: import.meta.env.VITE_FIREBASE_AUTHDOMAIN,

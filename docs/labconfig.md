@@ -365,6 +365,15 @@ VITE_FIREBASE_APPID              = xxxx
 # enter google analytics id
 VITE_GOOGLE_ANALYTICS            = xxxx
 
+# sona (credit)
+VITE_SONA_URL                    = ''
+VITE_SONA_EXPERIMENT_ID          = ''
+VITE_SONA_CREDIT_TOKEN           = ''
+
+# sona (paid)
+VITE_SONA_PAID_URL               = ''
+VITE_SONA_PAID_EXPERIMENT_ID     = ''
+VITE_SONA_PAID_CREDIT_TOKEN      = ''
 ```
 
 You will want to replace the values for the entries that contain the word
