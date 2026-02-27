@@ -369,7 +369,7 @@ forms (e.g., showing a parental consent form for participants under 18).
 The study URL format is:
 
 ```
-https://your-deploy-host/e/your-code-name/#/welcome/spark/?subject_ID=XXXX&participant_ID=XXXX&age=XX&gender=XXXX
+https://your-deploy-host/e/your-code-name/#/welcome/spark/?subject_ID=SUBJECTID&participant_ID=PARTICIPANTID&age=AGE&gender=GENDER
 ```
 
 ### How completion works

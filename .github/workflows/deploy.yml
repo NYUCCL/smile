@@ -263,6 +263,6 @@ jobs:
               "mturk_url": "https://${{ secrets.EXP_DEPLOY_HOST }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }}/#/welcome/mturk/",
               "sona_url": "https://${{ secrets.EXP_DEPLOY_HOST }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }}/#/welcome/sona/?survey_code=%SURVEY_CODE%",
               "sona_paid_url": "https://${{ secrets.EXP_DEPLOY_HOST }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }}/#/welcome/sona_paid/?survey_code=%SURVEY_CODE%",
-              "spark_url": "https://${{ secrets.EXP_DEPLOY_HOST }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }}/#/welcome/spark/?subject_ID=%SUBJECT_ID%&participant_ID=%PARTICIPANT_ID%&age=%AGE%&gender=%GENDER%",
+              "spark_url": "https://${{ secrets.EXP_DEPLOY_HOST }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }}/#/welcome/spark/?subject_ID=SUBJECTID&participant_ID=PARTICIPANTID&age=AGE&gender=GENDER",
               "citizen_url": "https://${{ secrets.EXP_DEPLOY_HOST }}/e/${{ steps.dotenv_github.outputs.VITE_CODE_NAME }}/#/welcome/citizen/"
             }
