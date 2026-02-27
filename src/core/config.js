@@ -103,6 +103,9 @@ export default {
     experimentId: import.meta.env.VITE_SONA_PAID_EXPERIMENT_ID,
     creditToken: import.meta.env.VITE_SONA_PAID_CREDIT_TOKEN,
   },
+  spark: {
+    completionUrl: 'https://spark.hartleylab.org/completed',
+  },
   firebaseConfig: {
     apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
     authDomain: import.meta.env.VITE_FIREBASE_AUTHDOMAIN,

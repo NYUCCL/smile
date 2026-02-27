@@ -269,7 +269,7 @@ Next, select "Webhook" as the type of workflow you are creating.
 Click add variables and add the following variable names to your workflow
 `deploy_base`, `deploy_base_codename`, `github_username`,`github_hash`,
 `qr_code`, `prolific_url`, `cloudresearch_url`, `mturk_url`, `sona_url`,
-`sona_paid_url`, `citizen_url`. This
+`sona_paid_url`, `spark_url`, `citizen_url`. This
 screenshot shows only a subset being added:
 
 ![Slack config](/images/labconfig-slack3.png)
@@ -293,6 +293,7 @@ add the variables to the message):
 - MTurk URL: mturk_url
 - SONA (credit) URL: sona_url
 - SONA (paid) URL: sona_paid_url
+- SPARK URL: spark_url
 - Citizen URL: citizen_url
 
 QR Code: qr_code

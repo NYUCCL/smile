@@ -140,6 +140,25 @@ const api = useViewAPI()
         </CardContent>
       </Card>
 
+      <!-- SPARK Platform Card -->
+      <Card class="flex flex-col">
+        <CardHeader>
+          <CardTitle>SPARK</CardTitle>
+          <CardDescription
+            >SPARK is a recruitment service from the Hartley Lab for adolescent participants of various
+            ages.</CardDescription
+          >
+        </CardHeader>
+        <CardContent class="flex justify-end flex-1 items-end">
+          <Button asChild variant="default" size="xs" class="is-red" id="spark_tester">
+            <a :href="api.urls['spark']"
+              ><i-lucide-dices /> SPARK User
+              <ArrowRight class="inline-block ml-1 w-4 h-4" />
+            </a>
+          </Button>
+        </CardContent>
+      </Card>
+
       <!-- Citizen Science Platform Card -->
       <Card class="flex flex-col">
         <CardHeader>

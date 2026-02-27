@@ -301,6 +301,41 @@ onMounted(() => {
         </TitleTwoCol>
       </div>
 
+      <!-- SPARK recruitment service completion -->
+      <div v-if="api.getRecruitmentService() == 'spark'">
+        <TitleTwoCol leftFirst leftWidth="w-1/3" :responsiveUI="api.config.responsiveUI">
+          <template #title>
+            <h1 class="text-3xl font-bold mb-4">
+              <i-fa6-solid-square-check class="inline mr-2" />&nbsp;Thanks for your contribution to science!
+            </h1>
+            <p class="text-lg mb-8">
+              Please click the button below to return to SPARK and mark your participation as complete. We really
+              appreciate your time.
+            </p>
+          </template>
+          <template #left>
+            <div class="text-left text-muted-foreground">
+              <h3 class="text-lg font-bold mb-2">Study Complete</h3>
+              <p class="text-sm text-muted-foreground">
+                Click the button to return to SPARK and confirm your completion of this study.
+              </p>
+            </div>
+          </template>
+          <template #right>
+            <div class="border border-border text-left bg-muted p-6 rounded-lg">
+              <Button
+                variant="default"
+                as="a"
+                :href="`${appconfig.spark.completionUrl}/${api.private.recruitmentInfo.subject_ID}`"
+              >
+                Return to SPARK
+                <i-fa6-solid-arrow-right />
+              </Button>
+            </div>
+          </template>
+        </TitleTwoCol>
+      </div>
+
       <!-- Web recruitment service completion -->
       <div v-if="api.getRecruitmentService() == 'web'">
         <TitleTwoCol leftFirst leftWidth="w-1/3" :responsiveUI="api.config.responsiveUI">

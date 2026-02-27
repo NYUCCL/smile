@@ -74,6 +74,14 @@ export function processQuery(query, service) {
     smilestore.setRecruitmentService(service, {
       survey_code: urlParams.survey_code,
     })
+  } else if (service === 'spark' && urlParams.subject_ID) {
+    log.log('Spark mode')
+    smilestore.setRecruitmentService(service, {
+      subject_ID: urlParams.subject_ID,
+      participant_ID: urlParams.participant_ID || '',
+      age: urlParams.age || '',
+      gender: urlParams.gender || '',
+    })
   } else if (
     service === 'citizensci' &&
     urlParams.CITIZEN_ID &&

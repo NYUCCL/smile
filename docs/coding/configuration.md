@@ -301,6 +301,10 @@ VITE_SONA_PAID_CREDIT_TOKEN      = ''
 - `VITE_SONA_PAID_CREDIT_TOKEN` is the SONA payment token for automatic payment
   granting
 
+Note: SPARK does not require any environment variables. The SPARK completion URL
+(`https://spark.hartleylab.org/completed`) is configured directly in
+`src/core/config.js` since it is not secret.
+
 #### Code Version Options (`.env.github.local`)
 
 The `.env.github.local` file contains information about the latest git commit

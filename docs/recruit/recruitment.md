@@ -338,6 +338,58 @@ In the developer tools sidebar, you can select "sona" or "sona_paid" from the
 you test the full flow including the thanks/credit page without needing an
 actual SONA participant.
 
+## SPARK
+
+[SPARK](https://spark.hartleylab.org) is a recruitment service from the Hartley
+Lab designed for adolescent participants of various ages. Unlike SONA, SPARK
+does not require environment variables or credit tokens — completion is handled
+by redirecting participants back to the SPARK platform.
+
+::: tip
+SPARK is available to Hartley Lab members and collaborators. Contact the
+Hartley Lab for access.
+:::
+
+### URL parameters
+
+SPARK passes the following URL parameters when directing a participant to your
+study:
+
+- `subject_ID` (required) — the SPARK subject identifier
+- `participant_ID` — the participant identifier
+- `age` — the participant's age
+- `gender` — the participant's gender
+
+These parameters are stored in `api.private.recruitmentInfo` and can be
+accessed anywhere in your experiment code. For example, you can use
+`api.private.recruitmentInfo.age` and `api.private.recruitmentInfo.gender` in
+`src/user/components/InformedConsentText.vue` to display age-appropriate consent
+forms (e.g., showing a parental consent form for participants under 18).
+
+The study URL format is:
+
+```
+https://your-deploy-host/e/your-code-name/#/welcome/spark/?subject_ID=XXXX&participant_ID=XXXX&age=XX&gender=XXXX
+```
+
+### How completion works
+
+When a participant finishes the study, the thanks page provides a button that
+redirects them to:
+
+```
+https://spark.hartleylab.org/completed/${subject_ID}
+```
+
+This marks the participant's session as complete in the SPARK system.
+
+### Testing in developer mode
+
+In the developer tools sidebar, you can select "spark" from the **Service**
+dropdown to simulate SPARK recruitment during development. The SPARK card in the
+recruitment chooser will launch with test parameters so you can verify the full
+flow including the thanks/completion redirect.
+
 ## Crowd-sourcing
 
 In the future the lab might make a citizen science recruitment portal. To
