@@ -126,7 +126,7 @@ jobs:
           SECRET_ENV_FILE: 'env/.env.local'
         run: |
           echo "------"
-          echo $SECRET_APP_CONFIG | base64 --decode > $SECRET_ENV_FILE
+          echo $SECRET_APP_CONFIG | base64 --decode -i > $SECRET_ENV_FILE
 
       # load the environment
       - name: Load the github dotenv file
