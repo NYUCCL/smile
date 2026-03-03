@@ -159,6 +159,25 @@ const api = useViewAPI()
         </CardContent>
       </Card>
 
+      <!-- PANDA Platform Card -->
+      <Card class="flex flex-col">
+        <CardHeader>
+          <CardTitle>PANDA</CardTitle>
+          <CardDescription
+            ><a href="https://www.discoveriesinaction.org">PANDA</a> (Princeton and NYU Discoveries in Action) is a
+            recruitment platform for younger participants.</CardDescription
+          >
+        </CardHeader>
+        <CardContent class="flex justify-end flex-1 items-end">
+          <Button asChild variant="default" size="xs" class="is-coral" id="panda_tester">
+            <a :href="api.urls['panda']"
+              ><i-lucide-dices /> PANDA User
+              <ArrowRight class="inline-block ml-1 w-4 h-4" />
+            </a>
+          </Button>
+        </CardContent>
+      </Card>
+
       <!-- Citizen Science Platform Card -->
       <Card class="flex flex-col">
         <CardHeader>
@@ -235,6 +254,11 @@ const api = useViewAPI()
 
 .is-orange {
   background-color: rgb(255, 179, 102);
+  color: #393939;
+}
+
+.is-coral {
+  background-color: rgb(255, 127, 80);
   color: #393939;
 }
 

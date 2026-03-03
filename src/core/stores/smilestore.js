@@ -206,6 +206,7 @@ const initBrowserEphemeral = {
     sona_paid: '#/welcome/sona_paid/?survey_code=SONA_PAID_TEST_67890',
     spark:
       '#/welcome/spark/?subject_ID=SPARK_TEST_001&participant_ID=SPARK_PID_001&age=14&gender=female',
+    panda: '#/welcome/panda/?ID=PANDA_TEST_001',
     web: '#/welcome',
   },
 }
@@ -261,6 +262,7 @@ export default defineStore('smilestore', {
       endtimeLocal: null, // time finished or withdrew in user's local time (ISO string)
       userTimezone: null, // user's timezone (e.g., "America/New_York")
       userTimezoneOffset: null, // user's UTC offset in minutes (e.g., -300 for EST)
+      panda_id: null,
       recruitmentService: 'web', // fake
       browserData: [], // empty
       withdrawn: false, // false

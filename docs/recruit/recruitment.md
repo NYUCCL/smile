@@ -390,6 +390,95 @@ dropdown to simulate SPARK recruitment during development. The SPARK card in the
 recruitment chooser will launch with test parameters so you can verify the full
 flow including the thanks/completion redirect.
 
+## PANDA
+
+[PANDA](https://www.discoveriesinaction.org) (Princeton and NYU Discoveries in
+Action) is a recruitment platform for younger participants, run by Marjorie
+Rhodes and Sarah Jane Leslie at Princeton.
+
+### URL parameters
+
+PANDA passes a single URL parameter when directing a participant to your study:
+
+- `ID` (required) — the PANDA participant identifier
+
+The study URL format is:
+
+```
+https://your-deploy-host/e/your-code-name/#/welcome/panda/?ID=PARTICIPANTID
+```
+
+The `ID` parameter is stored in both `api.private.recruitmentInfo.panda_id` and
+`api.data.panda_id` (so it appears in saved data files).
+
+### Dual-iframe caveat
+
+PANDA loads the study in two iframes simultaneously (one hidden, for
+mobile/desktop switching). This can cause localStorage conflicts when two Vue
+app instances run at once. <SmileText /> handles this automatically:
+
+1. **Hidden iframe detection**: When the study loads via PANDA and
+   `window.innerWidth === 0` (indicating a hidden iframe), navigation is
+   cancelled so the hidden instance never initializes.
+2. **localStorage clearing**: On visible iframe load, any existing
+   `smilestore-*` keys are cleared from localStorage before processing URL
+   parameters. This also handles the sibling/retry case where families need to
+   run the study multiple times.
+
+No special configuration is needed — this is handled in the `welcome_referred`
+route's `beforeEnter` guard.
+
+### How completion works
+
+PANDA has no completion redirect URL. When a participant finishes the study, the
+thanks page shows a generic "study complete" message. Researchers can customize
+their own end-of-study flow by using the optional PANDA builtin components (see
+below).
+
+### Optional builtin components
+
+<SmileText /> provides optional PANDA-specific builtin components that
+researchers can import and add to their timeline:
+
+- **`ParentFormView`** (`@/user/components/panda/ParentFormView.vue`): An
+  end-of-study parent form collecting video privacy consent, digital signature,
+  how-did-you-find-us checkboxes, primary language, and comments. Typically used
+  with `meta: { setDone: true }`.
+
+- **`UploadVideoView`** (`@/user/components/panda/UploadVideoView.vue`): A final
+  screen with a placeholder for an instructional video telling parents how to
+  upload their video recording. Force-saves data on mount. Typically used with
+  `meta: { resetApp: true }`.
+
+These live in `src/user/components/panda/` rather than `src/builtins/` because
+they are starter templates meant to be customized for each study (e.g.,
+replacing the video placeholder with your actual instructional video URL).
+
+To use these, uncomment the PANDA section in `src/user/design.js` or add:
+
+```js
+import ParentFormView from '@/user/components/panda/ParentFormView.vue'
+import UploadVideoView from '@/user/components/panda/UploadVideoView.vue'
+
+timeline.pushSeqView({
+  name: 'parentform',
+  component: ParentFormView,
+  meta: { setDone: true },
+})
+
+timeline.pushSeqView({
+  name: 'uploadvideo',
+  component: UploadVideoView,
+  meta: { resetApp: true },
+})
+```
+
+### Testing in developer mode
+
+In the developer tools sidebar, you can select "panda" from the **Service**
+dropdown to simulate PANDA recruitment during development. The PANDA card in the
+recruitment chooser will launch with a test ID so you can verify the full flow.
+
 ## Crowd-sourcing
 
 In the future the lab might make a citizen science recruitment portal. To
