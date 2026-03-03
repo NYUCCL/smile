@@ -29,9 +29,7 @@ onMounted(() => {
   >
     <TitleTwoCol leftFirst leftWidth="w-1/3" :responsiveUI="api.config.responsiveUI">
       <template #title>
-        <h3 class="text-3xl font-bold mb-4">
-          <i-fa6-solid-video class="inline mr-2" />&nbsp;Upload Your Video
-        </h3>
+        <h3 class="text-3xl font-bold mb-4"><i-fa6-solid-video class="inline mr-2" />&nbsp;Upload Your Video</h3>
         <p class="text-lg mb-8">
           Thank you for completing the study! Please watch the short video below for instructions on how to upload your
           video recording.

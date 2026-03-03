@@ -280,11 +280,13 @@ append a `survey_code` parameter that identifies each participant. Your study UR
 should follow this pattern:
 
 For credit-based studies:
+
 ```
 https://exps.gureckislab.org/e/note-useless-uncle/#/welcome/sona/?survey_code=%SURVEY_CODE%
 ```
 
 For paid studies:
+
 ```
 https://exps.gureckislab.org/e/note-useless-uncle/#/welcome/sona_paid/?survey_code=%SURVEY_CODE%
 ```
@@ -324,6 +326,7 @@ participant's survey code and your credit/payment token, so SONA can
 automatically grant credit or payment without any manual intervention.
 
 For credit studies, the redirect goes to:
+
 ```
 {SONA_URL}/webstudy_credit.aspx?experiment_id={ID}&credit_token={TOKEN}&survey_code={CODE}
 ```

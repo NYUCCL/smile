@@ -115,9 +115,7 @@ function finish() {
         <div class="border border-border text-left bg-muted p-6 rounded-lg">
           <!-- Video Privacy Consent -->
           <div class="mb-6">
-            <label class="block text-md font-semibold text-foreground mb-3">
-              Video Privacy Consent
-            </label>
+            <label class="block text-md font-semibold text-foreground mb-3"> Video Privacy Consent </label>
             <p class="text-sm text-muted-foreground mb-3">
               How would you like your child's video recording to be used?
             </p>
@@ -127,9 +125,7 @@ function finish() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="panda">PANDA only — video used for research purposes only</SelectItem>
-                <SelectItem value="public"
-                  >Public — video may be used in presentations or publications</SelectItem
-                >
+                <SelectItem value="public">Public — video may be used in presentations or publications</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -139,9 +135,7 @@ function finish() {
             <label class="block text-md font-semibold text-foreground mb-3">
               Digital Signature <span class="text-red-500">*</span>
             </label>
-            <p class="text-sm text-muted-foreground mb-3">
-              Please sign below to confirm your consent.
-            </p>
+            <p class="text-sm text-muted-foreground mb-3">Please sign below to confirm your consent.</p>
             <div class="border border-border rounded-md bg-background p-1">
               <VueSignaturePad ref="signaturePad" width="100%" height="150px" :options="{ penColor: '#000' }" />
             </div>
@@ -149,9 +143,7 @@ function finish() {
               <Button variant="outline" size="sm" @click="clearSignature"> Clear </Button>
               <Button variant="outline" size="sm" @click="saveSignature"> Save Signature </Button>
             </div>
-            <p v-if="api.persist.parentForm.signature" class="text-xs text-green-600 mt-1">
-              Signature saved
-            </p>
+            <p v-if="api.persist.parentForm.signature" class="text-xs text-green-600 mt-1">Signature saved</p>
           </div>
 
           <!-- How Did You Find Us -->
@@ -162,38 +154,23 @@ function finish() {
             </label>
             <div class="space-y-3">
               <div class="flex items-center gap-2">
-                <Checkbox
-                  v-model:checked="api.persist.parentForm.howFoundUs.socialMedia"
-                  id="socialMedia"
-                />
+                <Checkbox v-model:checked="api.persist.parentForm.howFoundUs.socialMedia" id="socialMedia" />
                 <Label for="socialMedia">Social media</Label>
               </div>
               <div class="flex items-center gap-2">
-                <Checkbox
-                  v-model:checked="api.persist.parentForm.howFoundUs.wordOfMouth"
-                  id="wordOfMouth"
-                />
+                <Checkbox v-model:checked="api.persist.parentForm.howFoundUs.wordOfMouth" id="wordOfMouth" />
                 <Label for="wordOfMouth">Word of mouth</Label>
               </div>
               <div class="flex items-center gap-2">
-                <Checkbox
-                  v-model:checked="api.persist.parentForm.howFoundUs.flyer"
-                  id="flyer"
-                />
+                <Checkbox v-model:checked="api.persist.parentForm.howFoundUs.flyer" id="flyer" />
                 <Label for="flyer">Flyer or poster</Label>
               </div>
               <div class="flex items-center gap-2">
-                <Checkbox
-                  v-model:checked="api.persist.parentForm.howFoundUs.school"
-                  id="school"
-                />
+                <Checkbox v-model:checked="api.persist.parentForm.howFoundUs.school" id="school" />
                 <Label for="school">School or community center</Label>
               </div>
               <div class="flex items-center gap-2">
-                <Checkbox
-                  v-model:checked="api.persist.parentForm.howFoundUs.other"
-                  id="otherCheckbox"
-                />
+                <Checkbox v-model:checked="api.persist.parentForm.howFoundUs.other" id="otherCheckbox" />
                 <Label for="otherCheckbox">Other</Label>
               </div>
               <Input
