@@ -103,6 +103,81 @@ const api = useViewAPI()
         </CardContent>
       </Card>
 
+      <!-- SONA Platform Card -->
+      <Card class="flex flex-col">
+        <CardHeader>
+          <CardTitle>SONA</CardTitle>
+          <CardDescription
+            >SONA is a platform for running experiments from the university "for credit" pool of
+            students.</CardDescription
+          >
+        </CardHeader>
+        <CardContent class="flex justify-end flex-1 items-end">
+          <Button asChild variant="default" size="xs" class="is-orange" id="sona_tester">
+            <a :href="api.urls['sona']"
+              ><i-lucide-dices /> SONA User
+              <ArrowRight class="inline-block ml-1 w-4 h-4" />
+            </a>
+          </Button>
+        </CardContent>
+      </Card>
+
+      <!-- SONA Paid Platform Card -->
+      <Card class="flex flex-col">
+        <CardHeader>
+          <CardTitle>SONA Paid</CardTitle>
+          <CardDescription
+            >SONA Paid is a platform for running paid experiments from the university pool.</CardDescription
+          >
+        </CardHeader>
+        <CardContent class="flex justify-end flex-1 items-end">
+          <Button asChild variant="default" size="xs" class="is-teal" id="sona_paid_tester">
+            <a :href="api.urls['sona_paid']"
+              ><i-lucide-dices /> SONA Paid User
+              <ArrowRight class="inline-block ml-1 w-4 h-4" />
+            </a>
+          </Button>
+        </CardContent>
+      </Card>
+
+      <!-- SPARK Platform Card -->
+      <Card class="flex flex-col">
+        <CardHeader>
+          <CardTitle>SPARK</CardTitle>
+          <CardDescription
+            >SPARK is a recruitment service from the Hartley Lab for adolescent participants of various
+            ages.</CardDescription
+          >
+        </CardHeader>
+        <CardContent class="flex justify-end flex-1 items-end">
+          <Button asChild variant="default" size="xs" class="is-red" id="spark_tester">
+            <a :href="api.urls['spark']"
+              ><i-lucide-dices /> SPARK User
+              <ArrowRight class="inline-block ml-1 w-4 h-4" />
+            </a>
+          </Button>
+        </CardContent>
+      </Card>
+
+      <!-- PANDA Platform Card -->
+      <Card class="flex flex-col">
+        <CardHeader>
+          <CardTitle>PANDA</CardTitle>
+          <CardDescription
+            ><a href="https://www.discoveriesinaction.org">PANDA</a> (Princeton and NYU Discoveries in Action) is a
+            recruitment platform for younger participants.</CardDescription
+          >
+        </CardHeader>
+        <CardContent class="flex justify-end flex-1 items-end">
+          <Button asChild variant="default" size="xs" class="is-coral" id="panda_tester">
+            <a :href="api.urls['panda']"
+              ><i-lucide-dices /> PANDA User
+              <ArrowRight class="inline-block ml-1 w-4 h-4" />
+            </a>
+          </Button>
+        </CardContent>
+      </Card>
+
       <!-- Citizen Science Platform Card -->
       <Card class="flex flex-col">
         <CardHeader>
@@ -112,7 +187,7 @@ const api = useViewAPI()
           >
         </CardHeader>
         <CardContent class="flex justify-end flex-1 items-end">
-          <Button asChild variant="default" size="xs" class="is-green" id="citizen_tester">
+          <Button asChild variant="default" size="xs" class="is-purple" id="citizen_tester">
             <a :href="api.urls['citizensci']"
               ><i-lucide-dices /> Citizen Sci User
               <ArrowRight class="inline-block ml-1 w-4 h-4" />
@@ -128,7 +203,7 @@ const api = useViewAPI()
           <CardDescription>Anonymous web user is not referred by any recruitment service.</CardDescription>
         </CardHeader>
         <CardContent class="flex justify-end flex-1 items-end">
-          <Button asChild variant="default" size="xs" class="is-purple" id="web_tester">
+          <Button asChild variant="default" size="xs" class="is-green" id="web_tester">
             <a :href="api.urls['web']"
               ><i-lucide-dices /> Anon Web User
               <ArrowRight class="inline-block ml-1 w-4 h-4" />
@@ -169,6 +244,21 @@ const api = useViewAPI()
 
 .is-green {
   background-color: rgb(91, 228, 166);
+  color: #393939;
+}
+
+.is-teal {
+  background-color: rgb(102, 223, 214);
+  color: #393939;
+}
+
+.is-orange {
+  background-color: rgb(255, 179, 102);
+  color: #393939;
+}
+
+.is-coral {
+  background-color: rgb(255, 127, 80);
   color: #393939;
 }
 

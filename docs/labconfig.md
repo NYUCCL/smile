@@ -268,7 +268,8 @@ Next, select "Webhook" as the type of workflow you are creating.
 
 Click add variables and add the following variable names to your workflow
 `deploy_base`, `deploy_base_codename`, `github_username`,`github_hash`,
-`qr_code`, `prolific_url`, `cloudresearch_url`, `mturk_url`, `citizen_url`. This
+`qr_code`, `prolific_url`, `cloudresearch_url`, `mturk_url`, `sona_url`,
+`sona_paid_url`, `spark_url`, `panda_url`, `citizen_url`. This
 screenshot shows only a subset being added:
 
 ![Slack config](/images/labconfig-slack3.png)
@@ -290,6 +291,10 @@ add the variables to the message):
 - Prolific URL: prolific_url
 - CloudResearch URL: cloudresearch_url
 - MTurk URL: mturk_url
+- SONA (credit) URL: sona_url
+- SONA (paid) URL: sona_paid_url
+- SPARK URL: spark_url
+- PANDA URL: panda_url
 - Citizen URL: citizen_url
 
 QR Code: qr_code
@@ -365,6 +370,15 @@ VITE_FIREBASE_APPID              = xxxx
 # enter google analytics id
 VITE_GOOGLE_ANALYTICS            = xxxx
 
+# sona (credit)
+VITE_SONA_URL                    = ''
+VITE_SONA_EXPERIMENT_ID          = ''
+VITE_SONA_CREDIT_TOKEN           = ''
+
+# sona (paid)
+VITE_SONA_PAID_URL               = ''
+VITE_SONA_PAID_EXPERIMENT_ID     = ''
+VITE_SONA_PAID_CREDIT_TOKEN      = ''
 ```
 
 You will want to replace the values for the entries that contain the word

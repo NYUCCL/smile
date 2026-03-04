@@ -13,7 +13,7 @@
  */
 
 import { markRaw } from 'vue'
-import { processQuery } from '@/core/utils/utils'
+import { processQuery, initService } from '@/core/utils/utils'
 
 // 1. Import main built-in View components
 import AdvertisementView from '@/builtins/advertisement/AdvertisementView.vue'
@@ -53,6 +53,7 @@ api.setRuntimeConfig('windowsizerRequest', { width: 800, height: 600 })
 api.setRuntimeConfig('windowsizerAggressive', true)
 
 api.setRuntimeConfig('anonymousMode', false)
+//api.setRuntimeConfig('unpaidStudy', true) // set to true for unpaid/credit studies (e.g., SONA)
 api.setRuntimeConfig('labURL', 'https://gureckislab.org')
 api.setRuntimeConfig('brandLogoFn', 'universitylogo.png')
 
@@ -130,6 +131,8 @@ timeline.pushSeqView({
     requiresConsent: false,
   },
   beforeEnter: (to) => {
+    // handle any service-specific initialization before processing URL params
+    if (initService(to.params.service) === false) return false
     // processes info to get the service-specific
     // participant info (e.g., Profilic ID)
     processQuery(to.query, to.params.service)
@@ -252,6 +255,22 @@ timeline.pushSeqView({
   component: TaskFeedbackSurveyView,
   meta: { setDone: true }, // this is the last form
 })
+
+// --- PANDA end-of-study flow (uncomment for PANDA studies) ---
+// import ParentFormView from '@/user/components/panda/ParentFormView.vue'
+// import UploadVideoView from '@/user/components/panda/UploadVideoView.vue'
+//
+// timeline.pushSeqView({
+//   name: 'parentform',
+//   component: ParentFormView,
+//   meta: { setDone: true },
+// })
+//
+// timeline.pushSeqView({
+//   name: 'uploadvideo',
+//   component: UploadVideoView,
+//   meta: { resetApp: true },
+// })
 
 // thanks/submit page
 timeline.pushSeqView({

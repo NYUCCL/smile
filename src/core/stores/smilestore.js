@@ -202,6 +202,10 @@ const initBrowserEphemeral = {
       '#/mturk/?assignmentId=123RVWYBAZW00EXAMPLE456RVWYBAZW00EXAMPLE&hitId=123RVWYBAZW00EXAMPLE&turkSubmitTo=https://www.mturk.com/&workerId=AZ3456EXAMPLE',
     citizensci:
       '#/welcome/citizensci/?CITIZEN_ID=XXXXX&CITIZEN_STUDY_ID=123RVWYBAZW00EXAMPLE&CITIZEN_SESSION_ID=AZ3456EXAMPLE',
+    sona: '#/welcome/sona/?survey_code=SONA_TEST_12345',
+    sona_paid: '#/welcome/sona_paid/?survey_code=SONA_PAID_TEST_67890',
+    spark: '#/welcome/spark/?subject_ID=SPARK_TEST_001&participant_ID=SPARK_PID_001&age=14&gender=female',
+    panda: '#/welcome/panda/?ID=PANDA_TEST_001',
     web: '#/welcome',
   },
 }
@@ -257,6 +261,7 @@ export default defineStore('smilestore', {
       endtimeLocal: null, // time finished or withdrew in user's local time (ISO string)
       userTimezone: null, // user's timezone (e.g., "America/New_York")
       userTimezoneOffset: null, // user's UTC offset in minutes (e.g., -300 for EST)
+      panda_id: null,
       recruitmentService: 'web', // fake
       browserData: [], // empty
       withdrawn: false, // false

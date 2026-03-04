@@ -233,6 +233,257 @@ htt?ps://exps.gureckislab.org/e/note-useless-uncle#/welcome/mturk/assignmentId=1
 which loads slightly different content. You can customize aspects of this via
 the `recruitment/MTurkRecruitPage.vue` component.
 
+## SONA
+
+[SONA Systems](https://www.sona-systems.com) is a participant management
+platform commonly used at universities for recruiting research participants from
+subject pools. Participants typically receive course credit for their
+participation, though SONA also supports paid studies.
+
+<SmileText /> supports both **SONA (credit)** and **SONA (paid)** as recruitment
+services.
+
+### Configuration
+
+SONA requires several environment variables to be set in your `env/.env.local`
+file. You will need to obtain these values from your SONA administrator or from
+your SONA experiment settings page.
+
+```
+# sona (credit)
+VITE_SONA_URL                    = 'https://yourschool.sona-systems.com'
+VITE_SONA_EXPERIMENT_ID          = 'your_experiment_id'
+VITE_SONA_CREDIT_TOKEN           = 'your_credit_token'
+
+# sona (paid)
+VITE_SONA_PAID_URL               = 'https://yourschool.sona-systems.com'
+VITE_SONA_PAID_EXPERIMENT_ID     = 'your_experiment_id'
+VITE_SONA_PAID_CREDIT_TOKEN      = 'your_credit_token'
+```
+
+You only need to fill in the set that matches your study type (credit or paid).
+After updating these values, run `npm run upload_config` to sync them to GitHub
+for deployment.
+
+- `VITE_SONA_URL` / `VITE_SONA_PAID_URL` is the base URL of your institution's
+  SONA instance (e.g., `https://yourschool.sona-systems.com`)
+- `VITE_SONA_EXPERIMENT_ID` / `VITE_SONA_PAID_EXPERIMENT_ID` is the experiment
+  ID assigned by SONA when you create the study
+- `VITE_SONA_CREDIT_TOKEN` / `VITE_SONA_PAID_CREDIT_TOKEN` is the
+  authentication token SONA provides for automatic credit/payment granting via
+  web studies
+
+### Setting up your study URL in SONA
+
+When creating a web study in SONA, you need to provide the study URL. SONA will
+append a `survey_code` parameter that identifies each participant. Your study URL
+should follow this pattern:
+
+For credit-based studies:
+
+```
+https://exps.gureckislab.org/e/note-useless-uncle/#/welcome/sona/?survey_code=%SURVEY_CODE%
+```
+
+For paid studies:
+
+```
+https://exps.gureckislab.org/e/note-useless-uncle/#/welcome/sona_paid/?survey_code=%SURVEY_CODE%
+```
+
+Replace `note-useless-uncle` with your project's code name. The `%SURVEY_CODE%`
+placeholder is automatically replaced by SONA with the participant's unique
+survey code.
+
+### Informed consent for unpaid studies
+
+SONA credit-based studies are unpaid, so the default informed consent language
+about monetary payment is inappropriate. To show course-credit-appropriate
+consent language, set the `unpaidStudy` runtime config option in your
+`design.js`:
+
+```js
+api.setRuntimeConfig('unpaidStudy', true)
+```
+
+This changes the compensation bullet in the default `InformedConsentText.vue`
+from payment language to course credit language. See the
+[configuration docs](/coding/configuration) for more on runtime config. You can
+also toggle this setting in the developer tools sidebar using the "Unpaid"
+switch.
+
+::: tip
+The `unpaidStudy` option is not specific to SONA — it can be used for any
+recruitment service where participants are not paid (e.g., citizen science
+studies).
+:::
+
+### How completion works
+
+When a participant finishes the study, the thanks page automatically provides a
+button that redirects them back to SONA. This redirect URL includes the
+participant's survey code and your credit/payment token, so SONA can
+automatically grant credit or payment without any manual intervention.
+
+For credit studies, the redirect goes to:
+
+```
+{SONA_URL}/webstudy_credit.aspx?experiment_id={ID}&credit_token={TOKEN}&survey_code={CODE}
+```
+
+This means participants are credited immediately upon clicking the button — no
+completion codes to copy and paste.
+
+### Testing in developer mode
+
+In the developer tools sidebar, you can select "sona" or "sona_paid" from the
+**Service** dropdown to simulate SONA recruitment during development. This lets
+you test the full flow including the thanks/credit page without needing an
+actual SONA participant.
+
+## SPARK
+
+[SPARK](https://spark.hartleylab.org) is a recruitment service from the Hartley
+Lab designed for adolescent participants of various ages. Unlike SONA, SPARK
+does not require environment variables or credit tokens — completion is handled
+by redirecting participants back to the SPARK platform.
+
+::: tip
+SPARK is available to Hartley Lab members and collaborators. Contact the
+Hartley Lab for access.
+:::
+
+### URL parameters
+
+SPARK passes the following URL parameters when directing a participant to your
+study:
+
+- `subject_ID` (required) — the SPARK subject identifier
+- `participant_ID` — the participant identifier
+- `age` — the participant's age
+- `gender` — the participant's gender
+
+These parameters are stored in `api.private.recruitmentInfo` and can be
+accessed anywhere in your experiment code. For example, you can use
+`api.private.recruitmentInfo.age` and `api.private.recruitmentInfo.gender` in
+`src/user/components/InformedConsentText.vue` to display age-appropriate consent
+forms (e.g., showing a parental consent form for participants under 18).
+
+The study URL format is:
+
+```
+https://your-deploy-host/e/your-code-name/#/welcome/spark/?subject_ID=SUBJECTID&participant_ID=PARTICIPANTID&age=AGE&gender=GENDER
+```
+
+### How completion works
+
+When a participant finishes the study, the thanks page provides a button that
+redirects them to:
+
+```
+https://spark.hartleylab.org/completed/${subject_ID}
+```
+
+This marks the participant's session as complete in the SPARK system.
+
+### Testing in developer mode
+
+In the developer tools sidebar, you can select "spark" from the **Service**
+dropdown to simulate SPARK recruitment during development. The SPARK card in the
+recruitment chooser will launch with test parameters so you can verify the full
+flow including the thanks/completion redirect.
+
+## PANDA
+
+[PANDA](https://www.discoveriesinaction.org) (Princeton and NYU Discoveries in
+Action) is a recruitment platform for younger participants, run by Marjorie
+Rhodes and Sarah Jane Leslie at Princeton.
+
+### URL parameters
+
+PANDA passes a single URL parameter when directing a participant to your study:
+
+- `ID` (required) — the PANDA participant identifier
+
+Give PANDA the base study URL (without query parameters):
+
+```
+https://your-deploy-host/e/your-code-name/#/welcome/panda/
+```
+
+PANDA will automatically append `?ID=<participant_id>` when directing
+participants to your study. The `ID` parameter is stored in both
+`api.private.recruitmentInfo.panda_id` and `api.data.panda_id` (so it appears
+in saved data files).
+
+### Dual-iframe caveat
+
+PANDA loads the study in two iframes simultaneously (one hidden, for
+mobile/desktop switching). This can cause localStorage conflicts when two Vue
+app instances run at once. <SmileText /> handles this automatically:
+
+1. **Hidden iframe detection**: When the study loads via PANDA and
+   `window.innerWidth === 0` (indicating a hidden iframe), navigation is
+   cancelled so the hidden instance never initializes.
+2. **localStorage clearing**: On visible iframe load, any existing
+   `smilestore-*` keys are cleared from localStorage before processing URL
+   parameters. This also handles the sibling/retry case where families need to
+   run the study multiple times.
+
+No special configuration is needed — this is handled in the `welcome_referred`
+route's `beforeEnter` guard.
+
+### How completion works
+
+PANDA has no completion redirect URL. When a participant finishes the study, the
+thanks page shows a generic "study complete" message. Researchers can customize
+their own end-of-study flow by using the optional PANDA builtin components (see
+below).
+
+### Optional builtin components
+
+<SmileText /> provides optional PANDA-specific builtin components that
+researchers can import and add to their timeline:
+
+- **`ParentFormView`** (`@/user/components/panda/ParentFormView.vue`): An
+  end-of-study parent form collecting video privacy consent, digital signature,
+  how-did-you-find-us checkboxes, primary language, and comments. Typically used
+  with `meta: { setDone: true }`.
+
+- **`UploadVideoView`** (`@/user/components/panda/UploadVideoView.vue`): A final
+  screen with a placeholder for an instructional video telling parents how to
+  upload their video recording. Force-saves data on mount. Typically used with
+  `meta: { resetApp: true }`.
+
+These live in `src/user/components/panda/` rather than `src/builtins/` because
+they are starter templates meant to be customized for each study (e.g.,
+replacing the video placeholder with your actual instructional video URL).
+
+To use these, uncomment the PANDA section in `src/user/design.js` or add:
+
+```js
+import ParentFormView from '@/user/components/panda/ParentFormView.vue'
+import UploadVideoView from '@/user/components/panda/UploadVideoView.vue'
+
+timeline.pushSeqView({
+  name: 'parentform',
+  component: ParentFormView,
+  meta: { setDone: true },
+})
+
+timeline.pushSeqView({
+  name: 'uploadvideo',
+  component: UploadVideoView,
+  meta: { resetApp: true },
+})
+```
+
+### Testing in developer mode
+
+In the developer tools sidebar, you can select "panda" from the **Service**
+dropdown to simulate PANDA recruitment during development. The PANDA card in the
+recruitment chooser will launch with a test ID so you can verify the full flow.
+
 ## Crowd-sourcing
 
 In the future the lab might make a citizen science recruitment portal. To
