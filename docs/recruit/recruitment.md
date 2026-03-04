@@ -405,14 +405,16 @@ PANDA passes a single URL parameter when directing a participant to your study:
 
 - `ID` (required) — the PANDA participant identifier
 
-The study URL format is:
+Give PANDA the base study URL (without query parameters):
 
 ```
-https://your-deploy-host/e/your-code-name/#/welcome/panda/?ID=PARTICIPANTID
+https://your-deploy-host/e/your-code-name/#/welcome/panda/
 ```
 
-The `ID` parameter is stored in both `api.private.recruitmentInfo.panda_id` and
-`api.data.panda_id` (so it appears in saved data files).
+PANDA will automatically append `?ID=<participant_id>` when directing
+participants to your study. The `ID` parameter is stored in both
+`api.private.recruitmentInfo.panda_id` and `api.data.panda_id` (so it appears
+in saved data files).
 
 ### Dual-iframe caveat
 
