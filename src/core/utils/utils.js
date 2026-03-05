@@ -64,24 +64,6 @@ export function processQuery(query, service) {
         assignment_id: urlParams.assignmentId,
       })
     }
-  } else if (service === 'sona' && urlParams.survey_code) {
-    log.log('Sona mode')
-    smilestore.setRecruitmentService(service, {
-      survey_code: urlParams.survey_code,
-    })
-  } else if (service === 'sona_paid' && urlParams.survey_code) {
-    log.log('Sona paid mode')
-    smilestore.setRecruitmentService(service, {
-      survey_code: urlParams.survey_code,
-    })
-  } else if (service === 'spark' && urlParams.subject_ID) {
-    log.log('Spark mode')
-    smilestore.setRecruitmentService(service, {
-      subject_ID: urlParams.subject_ID,
-      participant_ID: urlParams.participant_ID || '',
-      age: urlParams.age || '',
-      gender: urlParams.gender || '',
-    })
   } else if (
     service === 'citizensci' &&
     urlParams.CITIZEN_ID &&
