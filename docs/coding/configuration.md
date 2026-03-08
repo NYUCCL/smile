@@ -71,7 +71,6 @@ api.setRuntimeConfig('windowsizerRequest', { width: 800, height: 600 })
 api.setRuntimeConfig('windowsizerAggressive', true)
 
 api.setRuntimeConfig('anonymousMode', false)
-api.setRuntimeConfig('unpaidStudy', true) // for SONA credit or other unpaid studies
 api.setRuntimeConfig('labURL', 'https://gureckislab.org')
 api.setRuntimeConfig('brandLogoFn', 'universitylogo.png')
 
@@ -229,11 +228,6 @@ means they are made available to the web application/experiment.
   deployed in anonymous mode. This mode is useful for submitting a link to the
   study with a paper submission. In this mode, all <SmileText/>-default
   references to the organization conducting the study are removed.
-- `unpaidStudy` is a runtime-only config option (set via
-  `api.setRuntimeConfig('unpaidStudy', true)` in `design.js`) that switches the
-  default informed consent text from payment language to course credit language.
-  Defaults to `false`. Useful for SONA credit studies or any unpaid recruitment
-  service. Can also be toggled in the developer tools sidebar.
 - `VITE_LAB_URL` is the URL of the lab website. This can be used to link to the
   lab website or university homepage so participants can learn more about the
   organization conducting the study.
@@ -273,37 +267,12 @@ VITE_FIREBASE_APPID              = appid
 
 # enter google analytics id
 VITE_GOOGLE_ANALYTICS            = xxxx
-
-# sona (credit)
-VITE_SONA_URL                    = ''
-VITE_SONA_EXPERIMENT_ID          = ''
-VITE_SONA_CREDIT_TOKEN           = ''
-
-# sona (paid)
-VITE_SONA_PAID_URL               = ''
-VITE_SONA_PAID_EXPERIMENT_ID     = ''
-VITE_SONA_PAID_CREDIT_TOKEN      = ''
 ```
 
 - There several `VITE_FIREBASE_` options for configuring Google's Firestore
   backend (see [data storage](/coding/datastorage) for more info).
 - `VITE_GOOGLE_ANALYTICS` is the Google Analytics ID for your experiment
   (optional)
-- `VITE_SONA_URL` is the base URL of your institution's SONA instance for
-  credit-based studies (see [SONA recruitment](/recruit/recruitment#sona) for
-  details)
-- `VITE_SONA_EXPERIMENT_ID` is the SONA experiment ID for credit-based studies
-- `VITE_SONA_CREDIT_TOKEN` is the SONA credit token for automatic credit
-  granting
-- `VITE_SONA_PAID_URL` is the base URL of your institution's SONA instance for
-  paid studies
-- `VITE_SONA_PAID_EXPERIMENT_ID` is the SONA experiment ID for paid studies
-- `VITE_SONA_PAID_CREDIT_TOKEN` is the SONA payment token for automatic payment
-  granting
-
-Note: SPARK does not require any environment variables. The SPARK completion URL
-(`https://spark.hartleylab.org/completed`) is configured directly in
-`src/core/config.js` since it is not secret.
 
 #### Code Version Options (`.env.github.local`)
 

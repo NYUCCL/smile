@@ -20,17 +20,6 @@ const api = useAPI()
 const { system, mode: experimentColorMode } = useSmileColorMode('experiment')
 
 /**
- * Computed property for unpaidStudy runtime config toggle
- * @type {import('vue').ComputedRef<boolean>}
- */
-const unpaidStudy = computed({
-  get: () => !!api.getConfig('unpaidStudy'),
-  set: (value) => {
-    api.setRuntimeConfig('unpaidStudy', value)
-  },
-})
-
-/**
  * Computed property that syncs the dropdown with the actual color mode
  * @type {import('vue').ComputedRef<string>}
  */
@@ -182,12 +171,6 @@ const colorModeDisplayText = computed(() => {
                     </SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
-              <div class="flex flex-col items-center">
-                <span>Unpaid</span>
-                <div class="field">
-                  <Switch v-model="unpaidStudy" class="mt-1" />
-                </div>
               </div>
             </div>
           </td>

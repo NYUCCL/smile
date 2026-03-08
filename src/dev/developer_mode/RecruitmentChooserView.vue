@@ -187,7 +187,7 @@ const api = useViewAPI()
           >
         </CardHeader>
         <CardContent class="flex justify-end flex-1 items-end">
-          <Button asChild variant="default" size="xs" class="is-purple" id="citizen_tester">
+          <Button asChild variant="default" size="xs" class="is-green" id="citizen_tester">
             <a :href="api.urls['citizensci']"
               ><i-lucide-dices /> Citizen Sci User
               <ArrowRight class="inline-block ml-1 w-4 h-4" />
@@ -203,7 +203,7 @@ const api = useViewAPI()
           <CardDescription>Anonymous web user is not referred by any recruitment service.</CardDescription>
         </CardHeader>
         <CardContent class="flex justify-end flex-1 items-end">
-          <Button asChild variant="default" size="xs" class="is-green" id="web_tester">
+          <Button asChild variant="default" size="xs" class="is-purple" id="web_tester">
             <a :href="api.urls['web']"
               ><i-lucide-dices /> Anon Web User
               <ArrowRight class="inline-block ml-1 w-4 h-4" />
