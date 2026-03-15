@@ -6,9 +6,11 @@ url=$(git config --get remote.origin.url)
 repo_path=$(echo "$url" | sed -E 's|.*/([^/]+)/([^/.]+)(\.git)?|\1/\2|')
 
 
-# update the app configs using a base64 encoding of 
+# update the app configs using a base64 encoding of
 # all the variables
-ENC=$(cat env/.env.local | base64)
+# Note: Use tr -d '\n' to remove line breaks for cross-platform compatibility
+# (Linux base64 adds newlines by default, macOS doesn't)
+ENC=$(cat env/.env.local | base64 | tr -d '\n')
 gh secret set SECRET_APP_CONFIG --body "$ENC" --repo $repo_path
 
 
