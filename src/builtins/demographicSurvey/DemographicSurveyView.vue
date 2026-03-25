@@ -124,8 +124,11 @@ function finish() {
 
 <template>
   <!-- Main container with responsive layout -->
-  <ConstrainedPage :responsiveUI="api.config.responsiveUI" :width="api.config.windowsizerRequest.width"
-    :height="api.config.windowsizerRequest.height">
+  <ConstrainedPage
+    :responsiveUI="api.config.responsiveUI"
+    :width="api.config.windowsizerRequest.width"
+    :height="api.config.windowsizerRequest.height"
+  >
     <!-- Two-column layout with title and form content -->
     <TitleTwoCol leftFirst leftWidth="w-1/3" :responsiveUI="api.config.responsiveUI">
       <!-- Page title and description section -->
@@ -167,9 +170,14 @@ function finish() {
           <!-- Age (years) field -->
           <div class="mb-3">
             <label class="block text-md font-semibold text-foreground mb-2"> Age (years) </label>
-            <input v-model.number="api.persist.forminfo.age_years" type="number" inputmode="numeric" step="1"
+            <input
+              v-model.number="api.persist.forminfo.age_years"
+              type="number"
+              inputmode="numeric"
+              step="1"
               placeholder="Enter your age in years"
-              class="w-full px-3 py-2 text-base border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring" />
+              class="w-full px-3 py-2 text-base border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring"
+            />
             <p class="text-xs text-muted-foreground mt-1">Enter your age in years (required)</p>
           </div>
 
@@ -255,8 +263,10 @@ function finish() {
         </div>
 
         <!-- Page 2: Health and vision information -->
-        <div v-else-if="api.pathString === 'survey_page2'"
-          class="border border-border text-left bg-muted p-6 rounded-lg">
+        <div
+          v-else-if="api.pathString === 'survey_page2'"
+          class="border border-border text-left bg-muted p-6 rounded-lg"
+        >
           <!-- Vision field -->
           <div class="mb-3">
             <label class="block text-md font-semibold text-foreground mb-2">
@@ -369,8 +379,10 @@ function finish() {
         </div>
 
         <!-- Page 3: Location and background information -->
-        <div v-else-if="api.pathString === 'survey_page3'"
-          class="border border-border text-left bg-muted p-6 rounded-lg">
+        <div
+          v-else-if="api.pathString === 'survey_page3'"
+          class="border border-border text-left bg-muted p-6 rounded-lg"
+        >
           <!-- Country field -->
           <div class="mb-3">
             <label class="block text-md font-semibold text-foreground mb-2"> Country </label>
@@ -583,8 +595,12 @@ function finish() {
           <!-- Zipcode field -->
           <div class="mb-3">
             <label class="block text-md font-semibold text-foreground mb-2"> Zipcode/Postal Code </label>
-            <input type="text" v-model="api.persist.forminfo.zipcode" placeholder="Enter zip or postal code"
-              class="w-full px-3 py-2 border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring" />
+            <input
+              type="text"
+              v-model="api.persist.forminfo.zipcode"
+              placeholder="Enter zip or postal code"
+              class="w-full px-3 py-2 border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring"
+            />
             <p class="text-xs text-muted-foreground mt-1">
               Select zipcode or postal code of your primary residence. (optional)
             </p>
@@ -644,8 +660,13 @@ function finish() {
           <!-- Navigation section -->
           <div class="branding mb-4" style="--branding-bg: var(--muted)" aria-hidden="true">
             <div class="flex items-start gap-2">
-              <input v-model="api.persist.forminfo.branding_coca_cola" type="checkbox" class="branding__check mt-1"
-                aria-label="Brand awareness check" tabindex="-1" />
+              <input
+                v-model="api.persist.forminfo.branding_coca_cola"
+                type="checkbox"
+                class="branding__check mt-1"
+                aria-label="Brand awareness check"
+                tabindex="-1"
+              />
               <div class="branding__text text-sm leading-snug">
                 Brand awareness: Check this box if you are familiar with the brand “Coca-Cola”.
               </div>
