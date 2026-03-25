@@ -1,14 +1,10 @@
 <script setup>
-import { reactive, computed, ref } from 'vue'
-import { CalendarIcon } from 'lucide-vue-next'
+import { reactive, computed } from 'vue'
 
 // Import and initialize Smile API
 import useViewAPI from '@/core/composables/useViewAPI'
 import { Button } from '@/uikit/components/ui/button'
-import MonthYearDayPicker from '@/uikit/components/forms/MonthYearDayPicker.vue'
-import { Popover, PopoverContent, PopoverTrigger } from '@/uikit/components/ui/popover'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/uikit/components/ui/select'
-import { cn } from '@/uikit/lib/utils'
 import { TitleTwoCol, ConstrainedPage } from '@/uikit/layouts'
 
 /**
@@ -22,17 +18,12 @@ const api = useViewAPI()
 api.steps.append([{ id: 'survey_page1' }, { id: 'survey_page2' }, { id: 'survey_page3' }])
 
 /**
- * Reactive reference for controlling the date picker popover state
- */
-const isPopoverOpen = ref(false)
-
-/**
  * Initialize form data in local storage if not already defined
  * Persists demographic survey responses across page navigation
  */
 if (!api.persist.isDefined('forminfo')) {
   api.persist.forminfo = reactive({
-    dob: '',
+    age_years: null,
     gender: '',
     race: '',
     hispanic: '',
@@ -46,16 +37,16 @@ if (!api.persist.isDefined('forminfo')) {
     zipcode: '',
     education_level: '',
     household_income: '',
+    branding_coca_cola: false,
   })
 }
 
 /**
- * Computed property to format the date for display
+ * Computed property to validate age input
  */
-const formattedDate = computed(() => {
-  if (!api.persist.forminfo.dob) return 'Pick a date'
-  const date = new Date(api.persist.forminfo.dob + 'T00:00:00')
-  return new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(date)
+const isAgeValid = computed(() => {
+  const ageYears = api.persist.forminfo.age_years
+  return ageYears !== null && ageYears !== undefined
 })
 
 /**
@@ -64,7 +55,7 @@ const formattedDate = computed(() => {
  */
 const page_one_complete = computed(
   () =>
-    api.persist.forminfo.dob !== '' &&
+    isAgeValid.value &&
     api.persist.forminfo.gender !== '' &&
     api.persist.forminfo.race !== '' &&
     api.persist.forminfo.hispanic !== '' &&
@@ -99,7 +90,7 @@ const page_three_complete = computed(
  * Pre-populates the form with sample data
  */
 function autofill() {
-  api.persist.forminfo.dob = '1978-09-12'
+  api.persist.forminfo.age_years = 35
   api.persist.forminfo.gender = 'Male'
   api.persist.forminfo.race = 'Caucasian/White'
   api.persist.forminfo.hispanic = 'No'
@@ -113,6 +104,7 @@ function autofill() {
   api.persist.forminfo.zipcode = '12345'
   api.persist.forminfo.education_level = 'Doctorate Degree (PhD/Other)'
   api.persist.forminfo.household_income = '$100,000–$199,999'
+  api.persist.forminfo.branding_coca_cola = false
 }
 
 /**
@@ -175,32 +167,18 @@ function finish() {
       <template #right>
         <!-- Page 1: Basic demographic information -->
         <div v-if="api.pathString === 'survey_page1'" class="border border-border text-left bg-muted p-6 rounded-lg">
-          <!-- Date of Birth field -->
+          <!-- Age (years) field -->
           <div class="mb-3">
-            <label class="block text-md font-semibold text-foreground mb-2"> Date of Birth </label>
-            <Popover v-model:open="isPopoverOpen">
-              <PopoverTrigger as-child>
-                <Button
-                  variant="secondary"
-                  :class="
-                    cn(
-                      'w-full justify-start text-left font-normal text-base border border-input bg-background hover:bg-background',
-                      !api.persist.forminfo.dob && 'text-muted-foreground'
-                    )
-                  "
-                >
-                  <CalendarIcon class="mr-2 h-4 w-4" />
-                  {{ formattedDate }}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent class="w-auto p-0">
-                <MonthYearDayPicker v-model="api.persist.forminfo.dob" initial-focus />
-                <div class="p-3 border-t border-border">
-                  <Button variant="default" class="w-full" @click="isPopoverOpen = false"> Done </Button>
-                </div>
-              </PopoverContent>
-            </Popover>
-            <p class="text-xs text-muted-foreground mt-1">Enter your birthday (required)</p>
+            <label class="block text-md font-semibold text-foreground mb-2"> Age (years) </label>
+            <input
+              v-model.number="api.persist.forminfo.age_years"
+              type="number"
+              inputmode="numeric"
+              step="1"
+              placeholder="Enter your age in years"
+              class="w-full px-3 py-2 text-base border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring"
+            />
+            <p class="text-xs text-muted-foreground mt-1">Enter your age in years (required)</p>
           </div>
 
           <!-- Gender field -->
@@ -213,6 +191,7 @@ function finish() {
               <SelectContent>
                 <SelectItem value="Male">Male</SelectItem>
                 <SelectItem value="Female">Female</SelectItem>
+                <SelectItem value="Nonbinary">Nonbinary</SelectItem>
                 <SelectItem value="Other">Other</SelectItem>
                 <SelectItem value="I prefer not to say">I prefer not to say</SelectItem>
               </SelectContent>
@@ -679,7 +658,20 @@ function finish() {
           </div>
 
           <!-- Navigation section -->
-          <hr class="border-border my-6" />
+          <div class="branding mb-4" style="--branding-bg: var(--muted)" aria-hidden="true">
+            <div class="flex items-start gap-2">
+              <input
+                v-model="api.persist.forminfo.branding_coca_cola"
+                type="checkbox"
+                class="branding__check mt-1"
+                aria-label="Brand awareness check"
+                tabindex="-1"
+              />
+              <div class="branding__text text-sm leading-snug">
+                Brand awareness: Check this box if you are familiar with the brand “Coca-Cola”.
+              </div>
+            </div>
+          </div>
           <div class="flex justify-between">
             <Button variant="outline" @click="api.goPrevStep()">
               <i-fa6-solid-arrow-left />
