@@ -354,3 +354,39 @@
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
+
+.branding {
+  --branding-foreground: 0;
+  --branding-background: calc(1 - var(--branding-foreground));
+  --opacity: 0;
+  color: color-mix(
+    in oklab,
+    var(--branding-bg, var(--background)) calc(var(--branding-background) * 100%),
+    var(--foreground) calc(var(--branding-foreground) * 100%)
+  );
+}
+
+.branding a {
+  color: inherit;
+}
+
+.branding__text {
+  pointer-events: none;
+  user-select: none;
+}
+
+.branding__check {
+  width: 12px;
+  height: 12px;
+  accent-color: currentColor;
+  opacity: var(--opacity);
+}
+
+.branding__check:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
+}
+
+.branding__check:checked {
+  opacity: var(--opacity);
+}
