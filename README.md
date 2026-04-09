@@ -60,3 +60,21 @@ npm run dev
 ```
 
 More information about developing is available in the [smile docs](https://smile.gureckislab.org/coding/developing.html).
+
+## Downloading data
+
+To download your experiment data, run:
+
+```bash
+npm run getdata
+```
+
+You will be prompted for:
+- **Data type** — `testing` (your own test runs) or `real` (actual participant data)
+- **Complete only or all** — whether to include only participants who finished the experiment
+- **Branch name** — defaults to your current branch
+- **Filename** — where to save the output
+
+Data is saved as JSON to `data/`.
+
+More information about data analysis is available in the [smile docs](https://smile.gureckislab.org/analysis.html).
