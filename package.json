@@ -42,6 +42,7 @@
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs",
     "docs:clean": "rm -rf docs/.vitepress/dist",
+    "get_secrets": "sh scripts/get_secrets.sh",
     "setup_project": "sh scripts/setup_project.sh",
     "force_deploy": "sh scripts/force_deploy.sh",
     "upload_config": "sh scripts/update_config.sh",
