@@ -1,7 +1,7 @@
 
 # Smile 🤠 (codec-lab fork)
 
-This is the codec-lab fork of the [Smile project](https://smile.gureckislab.org/), used at the base template for running experiments.
+This is the codec-lab fork of the [Smile project](https://smile.gureckislab.org/), used as the base template for running experiments.
 
 ## Starting a new experiment
 
