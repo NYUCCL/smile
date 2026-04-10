@@ -32,7 +32,9 @@ export function addGuards(r, providedApi = null) {
 
     // check if status change on previous
     if (from.meta !== undefined && from.meta.setConsented !== undefined && from.meta.setConsented) {
-      api.completeConsent()
+      api.store.browserEphemeral.dbConnecting = true
+      await api.completeConsent()
+      api.store.browserEphemeral.dbConnecting = false
     }
 
     if (from.meta !== undefined && from.meta.setDone !== undefined && from.meta.setDone) {

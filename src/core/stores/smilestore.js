@@ -193,6 +193,7 @@ const initBrowserEphemeral = {
   tooSmall: false,
   steppers: {}, // Store for HStepper instances
   dbConnected: false,
+  dbConnecting: false,
   dbChanges: true,
   urls: {
     prolific: `?PROLIFIC_PID=test${Array.from({length: 6}, () => Math.floor(Math.random() * 16).toString(16)).join('')}&STUDY_ID=test${Array.from({length: 6}, () => Math.floor(Math.random() * 16).toString(16)).join('')}&SESSION_ID=test${Array.from({length: 6}, () => Math.floor(Math.random() * 16).toString(16)).join('')}#/welcome/prolific/`,
