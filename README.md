@@ -61,7 +61,7 @@ npm run dev
 
 More information about developing is available in the [smile docs](https://smile.gureckislab.org/coding/developing.html).
 
-## Downloading data
+## Downloading experiment data
 
 To download your experiment data, run:
 
@@ -78,3 +78,17 @@ You will be prompted for:
 Data is saved as JSON to `data/`.
 
 More information about data analysis is available in the [smile docs](https://smile.gureckislab.org/analysis.html).
+
+## Downloading recruitment data
+
+To download recruitment data, run:
+```bash
+npm run getrecruitment
+```
+
+You will be prompted for:
+- **Data type** — `testing` or `real`
+- **Branch name** — defaults to your current branch
+- **Filename** — where to save the output
+
+Data is saved as JSON to `data/private/` (gitignored).
