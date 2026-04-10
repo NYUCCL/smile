@@ -195,7 +195,7 @@ const initBrowserEphemeral = {
   dbConnected: false,
   dbChanges: true,
   urls: {
-    prolific: '?PROLIFIC_PID=XXXX&STUDY_ID=XXXX&SESSION_ID=XXXXX#/welcome/prolific/',
+    prolific: `?PROLIFIC_PID=test${Array.from({length: 6}, () => Math.floor(Math.random() * 16).toString(16)).join('')}&STUDY_ID=test${Array.from({length: 6}, () => Math.floor(Math.random() * 16).toString(16)).join('')}&SESSION_ID=test${Array.from({length: 6}, () => Math.floor(Math.random() * 16).toString(16)).join('')}#/welcome/prolific/`,
     cloudresearch:
       '#/welcome/cloudresearch/?assignmentId=123RVWYBAZW00EXAMPLE456RVWYBAZW00EXAMPLE&hitId=123RVWYBAZW00EXAMPLE&turkSubmitTo=https://www.mturk.com/&workerId=AZ3456EXAMPLE',
     mturk:

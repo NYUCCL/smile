@@ -14,4 +14,8 @@ echo "Fetching service account key..."
 gh api "repos/$REPO/contents/.service-account-key.json" --jq '.content' | base64 -d > "firebase/.service-account-key.json"
 echo "Downloaded: .service-account-key.json"
 
+echo "Fetching lab scripts..."
+gh api "repos/$REPO/contents/get_recruitment_data.mjs" --jq '.content' | base64 -d > "scripts/get_recruitment_data.mjs"
+echo "Downloaded: get_recruitment_data.mjs"
+
 echo "Done."
