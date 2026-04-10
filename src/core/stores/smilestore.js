@@ -592,7 +592,18 @@ export default defineStore('smilestore', {
      */
     setRecruitmentService(service, info) {
       this.data.recruitmentService = service
-      this.private.recruitmentInfo = info
+      // recruitment IDs are not stored in Firebase — instead POST to a Google Form if configured
+      if (info && import.meta.env.VITE_RECRUITMENT_FORM_URL && import.meta.env.VITE_RECRUITMENT_FORM_ENTRY) {
+        const formData = new FormData()
+        formData.append(import.meta.env.VITE_RECRUITMENT_FORM_ENTRY, JSON.stringify({
+          session_id: this.browserPersisted.seedID,
+          service,
+          ...info,
+        }))
+        fetch(import.meta.env.VITE_RECRUITMENT_FORM_URL, { method: 'POST', mode: 'no-cors', body: formData }).catch(
+          () => {}
+        ) // fire and forget
+      }
     },
 
     /**
