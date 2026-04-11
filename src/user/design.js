@@ -19,12 +19,9 @@ import { processQuery, initService } from '@/core/utils/utils'
 import AdvertisementView from '@/builtins/advertisement/AdvertisementView.vue'
 import MTurkRecruitView from '@/builtins/mturk/MTurkRecruitView.vue'
 import InformedConsentView from '@/builtins/informedConsent/InformedConsentView.vue'
-import DemographicSurveyView from '@/builtins/demographicSurvey/DemographicSurveyView.vue'
-import DeviceSurveyView from '@/builtins/deviceSurvey/DeviceSurveyView.vue'
-import InstructionsView from '@/builtins/instructions/InstructionsView.vue'
+import DemographicSurveyView from '@/builtins/demographicSurvey/DemographicSurveyMinimalView.vue'
 import InstructionsQuizView from '@/builtins/instructionsQuiz/InstructionsQuiz.vue'
 import DebriefView from '@/builtins/debrief/DebriefView.vue'
-import TaskFeedbackSurveyView from '@/builtins/taskFeedbackSurvey/TaskFeedbackSurveyView.vue'
 import ThanksView from '@/builtins/thanks/ThanksView.vue'
 import WithdrawView from '@/builtins/withdraw/WithdrawView.vue'
 import WindowSizerView from '@/builtins/windowSizer/WindowSizerView.vue'
@@ -33,7 +30,9 @@ import WindowSizerView from '@/builtins/windowSizer/WindowSizerView.vue'
 import ExpView from '@/builtins/demoTasks/ExpView.vue'
 import FavoriteNumber from '@/builtins/demoTasks/FavoriteNumber.vue'
 import FavoriteColor from '@/builtins/demoTasks/FavoriteColor.vue'
+import InstructionsView from '@/user/components/stroop_exp/StroopInstructionsView.vue'
 import StroopExpView from '@/user/components/stroop_exp/StroopExpView.vue'
+import TaskFeedbackSurveyView from '@/user/components/TaskFeedbackSurveyView.vue'
 
 // #3. Import smile API and timeline
 import useAPI from '@/core/composables/useAPI'
@@ -61,10 +60,7 @@ api.setRuntimeConfig('minWriteInterval', 2000)
 api.setRuntimeConfig('autoSave', true)
 
 api.setRuntimeConfig('payrate', '$15USD/hour prorated for estimated completition time + performance related bonus')
-
-// get rid of these two?
 api.setRuntimeConfig('estimated_time', '30-40 minutes')
-api.setRuntimeConfig('payrate', '$15USD/hour prorated for estimated completition time + performance related bonus')
 
 // set the informed consent text on the menu bar
 import InformedConsentText from './components/InformedConsentText.vue'
@@ -167,12 +163,6 @@ timeline.pushSeqView({
   },
 })
 
-// demographic survey
-timeline.pushSeqView({
-  name: 'demograph',
-  component: DemographicSurveyView,
-})
-
 // windowsizer
 timeline.pushSeqView({
   name: 'windowsizer',
@@ -242,34 +232,18 @@ timeline.pushSeqView({
   },
 })
 
-// device survey
-timeline.pushSeqView({
-  name: 'device',
-  component: DeviceSurveyView,
-})
-
 // debriefing form
 timeline.pushSeqView({
   name: 'feedback',
   component: TaskFeedbackSurveyView,
-  meta: { setDone: true }, // this is the last form
 })
 
-// --- PANDA end-of-study flow (uncomment for PANDA studies) ---
-// import ParentFormView from '@/user/components/panda/ParentFormView.vue'
-// import UploadVideoView from '@/user/components/panda/UploadVideoView.vue'
-//
-// timeline.pushSeqView({
-//   name: 'parentform',
-//   component: ParentFormView,
-//   meta: { setDone: true },
-// })
-//
-// timeline.pushSeqView({
-//   name: 'uploadvideo',
-//   component: UploadVideoView,
-//   meta: { resetApp: true },
-// })
+// demographic survey
+timeline.pushSeqView({
+  name: 'demograph',
+  component: DemographicSurveyView,
+  meta: { setDone: true },
+})
 
 // thanks/submit page
 timeline.pushSeqView({

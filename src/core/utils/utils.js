@@ -73,7 +73,7 @@ export function processQuery(query, service) {
     smilestore.setRecruitmentService(service, {
       prolific_id: urlParams.PROLIFIC_PID,
       study_id: urlParams.STUDY_ID,
-      session_id: urlParams.SESSION_ID,
+      prolific_session_id: urlParams.SESSION_ID,
     })
   } else if (service === 'cloudresearch' && urlParams.assignmentId && urlParams.hitId && urlParams.workerId) {
     log.log('CloudResearch mode')

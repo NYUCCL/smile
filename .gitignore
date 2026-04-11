@@ -35,6 +35,9 @@ env/*.zip
 
 # Firebase service account
 *.service-account*
+
+# Downloaded from smile-secrets — not committed to experiment repos
+scripts/get_recruitment_data.mjs
 components.d.ts
 /.vite
 

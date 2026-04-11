@@ -193,9 +193,10 @@ const initBrowserEphemeral = {
   tooSmall: false,
   steppers: {}, // Store for HStepper instances
   dbConnected: false,
+  dbConnecting: false,
   dbChanges: true,
   urls: {
-    prolific: '?PROLIFIC_PID=XXXX&STUDY_ID=XXXX&SESSION_ID=XXXXX#/welcome/prolific/',
+    prolific: `?PROLIFIC_PID=test${Array.from({length: 6}, () => Math.floor(Math.random() * 16).toString(16)).join('')}&STUDY_ID=test${Array.from({length: 6}, () => Math.floor(Math.random() * 16).toString(16)).join('')}&SESSION_ID=test${Array.from({length: 6}, () => Math.floor(Math.random() * 16).toString(16)).join('')}#/welcome/prolific/`,
     cloudresearch:
       '#/welcome/cloudresearch/?assignmentId=123RVWYBAZW00EXAMPLE456RVWYBAZW00EXAMPLE&hitId=123RVWYBAZW00EXAMPLE&turkSubmitTo=https://www.mturk.com/&workerId=AZ3456EXAMPLE',
     mturk:
@@ -592,7 +593,18 @@ export default defineStore('smilestore', {
      */
     setRecruitmentService(service, info) {
       this.data.recruitmentService = service
-      this.private.recruitmentInfo = info
+      // recruitment IDs are not stored in Firebase — instead POST to a Google Form if configured
+      if (info && import.meta.env.VITE_RECRUITMENT_FORM_URL && import.meta.env.VITE_RECRUITMENT_FORM_ENTRY) {
+        const formData = new FormData()
+        formData.append(import.meta.env.VITE_RECRUITMENT_FORM_ENTRY, JSON.stringify({
+          session_id: this.browserPersisted.seedID,
+          service,
+          ...info,
+        }))
+        fetch(import.meta.env.VITE_RECRUITMENT_FORM_URL, { method: 'POST', mode: 'no-cors', body: formData }).catch(
+          () => {}
+        ) // fire and forget
+      }
     },
 
     /**

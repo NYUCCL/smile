@@ -1,50 +1,94 @@
-<p align="center">
-<a href="https://smile.gureckislab.org/" target="_blank">
-<img src="https://smile.gureckislab.org/images/smile.svg" alt="smile" height="150" />
-</a>
 
-<p align="center">
-<i>A happy approach to online behavioral research.</i>
-</p>
+# Smile 🤠 (codec-lab fork)
 
-<p align="center">
-<a href="https://github.com/nyuccl/smile/releases" alt="GitHub release"><img src="https://img.shields.io/github/v/release/nyuccl/smile"></a>
-<a href="https://github.com/nyuccl/smile/actions" alt="Build Status"><img src="https://github.com/nyuccl/smile/actions/workflows/deploy.yml/badge.svg"></a>
-<a href="https://github.com/nyuccl/smile/actions" alt="Doc Build Status"><img src="https://github.com/nyuccl/smile/actions/workflows/docs-deploy.yml/badge.svg"></a>
-</p>
+This is the codec-lab fork of the [Smile project](https://smile.gureckislab.org/), used as the base template for running experiments.
 
-<br />
+## Starting a new experiment
 
-The Smile project is a new way to develop rich and interactive online experiments. Smile prioritizes modularity and reusability. Unlike tools that cater to non-programmers, Smile is designed to help reasonably competent programmers accomplish more in less time.
+Don't worry, it's easy and most of it you only do once! See also the [general smile setup docs](https://smile.gureckislab.org/starting.html).
 
-Online docs: [https://smile.gureckislab.org](https://smile.gureckislab.org)
+### Step 1: Copy this repo
 
-### Highlighted features:
+Create a new private GitHub repository from this template and clone it locally:
 
-- 🌈 Fast and fun front-end interface development with [Vue.js](https://vuejs.org),
-  [Tailwind CSS](https://tailwindcss.com/), and
-  [Shadcn/vue](https://www.shadcn-vue.com/). Create complex games, animations, and
-  surveys with ease.
-- 👩‍💻 Custom [developer mode tools](https://smile.gureckislab.org/coding/developing.html) provide a novel interface for specifying and debugging interactive
-  experiments. Quickly jump between phases and trials in your experiments,
-  [autofill forms and generate mock data for testing](https://smile.gureckislab.org/coding/autofill.html),
-  [hot-reload](https://smile.gureckislab.org/coding/developing.html#hot-module-replacement) your code without restarting the entire experiment, and more!
-- 🧩 Built-in support for
-  [common experiment elements](https://smile.gureckislab.org/coding/views.html#built-in-views) like consent forms,
-  instructions, and surveys. Just add your custom experiment logic and start
-  collecting data.
-- 🤖 Code writing is greatly accelerated using AI tools, as LLMs are
-  trained on extensive codebases covering Vue, Tailwind, and other popular web
-  standards used by the project.
-- 👫 Supports multiple [recruitment services](https://smile.gureckislab.org/recruit/recruitment.html)
-  including Prolific, MTurk, CloudResearch, and more.
-- 📝 [Data provenance features](https://smile.gureckislab.org/analysis.html#data-provenance) include an audit trail
-  of which version of the code was used to create each data file.
-- 🐍 Easy-to-use [Python library](https://smile.gureckislab.org/analysis.html#python-analysis-library-smiledata) for data analysis with Polars DataFrames, built-in plotting, and support for Jupyter and Marimo notebooks.
-- 😎 Great-looking and detailed docs, if we do say so ourselves!
+```bash
+gh repo create <YOUR_EXPERIMENT_NAME> --private --template codec-lab/smile
+gh repo clone <YOUR_GITHUB_USERNAME>/<YOUR_EXPERIMENT_NAME>
+cd <YOUR_EXPERIMENT_NAME>
+```
 
-## License
+### Step 2: Get the lab config files
 
-MIT License © 2022 [Todd Gureckis](https://todd.gureckislab.org)
+Pull the lab's secret configuration files (Firebase credentials, deploy keys, etc.) from the private [smile-secrets](https://github.com/codec-lab/smile-secrets) repo:
 
-_Initial development was supported by National Science Foundation Grant [BCS-2121102](https://www.nsf.gov/awardsearch/showAward?AWD_ID=2121102&HistoricalAwards=false) to T. M. Gureckis._
+```bash
+npm run get_secrets
+```
+
+> **Note:** You need access to [codec-lab/smile-secrets](https://github.com/codec-lab/smile-secrets) first — ask Mark.
+
+Then push the config to your repo's GitHub secrets:
+
+```bash
+npm run upload_config
+```
+
+### Step 3: Install dependencies
+
+Install the required Node packages for local development and testing:
+
+```bash
+npm run setup_project
+```
+
+### Step 4: Verify deployment
+
+Create an initial deployment to confirm everything is configured correctly. A confirmation will appear in the lab Slack channel.
+
+```bash
+npm run force_deploy
+```
+
+In the future, deployments happen automatically whenever you push to your repo.
+
+### Step 5: Start developing
+
+Run the development server to see the default experiment setup:
+
+```bash
+npm run dev
+```
+
+More information about developing is available in the [smile docs](https://smile.gureckislab.org/coding/developing.html).
+
+## Downloading experiment data
+
+To download your experiment data, run:
+
+```bash
+npm run getdata
+```
+
+You will be prompted for:
+- **Data type** — `testing` (your own test runs) or `real` (actual participant data)
+- **Complete only or all** — whether to include only participants who finished the experiment
+- **Branch name** — defaults to your current branch
+- **Filename** — where to save the output
+
+Data is saved as JSON to `data/`.
+
+More information about data analysis is available in the [smile docs](https://smile.gureckislab.org/analysis.html).
+
+## Downloading recruitment data
+
+To download recruitment data, run:
+```bash
+npm run getrecruitment
+```
+
+You will be prompted for:
+- **Data type** — `testing` or `real`
+- **Branch name** — defaults to your current branch
+- **Filename** — where to save the output
+
+Data is saved as JSON to `data/private/` (gitignored).

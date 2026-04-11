@@ -34,7 +34,6 @@ async function askQuestions() {
     )
     .option('-b, --branch_name <branch_name>', 'branch name')
     .option('-f, --filename <filename>', 'filename')
-    .option('-r, --save_recruitment_info', 'save recruitment info')
 
   program.parse()
   const options = program.opts()
@@ -60,12 +59,6 @@ async function askQuestions() {
       default: currentBranch,
     },
     {
-      type: 'confirm',
-      name: 'SAVE_RECRUITMENT_INFO',
-      message: 'Should this save the recruitment info (e.g., Prolific IDs)? Defaults to false.',
-      default: false,
-    },
-    {
       type: 'input',
       name: 'FILENAME',
       message: 'What is the name of the file without extension?',
@@ -87,7 +80,7 @@ async function askQuestions() {
   }
 }
 
-const storeData = async (data, path, relativeDir = 'data/anonymized', ext = '.json') => {
+const storeData = async (data, path, relativeDir = 'data', ext = '.json') => {
   try {
     let filename = path
     if (extname(path) !== ext) {
@@ -141,11 +134,7 @@ const getData = async (path, completeOnly, db, filename, saveRecruitmentInfo = f
       data.push({ id: doc.id, data: docData })
     }
 
-    if (saveRecruitmentInfo) {
-      return storeData(data, filename, 'data/private')
-    } else {
-      return storeData(data, filename, 'data/anonymized')
-    }
+    return storeData(data, filename, 'data')
   } catch (error) {
     console.log('The read failed:', error)
   }
@@ -162,7 +151,7 @@ const run = async () => {
 
   // ask questions
   const answers = await askQuestions()
-  const { TYPE, COMPLETE_ONLY, BRANCH_NAME, SAVE_RECRUITMENT_INFO, FILENAME } = answers
+  const { TYPE, COMPLETE_ONLY, BRANCH_NAME, FILENAME } = answers
   const project_ref = `${env.parsed.VITE_GIT_OWNER}-${env.parsed.VITE_PROJECT_NAME}-${BRANCH_NAME}`
 
   // connect to database
@@ -191,7 +180,7 @@ const run = async () => {
     filename = filename
   }
 
-  const finalPath = await getData(path, COMPLETE_ONLY, db, filename, SAVE_RECRUITMENT_INFO)
+  const finalPath = await getData(path, COMPLETE_ONLY, db, filename, false)
 
   // show success message
   success(finalPath)

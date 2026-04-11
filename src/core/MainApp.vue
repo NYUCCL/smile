@@ -265,7 +265,13 @@ const deviceTooSmall = computed(() => {
     ref="containerDiv"
   >
     <StatusBar v-if="showStatusBar" />
-    <WindowSizerView triggered="true" v-if="deviceTooSmall"></WindowSizerView>
+    <div v-if="smilestore.browserEphemeral.dbConnecting" class="flex items-center justify-center w-full h-screen">
+      <div class="text-center text-muted-foreground">
+        <i-fa6-solid-circle-notch class="inline-block text-4xl animate-spin mb-4" />
+        <p class="text-lg">Connecting...</p>
+      </div>
+    </div>
+    <WindowSizerView triggered="true" v-else-if="deviceTooSmall"></WindowSizerView>
     <router-view v-else />
   </div>
 </template>

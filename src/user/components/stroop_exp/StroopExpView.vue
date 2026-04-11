@@ -6,6 +6,23 @@ import useViewAPI from '@/core/composables/useViewAPI'
 import { Button } from '@/uikit/components/ui/button'
 import { ConstrainedTaskWindow } from '@/uikit/layouts'
 
+const props = defineProps({
+  trials: {
+    type: Array,
+    default: () => [
+      { id: 'a', word: 'SHIP', color: 'red', condition: 'unrelated' },
+      { id: 'b', word: 'MONKEY', color: 'green', condition: 'unrelated' },
+      { id: 'c', word: 'ZAMBONI', color: 'blue', condition: 'unrelated' },
+      { id: 'd', word: 'RED', color: 'red', condition: 'congruent' },
+      { id: 'e', word: 'GREEN', color: 'green', condition: 'congruent' },
+      { id: 'f', word: 'BLUE', color: 'blue', condition: 'congruent' },
+      { id: 'g', word: 'GREEN', color: 'red', condition: 'incongruent' },
+      { id: 'h', word: 'BLUE', color: 'green', condition: 'incongruent' },
+      { id: 'i', word: 'RED', color: 'blue', condition: 'incongruent' },
+    ],
+  },
+})
+
 const api = useViewAPI()
 
 // define the trials for the experiment as a spec
@@ -18,19 +35,7 @@ const trials = api.steps.append([
   },
 ])
 
-trials[0]
-  .append([
-    { id: 'a', word: 'SHIP', color: 'red', condition: 'unrelated' },
-    { id: 'b', word: 'MONKEY', color: 'green', condition: 'unrelated' },
-    { id: 'c', word: 'ZAMBONI', color: 'blue', condition: 'unrelated' },
-    { id: 'd', word: 'RED', color: 'red', condition: 'congruent' },
-    { id: 'e', word: 'GREEN', color: 'green', condition: 'congruent' },
-    { id: 'f', word: 'BLUE', color: 'blue', condition: 'congruent' },
-    { id: 'g', word: 'GREEN', color: 'red', condition: 'incongruent' },
-    { id: 'h', word: 'BLUE', color: 'green', condition: 'incongruent' },
-    { id: 'i', word: 'RED', color: 'blue', condition: 'incongruent' },
-  ])
-  .shuffle()
+trials[0].append(props.trials).shuffle()
 
 trials.append([{ id: 'summary' }])
 

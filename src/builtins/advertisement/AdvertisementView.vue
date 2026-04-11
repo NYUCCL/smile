@@ -63,8 +63,18 @@ onBeforeUnmount(() => {
     :width="api.config.windowsizerRequest.width"
     :height="api.config.windowsizerRequest.height"
   >
-    <!-- Study logo/branding image -->
-    <img ref="logo" src="@/user/assets/brain.svg" width="220" class="dark-aware-img" />
+    <!-- Lab logo -->
+    <div class="flex items-center gap-3 mb-6">
+      <svg width="80" height="80" viewBox="0 0 100 100">
+        <g stroke="currentColor" vector-effect="non-scaling-stroke" stroke-width="3" fill="none" stroke-linejoin="miter" stroke-miterlimit="0" stroke-linecap="round">
+          <rect x="8%" y="8%" width="60%" height="60%"></rect>
+          <rect x="25%" y="35%" width="60%" height="60%"></rect>
+        </g>
+      </svg>
+      <div class="text-left leading-tight">
+        <span class="font-semibold text-lg">Computation and<br>Decision-Making<br>Lab</span>
+      </div>
+    </div>
 
     <!-- Main heading -->
     <h1 ref="title" class="text-3xl font-bold mb-4">Please help us understand the mind!</h1>
