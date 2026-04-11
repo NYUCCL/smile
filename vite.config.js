@@ -5,7 +5,7 @@ import Vue from '@vitejs/plugin-vue'
 import path from 'path'
 import handlebars from 'vite-plugin-handlebars'
 import Inspect from 'vite-plugin-inspect'
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
 //import preLoaderPlugin from './plugins/preloader'
 import stripDevToolPlugin from './plugins/strip-devtool'
 import generateQRCode from './plugins/generate-qr.js'
@@ -15,8 +15,8 @@ import Components from 'unplugin-vue-components/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import { fileURLToPath } from 'node:url'
 import { readFileSync } from 'fs'
-// Execute git environment generation script
-execSync('sh scripts/generate_git_env.sh', { stdio: 'inherit' })
+// Execute git environment generation script (cross-platform)
+execFileSync(process.execPath, ['scripts/generate_git_env.mjs'], { stdio: 'inherit' })
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
